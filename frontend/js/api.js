@@ -1,9 +1,9 @@
-const API = "/api";
+const API = window.FILALIVRE_API_URL || "/api";
 
 async function apiFetch(path, options = {}) {
   const config = {
     method: options.method || "GET",
-    credentials: "same-origin",
+    credentials: "include",
     headers: {}
   };
   if (options.body !== undefined) {
@@ -46,7 +46,7 @@ function destinoPorPerfil(perfil) {
 }
 
 function sair() {
-  fetch(API + "/auth/logout", { method: "POST", credentials: "same-origin" }).finally(() => {
+  fetch(API + "/auth/logout", { method: "POST", credentials: "include" }).finally(() => {
     localStorage.removeItem("filalivre_usuario");
     window.location.href = "index.html";
   });

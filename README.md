@@ -2,6 +2,24 @@
 
 Sistema de Gerenciamento Remoto de Caixas de Supermercado
 
+## Publicar no GitHub Pages
+
+O workflow em `.github/workflows/pages.yml` publica automaticamente a pasta `frontend` no GitHub Pages a cada push na branch `main`.
+
+Antes da publicação, informe a URL pública do backend em `frontend/js/config.js`:
+
+```javascript
+window.FILALIVRE_API_URL = "https://seu-backend.exemplo.com/api";
+```
+
+O GitHub Pages hospeda somente o frontend. O backend Spring Boot precisa estar rodando em outro serviço, como Render, Railway ou um VPS. Depois, em **Settings > Pages**, selecione **GitHub Actions** como fonte de publicação.
+
+Como o frontend e o backend ficam em domínios diferentes, o backend publicado deve aceitar CORS para o domínio do GitHub Pages e usar cookie de sessão `SameSite=None; Secure` em HTTPS.
+
+### Deploy do backend no Render
+
+O repositório possui um `Dockerfile` na raiz. No Render, crie um **Web Service**, conecte este repositório e selecione **Docker** como ambiente. Não use `mvn clean package` como build command; o Dockerfile já instala Maven e Java 21 e realiza o build automaticamente.
+
 **Integrantes:** Eduardo Gomes, Maicon Goulart, Heitor Hara e José Leandro
 **Disciplina:** Projeto Integrador
 **Professor:** André Lobo

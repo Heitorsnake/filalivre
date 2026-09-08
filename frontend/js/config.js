@@ -1,0 +1,1 @@
+window.FILALIVRE_API_URL = "";
