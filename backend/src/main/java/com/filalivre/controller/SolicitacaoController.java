@@ -38,19 +38,19 @@ public class SolicitacaoController {
     }
 
     @GetMapping("/pendentes")
-    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
     public List<SolicitacaoResponse> pendentes() {
         return solicitacaoService.pendentes();
     }
 
     @PostMapping("/{id}/analisar")
-    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
     public SolicitacaoResponse iniciarAnalise(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         return solicitacaoService.iniciarAnalise(id, usuario);
     }
 
     @PostMapping("/{id}/decidir")
-    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
     public SolicitacaoResponse decidir(@PathVariable Long id,
                                        @Valid @RequestBody DecisaoRequest req,
                                        @AuthenticationPrincipal Usuario usuario) {
@@ -58,7 +58,7 @@ public class SolicitacaoController {
     }
 
     @GetMapping("/historico")
-    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
     public List<SolicitacaoResponse> historico() {
         return solicitacaoService.historico();
     }

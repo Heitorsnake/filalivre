@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FilaLivre — Administração</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="logo">FILA<span>LIVRE</span></div>
+    <div class="subtitulo-topo">Administração do sistema</div>
+    <div class="espaco"></div>
+    <div class="usuario-info">
+      <strong id="nome-usuario"></strong>
+      <span class="perfil-badge">Administrador</span>
+    </div>
+    <button class="btn btn-sair btn-pequeno" onclick="sair()">Sair</button>
+  </header>
+
+  <main class="conteudo">
+    <section class="secao">
+      <h2>Visão administrativa</h2>
+      <div class="chips">
+        <div class="chip"><div class="rotulo">Usuários ativos</div><div class="valor" id="res-ativos">–</div></div>
+        <div class="chip"><div class="rotulo">Solicitações pendentes</div><div class="valor" id="res-pendentes">–</div></div>
+        <div class="chip"><div class="rotulo">Aprovadas</div><div class="valor" style="color:var(--verde)" id="res-aprovadas">–</div></div>
+        <div class="chip"><div class="rotulo">Recusadas</div><div class="valor" style="color:var(--vermelho)" id="res-recusadas">–</div></div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <h2>Manutenção de usuários e perfis</h2>
+      <div class="cartao">
+        <form class="linha-form" id="form-usuario">
+          <input type="text" id="novo-nome" required placeholder="Nome completo">
+          <input type="email" id="novo-email" required placeholder="E-mail">
+          <input type="password" id="nova-senha" required minlength="6" placeholder="Senha">
+          <select id="novo-perfil" required>
+            <option value="OPERADOR">Operador</option>
+            <option value="SUPERVISOR">Supervisor</option>
+            <option value="GERENTE">Gestor</option>
+            <option value="ADMINISTRADOR">Administrador</option>
+          </select>
+          <button type="submit" class="btn btn-verde">Criar usuário</button>
+        </form>
+        <div class="mensagem-erro" id="erro-usuario"></div>
+      </div>
+      <div class="cartao" style="padding:0; overflow-x:auto; margin-top:1rem;">
+        <table class="tabela">
+          <thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody id="corpo-usuarios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="secao-cabecalho">
+        <h2>Caixas cadastrados</h2>
+        <button class="btn btn-verde btn-pequeno" id="btn-novo-caixa">+ Novo caixa</button>
+      </div>
+      <div class="grid-caixas" id="grid-caixas"></div>
+    </section>
+
+    <section class="secao">
+      <h2>Auditoria do sistema</h2>
+      <div class="cartao" style="padding:0; overflow-x:auto;">
+        <table class="tabela">
+          <thead><tr><th>Momento</th><th>Usuário</th><th>Caixa</th><th>Ação</th><th>Detalhes</th></tr></thead>
+          <tbody id="corpo-historico"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dialog-caixa">
+    <h3>Cadastrar novo caixa</h3>
+    <div class="mensagem-erro" id="erro-caixa"></div>
+    <form method="dialog" id="form-novo-caixa">
+      <div class="campo">
+        <label for="localizacao-caixa">Nome/localização do caixa</label>
+        <input type="text" id="localizacao-caixa" maxlength="150" required placeholder="Ex.: Entrada principal">
+        <small>O número será gerado automaticamente pelo sistema.</small>
+      </div>
+      <div class="dialog-acoes">
+        <button type="button" class="btn btn-cinza" onclick="document.getElementById('dialog-caixa').close()">Cancelar</button>
+        <button type="submit" class="btn btn-verde">Criar caixa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.filalivre.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public record CaixaRequest(@NotNull @Positive Integer numero) {
+public record CaixaRequest(@NotBlank @Size(max = 150) String localizacao) {
 }

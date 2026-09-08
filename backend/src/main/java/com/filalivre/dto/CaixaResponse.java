@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 public record CaixaResponse(
         Long id,
         Integer numero,
+        String localizacao,
+        boolean ativo,
         StatusCaixa status,
         BigDecimal valorCompra,
         Integer qtdItens,

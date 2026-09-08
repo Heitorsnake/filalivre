@@ -12,7 +12,7 @@ COPY --from=build /build/backend/target/filalivre-backend-1.0.0.jar app.jar
 COPY frontend /frontend
 
 ENV FILALIVRE_FRONTEND_PATH=/frontend
-ENV FILALIVRE_DB_PATH=/data/filalivre
+ENV FILALIVRE_DB_PATH=/data/filalivre.db
 
 RUN mkdir -p /data
 

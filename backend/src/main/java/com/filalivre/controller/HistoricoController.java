@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/historico")
@@ -19,6 +20,7 @@ public class HistoricoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
     public List<RegistroAcaoResponse> listar() {
         return registroAcaoRepository.findTop100ByOrderByMomentoDesc().stream()
                 .map(this::toResponse)

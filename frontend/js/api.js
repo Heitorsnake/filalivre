@@ -42,7 +42,9 @@ function salvarUsuario(usuario) {
 }
 
 function destinoPorPerfil(perfil) {
-  return perfil === "OPERADOR" ? "caixa.html" : "painel.html";
+  if (perfil === "OPERADOR") return "caixa.html";
+  if (perfil === "ADMINISTRADOR") return "admin.html";
+  return "painel.html";
 }
 
 function sair() {

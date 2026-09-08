@@ -3,9 +3,11 @@ if (!usuario) {
   window.location.href = "index.html";
 } else if (usuario.perfil === "OPERADOR") {
   window.location.href = "caixa.html";
+} else if (usuario.perfil === "ADMINISTRADOR") {
+  window.location.href = "admin.html";
 }
 
-const podeDecidir = ["SUPERVISOR", "GERENTE", "ADMINISTRADOR"].includes(usuario?.perfil);
+const podeDecidir = ["SUPERVISOR", "GERENTE"].includes(usuario?.perfil);
 const rotulosAcao = {
   LOGIN: "Login",
   INICIO_ATENDIMENTO: "Início de atendimento",
@@ -28,7 +30,7 @@ document.getElementById("perfil-usuario").textContent = usuario.perfil;
 
 if (!podeDecidir) {
   document.getElementById("btn-novo-caixa").style.display = "none";
-} else {
+} else if (usuario?.perfil === "GERENTE") {
   const btnNovoCaixa = document.getElementById("btn-novo-caixa");
   const dialogCaixa = document.getElementById("dialog-caixa");
   btnNovoCaixa.addEventListener("click", () => {
@@ -40,7 +42,7 @@ if (!podeDecidir) {
     try {
       await apiFetch("/caixas", {
         method: "POST",
-        body: { numero: Number(document.getElementById("numero-caixa").value) }
+        body: { localizacao: document.getElementById("localizacao-caixa").value.trim() }
       });
       dialogCaixa.close();
       mostrarToast("Caixa cadastrado com sucesso", "verde");
@@ -164,13 +166,36 @@ async function carregarCaixas() {
       cartao.innerHTML = `
         <div class="caixa-numero">Caixa ${String(c.numero).padStart(2, "0")}</div>
         <span class="status-chip status-${c.status}">${c.solicitacaoPendente ? c.status + " • PENDENTE" : c.status}</span>
+        <div class="caixa-detalhe"><span>Localização</span><strong>${escapar(c.localizacao || "Não informada")}</strong></div>
         <div class="caixa-detalhe"><span>Valor da compra</span><strong>${formatarMoeda(c.valorCompra)}</strong></div>
         <div class="caixa-detalhe"><span>Itens</span><strong>${c.qtdItens}</strong></div>
         <div class="caixa-detalhe"><span>Operador</span><strong>${c.operadorNome ? escapar(c.operadorNome) : "—"}</strong></div>
-        <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>`;
+        <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>
+        ${usuario?.perfil === "GERENTE" ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
       grid.appendChild(cartao);
     }
+    grid.querySelectorAll("[data-editar-caixa]").forEach(botao => botao.addEventListener("click", () => editarCaixa(botao.dataset.editarCaixa)));
+    grid.querySelectorAll("[data-desativar-caixa]").forEach(botao => botao.addEventListener("click", () => desativarCaixa(botao.dataset.desativarCaixa)));
   } catch (e) { /* silencioso */ }
+}
+
+async function editarCaixa(id) {
+  const localizacao = prompt("Nova localização do caixa:");
+  if (!localizacao?.trim()) return;
+  try {
+    await apiFetch(`/caixas/${id}`, { method: "PATCH", body: { localizacao: localizacao.trim() } });
+    mostrarToast("Localização atualizada", "verde");
+    carregarCaixas();
+  } catch (e) { mostrarToast(e.message, "vermelho"); }
+}
+
+async function desativarCaixa(id) {
+  if (!confirm("Desativar este caixa? O número será preservado no histórico.")) return;
+  try {
+    await apiFetch(`/caixas/${id}`, { method: "DELETE" });
+    mostrarToast("Caixa desativado", "verde");
+    carregarCaixas();
+  } catch (e) { mostrarToast(e.message, "vermelho"); }
 }
 
 async function carregarHistorico() {

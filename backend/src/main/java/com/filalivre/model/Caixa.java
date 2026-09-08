@@ -25,6 +25,12 @@ public class Caixa {
     @Column(nullable = false, unique = true)
     private Integer numero;
 
+    @Column(length = 150)
+    private String localizacao = "Não informada";
+
+    @Column(nullable = false)
+    private boolean ativo = true;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusCaixa status = StatusCaixa.NORMAL;
@@ -51,6 +57,22 @@ public class Caixa {
 
     public void setNumero(Integer numero) {
         this.numero = numero;
+    }
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public StatusCaixa getStatus() {

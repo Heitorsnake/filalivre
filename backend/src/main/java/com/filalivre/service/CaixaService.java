@@ -33,18 +33,40 @@ public class CaixaService {
     }
 
     public List<CaixaResponse> listar() {
-        return caixaRepository.findAllByOrderByNumeroAsc().stream().map(this::toResponse).toList();
+        return caixaRepository.findAllByAtivoTrueOrderByNumeroAsc().stream().map(this::toResponse).toList();
     }
 
     @Transactional
     public CaixaResponse criar(CaixaRequest req) {
-        if (caixaRepository.existsByNumero(req.numero())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um caixa com o número " + req.numero());
-        }
         Caixa caixa = new Caixa();
-        caixa.setNumero(req.numero());
+        Integer maiorNumero = caixaRepository.findTopByOrderByNumeroDesc()
+            .map(Caixa::getNumero)
+            .orElse(null);
+        caixa.setNumero(maiorNumero == null ? 1 : maiorNumero + 1);
+        caixa.setLocalizacao(req.localizacao().trim());
         caixa = caixaRepository.save(caixa);
         return toResponse(caixa);
+    }
+
+    @Transactional
+    public CaixaResponse editar(Long id, CaixaRequest req, Usuario usuario) {
+        Caixa caixa = buscar(id);
+        caixa.setLocalizacao(req.localizacao().trim());
+        auditoriaService.registrar(usuario, caixa.getNumero(), "CAIXA_EDITADO",
+                "Localização alterada para " + caixa.getLocalizacao());
+        return toResponse(caixa);
+    }
+
+    @Transactional
+    public void desativar(Long id, Usuario usuario) {
+        Caixa caixa = buscar(id);
+        if (caixa.getOperador() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Finalize o atendimento antes de desativar o caixa");
+        }
+        caixa.setAtivo(false);
+        auditoriaService.registrar(usuario, caixa.getNumero(), "CAIXA_DESATIVADO",
+                "Caixa desativado; número preservado para auditoria");
     }
 
     @Transactional
@@ -100,7 +122,7 @@ public class CaixaService {
     }
 
     private Caixa buscar(Long id) {
-        return caixaRepository.findById(id)
+        return caixaRepository.findByIdAndAtivoTrue(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado"));
     }
 
@@ -109,6 +131,8 @@ public class CaixaService {
         return new CaixaResponse(
                 c.getId(),
                 c.getNumero(),
+                c.getLocalizacao(),
+                c.isAtivo(),
                 c.getStatus(),
                 c.getValorCompra(),
                 c.getQtdItens(),

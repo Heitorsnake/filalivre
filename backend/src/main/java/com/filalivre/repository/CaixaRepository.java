@@ -7,9 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CaixaRepository extends JpaRepository<Caixa, Long> {
 
-    List<Caixa> findAllByOrderByNumeroAsc();
+    List<Caixa> findAllByAtivoTrueOrderByNumeroAsc();
 
     Optional<Caixa> findByNumero(Integer numero);
 
     boolean existsByNumero(Integer numero);
+
+    Optional<Caixa> findTopByOrderByNumeroDesc();
+
+    Optional<Caixa> findByIdAndAtivoTrue(Long id);
 }

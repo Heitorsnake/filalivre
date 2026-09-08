@@ -67,8 +67,9 @@
     <div class="mensagem-erro" id="erro-caixa"></div>
     <form method="dialog" id="form-novo-caixa">
       <div class="campo">
-        <label for="numero-caixa">Número do caixa</label>
-        <input type="number" id="numero-caixa" min="1" required placeholder="Ex.: 7">
+        <label for="localizacao-caixa">Nome/localização do caixa</label>
+        <input type="text" id="localizacao-caixa" maxlength="150" required placeholder="Ex.: Perto do banheiro">
+        <small>O número será gerado automaticamente pelo sistema.</small>
       </div>
       <div class="dialog-acoes">
         <button type="button" class="btn btn-cinza" onclick="document.getElementById('dialog-caixa').close()">Cancelar</button>
