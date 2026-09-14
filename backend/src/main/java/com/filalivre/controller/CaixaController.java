@@ -32,15 +32,16 @@ public class CaixaController {
     }
 
     @GetMapping
-    public List<CaixaResponse> listar() {
-        return caixaService.listar();
+    public List<CaixaResponse> listar(@AuthenticationPrincipal Usuario usuario) {
+        return caixaService.listar(usuario);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
     @ResponseStatus(HttpStatus.CREATED)
-    public CaixaResponse criar(@Valid @RequestBody CaixaRequest req) {
-        return caixaService.criar(req);
+    public CaixaResponse criar(@Valid @RequestBody CaixaRequest req,
+                               @AuthenticationPrincipal Usuario usuario) {
+        return caixaService.criar(req, usuario);
     }
 
     @PatchMapping("/{id}")

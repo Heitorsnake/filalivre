@@ -78,9 +78,19 @@ docker run --rm -p 8080:8080 -v filalivre-data:/data filalivre
 
 Depois, acesse `http://localhost:8080`ou `https://filalivre.onrender.com`.
 
-As contas iniciais são criadas internamente por `DadosIniciais.java` quando a base é inicializada. As credenciais não são exibidas na interface pública de login.
+As contas iniciais são criadas internamente por `DadosIniciais.java` quando a base é inicializada. Para demonstração, use:
+
+| Perfil | E-mail | Senha | Código do mercado |
+|---|---|---|---|
+| Administrador | `admin@filalivre.com` | `admin123` | - |
+| Gestor | `gestor@filalivre.com` | `gestor123` | `MERCADO1` |
+| Operador | `operador@filalivre.com` | `operador123` | `MERCADO1` |
+
+O gestor cria ou atualiza o nome do mercado no painel e compartilha o código exibido com os operadores. O operador informa esse código no terminal para visualizar os caixas daquele mercado.
 
 ## Publicação
+
+O arquivo [render.yaml](render.yaml) define o serviço Docker para publicação no Render. No painel do Render, use **New > Blueprint** e selecione este repositório. O plano gratuito não mantém um arquivo SQLite entre reinicializações; para produção, troque o banco por um serviço persistente.
 
 O GitHub Pages publica somente o frontend. Para usar o site publicado, hospede o backend Java em um serviço acessível pela internet e configure `frontend/js/config.js`:
 

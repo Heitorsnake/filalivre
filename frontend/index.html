@@ -47,7 +47,14 @@
           <label for="cad-senha">Senha (mínimo 6 caracteres)</label>
           <input type="password" id="cad-senha" required minlength="6" placeholder="••••••••">
         </div>
-        <button type="submit" class="btn btn-azul" style="width:100%">Criar conta de operador</button>
+        <div class="campo">
+          <label for="cad-perfil">Tipo de conta</label>
+          <select id="cad-perfil" required>
+            <option value="OPERADOR">Operador de caixa</option>
+            <option value="GERENTE">Gestor do mercado</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-azul" style="width:100%">Criar conta</button>
       </form>
     </div>
 

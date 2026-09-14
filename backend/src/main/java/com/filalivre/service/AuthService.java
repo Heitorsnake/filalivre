@@ -23,8 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class AuthService {
 
-    public static final Perfil PERFIL_CADASTRO_PUBLICO = Perfil.OPERADOR;
-
     private final UsuarioRepository usuarioRepository;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
@@ -52,7 +50,15 @@ public class AuthService {
         usuario.setNome(req.nome());
         usuario.setEmail(req.email());
         usuario.setSenha(passwordEncoder.encode(req.senha()));
-        usuario.setPerfil(PERFIL_CADASTRO_PUBLICO);
+        try {
+            Perfil perfil = Perfil.valueOf(req.perfil().trim().toUpperCase());
+            if (perfil != Perfil.OPERADOR && perfil != Perfil.GERENTE) {
+                throw new IllegalArgumentException();
+            }
+            usuario.setPerfil(perfil);
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Escolha Operador ou Gestor");
+        }
         usuario = usuarioRepository.save(usuario);
 
         autenticarESalvarSessao(new LoginRequest(usuario.getEmail(), req.senha()), request, response);

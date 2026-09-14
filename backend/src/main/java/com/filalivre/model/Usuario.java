@@ -8,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +40,10 @@ public class Usuario implements UserDetails {
 
     @Column(nullable = false)
     private boolean ativo = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mercado_id")
+    private Mercado mercado;
 
     public Long getId() {
         return id;
@@ -81,6 +88,10 @@ public class Usuario implements UserDetails {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public Mercado getMercado() { return mercado; }
+
+    public void setMercado(Mercado mercado) { this.mercado = mercado; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -25,6 +25,26 @@ let carrinho = [];
 let solicitacaoPendenteId = null;
 let ultimaSolicitacaoDecidida = null;
 
+async function carregarMercado() {
+  const mercado = await apiFetch("/mercados/meu");
+  document.getElementById("mercado-atual").textContent = mercado
+    ? `${mercado.nome} · código ${mercado.codigoAcesso}`
+    : "Digite o código fornecido pelo gestor para acessar um mercado.";
+}
+
+document.getElementById("form-mercado").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  try {
+    await apiFetch("/mercados/entrar", {
+      method: "POST",
+      body: { codigo: document.getElementById("codigo-mercado").value.trim() }
+    });
+    mostrarToast("Mercado conectado", "verde");
+    await carregarMercado();
+    await carregarCaixas();
+  } catch (e) { mostrarToast(e.message, "vermelho"); }
+});
+
 btnIniciar.addEventListener("click", async () => {
   if (!caixaSelecionada()) return;
   try {
@@ -270,6 +290,7 @@ async function atualizarTudo() {
 
 (async function iniciar() {
   try {
+    await carregarMercado();
     await carregarCaixas();
   } catch (e) {
     mostrarToast(e.message, "vermelho");

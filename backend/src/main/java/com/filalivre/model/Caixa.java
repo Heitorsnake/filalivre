@@ -31,6 +31,10 @@ public class Caixa {
     @Column(nullable = false)
     private boolean ativo = true;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mercado_id")
+    private Mercado mercado;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusCaixa status = StatusCaixa.NORMAL;
@@ -74,6 +78,10 @@ public class Caixa {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public Mercado getMercado() { return mercado; }
+
+    public void setMercado(Mercado mercado) { this.mercado = mercado; }
 
     public StatusCaixa getStatus() {
         return status;

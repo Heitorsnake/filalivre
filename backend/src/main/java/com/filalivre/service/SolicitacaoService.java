@@ -38,6 +38,8 @@ public class SolicitacaoService {
         Caixa caixa = caixaRepository.findById(req.caixaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado"));
 
+        exigirMesmoMercado(caixa, operador);
+
         if (caixa.getOperador() == null || !caixa.getOperador().getId().equals(operador.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não está atendendo este caixa");
         }
@@ -69,19 +71,22 @@ public class SolicitacaoService {
                 .stream().map(this::toResponse).toList();
     }
 
-    public List<SolicitacaoResponse> pendentes() {
+    public List<SolicitacaoResponse> pendentes(Usuario gestor) {
         return solicitacaoRepository.findByStatusOrderByCriadoEmDesc(StatusSolicitacao.PENDENTE)
-                .stream().map(this::toResponse).toList();
+                .stream().filter(s -> mesmoMercado(s.getCaixa(), gestor))
+                .map(this::toResponse).toList();
     }
 
-    public List<SolicitacaoResponse> historico() {
+    public List<SolicitacaoResponse> historico(Usuario gestor) {
         return solicitacaoRepository.findTop100ByOrderByCriadoEmDesc()
-                .stream().map(this::toResponse).toList();
+                .stream().filter(s -> mesmoMercado(s.getCaixa(), gestor))
+                .map(this::toResponse).toList();
     }
 
     @Transactional
     public SolicitacaoResponse iniciarAnalise(Long id, Usuario gestor) {
         Solicitacao solicitacao = buscar(id);
+        exigirMesmoMercado(solicitacao.getCaixa(), gestor);
         exigirPendente(solicitacao);
         solicitacao.getCaixa().setStatus(StatusCaixa.APROVACAO);
         auditoriaService.registrar(gestor, solicitacao.getCaixa().getNumero(), "ANALISE_INICIADA",
@@ -92,6 +97,7 @@ public class SolicitacaoService {
     @Transactional
     public SolicitacaoResponse decidir(Long id, Usuario gestor, DecisaoRequest req) {
         Solicitacao solicitacao = buscar(id);
+        exigirMesmoMercado(solicitacao.getCaixa(), gestor);
         exigirPendente(solicitacao);
 
         solicitacao.setStatus(req.aprovar() ? StatusSolicitacao.APROVADA : StatusSolicitacao.RECUSADA);
@@ -115,6 +121,17 @@ public class SolicitacaoService {
     private Solicitacao buscar(Long id) {
         return solicitacaoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Solicitação não encontrada"));
+    }
+
+    private void exigirMesmoMercado(Caixa caixa, Usuario usuario) {
+        if (!mesmoMercado(caixa, usuario)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Solicitação não encontrada");
+        }
+    }
+
+    private boolean mesmoMercado(Caixa caixa, Usuario usuario) {
+        return usuario.getMercado() != null && caixa.getMercado() != null
+                && caixa.getMercado().getId().equals(usuario.getMercado().getId());
     }
 
     private SolicitacaoResponse toResponse(Solicitacao s) {

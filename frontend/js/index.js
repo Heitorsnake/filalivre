@@ -51,7 +51,8 @@ formCadastro.addEventListener("submit", async (evento) => {
       body: {
         nome: document.getElementById("cad-nome").value.trim(),
         email: document.getElementById("cad-email").value.trim(),
-        senha: document.getElementById("cad-senha").value
+        senha: document.getElementById("cad-senha").value,
+        perfil: document.getElementById("cad-perfil").value
       }
     });
     salvarUsuario(usuario);

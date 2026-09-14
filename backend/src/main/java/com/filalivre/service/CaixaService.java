@@ -32,25 +32,31 @@ public class CaixaService {
         this.auditoriaService = auditoriaService;
     }
 
-    public List<CaixaResponse> listar() {
-        return caixaRepository.findAllByAtivoTrueOrderByNumeroAsc().stream().map(this::toResponse).toList();
+    public List<CaixaResponse> listar(Usuario usuario) {
+        if (usuario.getMercado() == null) return List.of();
+        return caixaRepository.findAllByMercadoIdAndAtivoTrueOrderByNumeroAsc(usuario.getMercado().getId())
+                .stream().map(this::toResponse).toList();
     }
 
     @Transactional
-    public CaixaResponse criar(CaixaRequest req) {
+    public CaixaResponse criar(CaixaRequest req, Usuario usuario) {
+        if (usuario.getMercado() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cadastre um mercado antes de criar caixas");
+        }
         Caixa caixa = new Caixa();
         Integer maiorNumero = caixaRepository.findTopByOrderByNumeroDesc()
             .map(Caixa::getNumero)
             .orElse(null);
         caixa.setNumero(maiorNumero == null ? 1 : maiorNumero + 1);
         caixa.setLocalizacao(req.localizacao().trim());
+        caixa.setMercado(usuario.getMercado());
         caixa = caixaRepository.save(caixa);
         return toResponse(caixa);
     }
 
     @Transactional
     public CaixaResponse editar(Long id, CaixaRequest req, Usuario usuario) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, usuario);
         caixa.setLocalizacao(req.localizacao().trim());
         auditoriaService.registrar(usuario, caixa.getNumero(), "CAIXA_EDITADO",
                 "Localização alterada para " + caixa.getLocalizacao());
@@ -59,7 +65,7 @@ public class CaixaService {
 
     @Transactional
     public void desativar(Long id, Usuario usuario) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, usuario);
         if (caixa.getOperador() != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Finalize o atendimento antes de desativar o caixa");
@@ -71,7 +77,7 @@ public class CaixaService {
 
     @Transactional
     public CaixaResponse iniciarAtendimento(Long id, Usuario operador) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, operador);
         caixa.setOperador(operador);
         caixa.setStatus(StatusCaixa.NORMAL);
         caixa.setValorCompra(BigDecimal.ZERO);
@@ -84,7 +90,7 @@ public class CaixaService {
 
     @Transactional
     public CaixaResponse alternarEspera(Long id, Usuario usuario) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, usuario);
         if (caixa.getStatus() == StatusCaixa.SOLICITACAO || caixa.getStatus() == StatusCaixa.APROVACAO) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Não é possível alterar o status: existe uma solicitação em andamento neste caixa");
@@ -101,7 +107,7 @@ public class CaixaService {
 
     @Transactional
     public CaixaResponse finalizarAtendimento(Long id, Usuario usuario) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, usuario);
         String detalhes = String.format("Compra finalizada: %d itens, R$ %.2f",
                 caixa.getQtdItens(), caixa.getValorCompra());
         caixa.setOperador(null);
@@ -115,15 +121,20 @@ public class CaixaService {
 
     @Transactional
     public CaixaResponse atualizarTotais(Long id, Usuario operador, TotaisRequest req) {
-        Caixa caixa = buscar(id);
+        Caixa caixa = buscar(id, operador);
         caixa.setValorCompra(req.valorCompra());
         caixa.setQtdItens(req.qtdItens());
         return toResponse(caixa);
     }
 
-    private Caixa buscar(Long id) {
-        return caixaRepository.findByIdAndAtivoTrue(id)
+    private Caixa buscar(Long id, Usuario usuario) {
+        Caixa caixa = caixaRepository.findByIdAndAtivoTrue(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado"));
+        if (usuario.getMercado() == null || caixa.getMercado() == null
+                || !caixa.getMercado().getId().equals(usuario.getMercado().getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado");
+        }
+        return caixa;
     }
 
     private CaixaResponse toResponse(Caixa c) {

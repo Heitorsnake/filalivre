@@ -15,7 +15,15 @@ CREATE TABLE usuarios (
   email    TEXT NOT NULL UNIQUE,
   senha    TEXT NOT NULL,                  -- hash BCrypt
   perfil   TEXT NOT NULL,                  -- OPERADOR | SUPERVISOR | GERENTE | ADMINISTRADOR
-  ativo    INTEGER NOT NULL DEFAULT 1
+  ativo    INTEGER NOT NULL DEFAULT 1,
+  mercado_id BIGINT
+);
+
+CREATE TABLE mercados (
+  id BIGINT PRIMARY KEY,
+  nome TEXT NOT NULL,
+  codigo_acesso TEXT NOT NULL UNIQUE,
+  gestor_id BIGINT NOT NULL
 );
 
 CREATE TABLE caixas (
@@ -28,6 +36,7 @@ CREATE TABLE caixas (
   qtd_itens          INTEGER NOT NULL DEFAULT 0,
   operador_id        BIGINT,                -- FK usuarios.id (operador atual, opcional)
   inicio_atendimento TEXT,
+  mercado_id BIGINT,
   CONSTRAINT fk_caixa_operador FOREIGN KEY (operador_id) REFERENCES usuarios (id)
 );
 

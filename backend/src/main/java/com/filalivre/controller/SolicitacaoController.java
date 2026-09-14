@@ -39,8 +39,8 @@ public class SolicitacaoController {
 
     @GetMapping("/pendentes")
     @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
-    public List<SolicitacaoResponse> pendentes() {
-        return solicitacaoService.pendentes();
+    public List<SolicitacaoResponse> pendentes(@AuthenticationPrincipal Usuario usuario) {
+        return solicitacaoService.pendentes(usuario);
     }
 
     @PostMapping("/{id}/analisar")
@@ -59,7 +59,7 @@ public class SolicitacaoController {
 
     @GetMapping("/historico")
     @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE')")
-    public List<SolicitacaoResponse> historico() {
-        return solicitacaoService.historico();
+    public List<SolicitacaoResponse> historico(@AuthenticationPrincipal Usuario usuario) {
+        return solicitacaoService.historico(usuario);
     }
 }

@@ -28,6 +28,42 @@ let idsPendentesAnteriores = new Set();
 document.getElementById("nome-usuario").textContent = usuario.nome;
 document.getElementById("perfil-usuario").textContent = usuario.perfil;
 
+const secaoMercado = document.getElementById("secao-mercado");
+if (usuario.perfil !== "GERENTE") {
+  secaoMercado.style.display = "none";
+} else {
+  carregarMercadoGestor();
+  document.getElementById("form-mercado").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const erro = document.getElementById("erro-mercado");
+    erro.style.display = "none";
+    try {
+      const mercado = await apiFetch("/mercados", {
+        method: "POST",
+        body: { nome: document.getElementById("nome-mercado").value.trim() }
+      });
+      mostrarMercado(mercado);
+      mostrarToast("Mercado cadastrado. Compartilhe o código com os operadores.", "verde");
+    } catch (e) {
+      erro.textContent = e.message;
+      erro.style.display = "block";
+    }
+  });
+}
+
+async function carregarMercadoGestor() {
+  try {
+    const mercado = await apiFetch("/mercados/meu");
+    if (mercado) mostrarMercado(mercado);
+  } catch (e) { /* o formulário continua disponível */ }
+}
+
+function mostrarMercado(mercado) {
+  document.getElementById("mercado-resumo").textContent =
+    `${mercado.nome} · código de acesso: ${mercado.codigoAcesso}`;
+  document.getElementById("nome-mercado").value = mercado.nome;
+}
+
 if (!podeDecidir) {
   document.getElementById("btn-novo-caixa").style.display = "none";
 } else if (usuario?.perfil === "GERENTE") {
