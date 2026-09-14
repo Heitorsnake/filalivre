@@ -11,7 +11,7 @@ document.getElementById("nome-usuario").textContent = usuario?.nome || "";
 const rotulosPerfil = {
   OPERADOR: "Operador",
   SUPERVISOR: "Supervisor",
-  GERENTE: "Gestor",
+  SUPERVISOR: "Supervisor / gestor",
   ADMINISTRADOR: "Administrador"
 };
 

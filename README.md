@@ -83,7 +83,7 @@ As contas iniciais são criadas internamente por `DadosIniciais.java` quando a b
 | Perfil | E-mail | Senha | Código do mercado |
 |---|---|---|---|
 | Administrador | `admin@filalivre.com` | `admin123` | - |
-| Gestor | `gestor@filalivre.com` | `gestor123` | `MERCADO1` |
+| Supervisor / gestor | `supervisor@filalivre.com` | `supervisor123` | `MERCADO1` |
 | Operador | `operador@filalivre.com` | `operador123` | `MERCADO1` |
 
 O gestor cria ou atualiza o nome do mercado no painel e compartilha o código exibido com os operadores. O operador informa esse código no terminal para visualizar os caixas daquele mercado.

@@ -20,7 +20,7 @@ public class RelatorioController {
     }
 
     @GetMapping("/resumo")
-    @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     public ResumoResponse resumo(@AuthenticationPrincipal Usuario usuario) {
         return relatorioService.resumo(usuario);
     }

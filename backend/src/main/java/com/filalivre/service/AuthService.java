@@ -52,12 +52,12 @@ public class AuthService {
         usuario.setSenha(passwordEncoder.encode(req.senha()));
         try {
             Perfil perfil = Perfil.valueOf(req.perfil().trim().toUpperCase());
-            if (perfil != Perfil.OPERADOR && perfil != Perfil.GERENTE) {
+            if (perfil != Perfil.OPERADOR && perfil != Perfil.SUPERVISOR) {
                 throw new IllegalArgumentException();
             }
             usuario.setPerfil(perfil);
         } catch (IllegalArgumentException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Escolha Operador ou Gestor");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Escolha Operador ou Supervisor");
         }
         usuario = usuarioRepository.save(usuario);
 

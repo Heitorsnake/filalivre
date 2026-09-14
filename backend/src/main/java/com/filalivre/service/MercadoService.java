@@ -59,8 +59,9 @@ public class MercadoService {
     }
 
     private void exigirGestor(Usuario usuario) {
-        if (usuario.getPerfil() != Perfil.GERENTE && usuario.getPerfil() != Perfil.ADMINISTRADOR) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas gestores podem cadastrar mercados");
+        if (usuario.getPerfil() != Perfil.SUPERVISOR && usuario.getPerfil() != Perfil.GERENTE
+                && usuario.getPerfil() != Perfil.ADMINISTRADOR) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas supervisores podem cadastrar mercados");
         }
     }
 

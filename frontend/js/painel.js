@@ -29,7 +29,7 @@ document.getElementById("nome-usuario").textContent = usuario.nome;
 document.getElementById("perfil-usuario").textContent = usuario.perfil;
 
 const secaoMercado = document.getElementById("secao-mercado");
-if (usuario.perfil !== "GERENTE") {
+if (!["SUPERVISOR", "GERENTE"].includes(usuario.perfil)) {
   secaoMercado.style.display = "none";
 } else {
   carregarMercadoGestor();
@@ -66,7 +66,7 @@ function mostrarMercado(mercado) {
 
 if (!podeDecidir) {
   document.getElementById("btn-novo-caixa").style.display = "none";
-} else if (usuario?.perfil === "GERENTE") {
+} else if (["SUPERVISOR", "GERENTE"].includes(usuario?.perfil)) {
   const btnNovoCaixa = document.getElementById("btn-novo-caixa");
   const dialogCaixa = document.getElementById("dialog-caixa");
   btnNovoCaixa.addEventListener("click", () => {
@@ -207,7 +207,7 @@ async function carregarCaixas() {
         <div class="caixa-detalhe"><span>Itens</span><strong>${c.qtdItens}</strong></div>
         <div class="caixa-detalhe"><span>Operador</span><strong>${c.operadorNome ? escapar(c.operadorNome) : "—"}</strong></div>
         <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>
-        ${usuario?.perfil === "GERENTE" ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
+        ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
       grid.appendChild(cartao);
     }
     grid.querySelectorAll("[data-editar-caixa]").forEach(botao => botao.addEventListener("click", () => editarCaixa(botao.dataset.editarCaixa)));

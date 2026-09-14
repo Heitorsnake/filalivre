@@ -24,19 +24,20 @@ public class DadosIniciais {
         return args -> {
             if (usuarioRepository.count() == 0) {
                 Usuario admin = usuario("Administrador", "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR, passwordEncoder);
-                Usuario gerente = usuario("Gestor Demonstração", "gestor@filalivre.com", "gestor123", Perfil.GERENTE, passwordEncoder);
+                Usuario supervisor = usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123", Perfil.SUPERVISOR, passwordEncoder);
                 Usuario operador = usuario("Operador Demonstração", "operador@filalivre.com", "operador123", Perfil.OPERADOR, passwordEncoder);
-                usuarioRepository.saveAll(List.of(admin, gerente, operador));
+                usuarioRepository.saveAll(List.of(admin, supervisor, operador));
 
                 Mercado mercado = new Mercado();
                 mercado.setNome("Mercado Demonstração");
                 mercado.setCodigoAcesso("MERCADO1");
-                mercado.setGestor(gerente);
+                mercado.setGestor(supervisor);
                 mercado = mercadoRepository.save(mercado);
-                gerente.setMercado(mercado);
+                supervisor.setMercado(mercado);
                 operador.setMercado(mercado);
-                usuarioRepository.saveAll(List.of(gerente, operador));
+                usuarioRepository.saveAll(List.of(supervisor, operador));
             }
+            migrarContaGestorAntiga(usuarioRepository, passwordEncoder);
             if (caixaRepository.count() == 0) {
                 Mercado mercado = mercadoRepository.findAll().stream().findFirst().orElse(null);
                 for (int numero = 1; numero <= 6; numero++) {
@@ -47,6 +48,21 @@ public class DadosIniciais {
                 }
             }
         };
+    }
+
+    private void migrarContaGestorAntiga(UsuarioRepository usuarioRepository,
+                                         PasswordEncoder passwordEncoder) {
+        usuarioRepository.findByEmail("gestor@filalivre.com").ifPresent(antiga -> {
+            if (usuarioRepository.findByEmail("supervisor@filalivre.com").isEmpty()) {
+                antiga.setNome("Supervisor Demonstração");
+                antiga.setEmail("supervisor@filalivre.com");
+                antiga.setSenha(passwordEncoder.encode("supervisor123"));
+                antiga.setPerfil(Perfil.SUPERVISOR);
+                usuarioRepository.save(antiga);
+            } else {
+                usuarioRepository.delete(antiga);
+            }
+        });
     }
 
     private Usuario usuario(String nome, String email, String senha, Perfil perfil, PasswordEncoder encoder) {

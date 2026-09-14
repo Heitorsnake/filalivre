@@ -37,7 +37,7 @@ public class CaixaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     @ResponseStatus(HttpStatus.CREATED)
     public CaixaResponse criar(@Valid @RequestBody CaixaRequest req,
                                @AuthenticationPrincipal Usuario usuario) {
@@ -45,7 +45,7 @@ public class CaixaController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     public CaixaResponse editar(@PathVariable Long id,
                                 @Valid @RequestBody CaixaRequest req,
                                 @AuthenticationPrincipal Usuario usuario) {
@@ -53,7 +53,7 @@ public class CaixaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('GERENTE', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desativar(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         caixaService.desativar(id, usuario);
