@@ -64,6 +64,7 @@ Acesse:
 
 ```text
 http://localhost:8080
+https://filalivre.onrender.com
 ```
 
 O backend serve as páginas do frontend quando `FILALIVRE_FRONTEND_PATH` aponta para `../frontend`, que é o padrão local.
@@ -75,7 +76,7 @@ docker build -t filalivre .
 docker run --rm -p 8080:8080 -v filalivre-data:/data filalivre
 ```
 
-Depois, acesse `http://localhost:8080`.
+Depois, acesse `http://localhost:8080`ou `https://filalivre.onrender.com`.
 
 As contas iniciais são criadas internamente por `DadosIniciais.java` quando a base é inicializada. As credenciais não são exibidas na interface pública de login.
 
