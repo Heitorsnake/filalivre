@@ -68,10 +68,15 @@ CREATE TABLE registros_acao (
   CONSTRAINT fk_reg_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
 );
 
+-- O campo usuarios.mercado_id e caixas.mercado_id limita a operacao ao mercado do usuario.
+-- O supervisor exerce a funcao de gestor; GERENTE e mantido apenas para compatibilidade
+-- com bancos antigos.
+
 -- =====================================================================
 -- Dados iniciais (criados automaticamente pelo DadosIniciais.java):
 --   admin@filalivre.com    / admin123     (ADMINISTRADOR)
---   gerente@filalivre.com  / gerente123   (GERENTE)
+--   supervisor@filalivre.com / supervisor123 (SUPERVISOR e gestor)
 --   operador@filalivre.com / operador123  (OPERADOR)
+--   Codigo do mercado de demonstracao: MERCADO1
 --   Caixas numerados de 1 a 6 com status NORMAL
 -- =====================================================================
