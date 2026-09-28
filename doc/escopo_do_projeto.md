@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-O FilaLivre reduz o tempo de espera nos caixas ao permitir que solicitações de cancelamento, desconto e cupom sejam analisadas remotamente pelo supervisor, que exerce a função de gestor. O sistema registra cada ação para manter rastreabilidade operacional e separa a operação por mercado.
+O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, que exerce a função de gestor, acompanha os atendimentos e analisa solicitações de cancelamento de item sem precisar se deslocar até o caixa. O sistema registra cada ação para manter rastreabilidade operacional e separa a operação por mercado.
 
 ## Escopo funcional
 
@@ -11,7 +11,7 @@ O FilaLivre reduz o tempo de espera nos caixas ao permitir que solicitações de
 - Cadastro de mercado pelo supervisor e geração de código de acesso.
 - Entrada do operador no mercado por código.
 - Operação de caixas, carrinho simulado e acompanhamento do atendimento.
-- Criação de solicitações pelo operador.
+- Criação de solicitações de cancelamento de item pelo operador.
 - Análise, aprovação ou recusa pelo gestor/supervisor.
 - Administração de usuários, perfis e status de ativação.
 - Relatórios resumidos e histórico de auditoria.

@@ -1,5 +1,7 @@
 # Requisitos de Sistema - FilaLivre
 
+O projeto é voltado ao acesso remoto à operação dos caixas: o supervisor acompanha o atendimento e decide solicitações pelo painel, sem precisar estar fisicamente no caixa.
+
 ## Stack obrigatória
 
 - Java 21 e Spring Boot no backend.
@@ -53,6 +55,7 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 - Usuários inativos não podem autenticar.
 - Ações relevantes são registradas na auditoria.
 - O acesso a caixas, solicitações, histórico e relatórios respeita o mercado do usuário.
+- Novas solicitações de negócio são limitadas ao cancelamento de item.
 
 ## Requisitos não funcionais
 

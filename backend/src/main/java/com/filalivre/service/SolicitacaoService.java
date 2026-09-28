@@ -7,6 +7,7 @@ import com.filalivre.model.Caixa;
 import com.filalivre.model.StatusCaixa;
 import com.filalivre.model.StatusSolicitacao;
 import com.filalivre.model.Solicitacao;
+import com.filalivre.model.TipoSolicitacao;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.SolicitacaoRepository;
@@ -35,6 +36,11 @@ public class SolicitacaoService {
 
     @Transactional
     public SolicitacaoResponse criar(Usuario operador, SolicitacaoRequest req) {
+        if (req.tipo() != TipoSolicitacao.CANCELAMENTO) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "O único tipo de solicitação disponível é cancelamento de item");
+        }
+
         Caixa caixa = caixaRepository.findById(req.caixaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado"));
 

@@ -1,6 +1,6 @@
 # FilaLivre
 
-Sistema de gerenciamento remoto de caixas de supermercado. O operador registra uma ocorrência no terminal, o supervisor, que exerce a função de gestor, toma a decisão remotamente e o administrador mantém usuários, perfis e auditoria.
+Sistema voltado ao acesso remoto à operação de caixas de supermercado. O operador registra uma solicitação de cancelamento de item no terminal e o supervisor, que exerce a função de gestor, analisa e decide pelo painel, sem deslocamento físico. O administrador mantém usuários, perfis e auditoria.
 
 ## Tecnologias
 
@@ -61,7 +61,7 @@ O arquivo `database/filalivre-cloud.sql` é uma cópia de demonstração para co
 - `mercados`: mercado cadastrado pelo supervisor e seu código de acesso.
 - `usuarios`: contas, perfil, status e mercado associado.
 - `caixas`: caixas ativos, operador atual, status, totais e mercado.
-- `solicitacoes`: pedidos de cancelamento, desconto ou cupom.
+- `solicitacoes`: pedidos de cancelamento de item.
 - `registros_acao`: auditoria de login, atendimento, decisões e alterações.
 
 Cada operador informa o código do mercado no terminal. A API passa a listar somente os caixas e solicitações daquele mercado.

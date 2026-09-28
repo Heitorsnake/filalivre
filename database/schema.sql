@@ -44,7 +44,7 @@ CREATE TABLE solicitacoes (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   caixa_id      BIGINT NOT NULL,
   operador_id   BIGINT NOT NULL,
-  tipo          TEXT NOT NULL,              -- CANCELAMENTO | DESCONTO | CUPOM
+  tipo          TEXT NOT NULL,              -- CANCELAMENTO
   produto       TEXT NOT NULL,
   quantidade    INTEGER,
   valor         NUMERIC,

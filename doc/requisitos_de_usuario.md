@@ -17,9 +17,9 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 - **RU-01A - Cadastro de perfil:** no cadastro público, o usuário escolhe operador ou supervisor/gestor. Administrador continua sendo criado apenas pela administração.
 - **RU-02 - Terminal do operador:** o operador visualiza seu caixa, registra itens, inicia, pausa e finaliza o atendimento.
 - **RU-02A - Acesso ao mercado:** o operador informa o código recebido do supervisor e visualiza somente os caixas do mercado associado.
-- **RU-03 - Solicitação:** o operador informa tipo, produto, quantidade, valor e motivo para criar uma solicitação pendente.
+- **RU-03 - Solicitação:** o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.
 - **RU-04 - Acompanhamento:** o operador visualiza o retorno da decisão no terminal.
-- **RU-05 - Painel do supervisor/gestor:** o supervisor/gestor cadastra o mercado, visualiza caixas, status, operadores e solicitações pendentes.
+- **RU-05 - Painel remoto do supervisor/gestor:** o supervisor/gestor acompanha remotamente caixas, status, operadores e solicitações pendentes do mercado.
 - **RU-06 - Decisão:** supervisor e gestor podem analisar, aprovar ou recusar uma solicitação.
 - **RU-07 - Relatórios:** gestor e administrador consultam totais e indicadores operacionais.
 - **RU-08 - Administração:** administrador cria usuários, escolhe seus perfis e ativa ou desativa contas.
@@ -30,9 +30,9 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 1. O supervisor/gestor cria o mercado e recebe um código de acesso.
 2. O operador informa o código e entra no mercado correto.
 3. O operador escolhe um caixa livre, inicia o atendimento e registra os produtos.
-4. Quando necessário, envia uma solicitação ao supervisor/gestor.
-5. O painel do supervisor/gestor apresenta a solicitação pendente.
-6. O supervisor/gestor analisa e decide.
+4. Quando necessário, envia uma solicitação de cancelamento de item ao supervisor/gestor.
+5. O painel remoto do supervisor/gestor apresenta a solicitação pendente.
+6. O supervisor/gestor analisa e decide sem se deslocar até o caixa.
 7. O sistema registra a decisão e atualiza o terminal do operador.
 8. O administrador acompanha a operação por relatórios e auditoria.
 

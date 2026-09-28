@@ -108,6 +108,7 @@ async function carregarResumo() {
 async function carregarPendentes() {
   try {
     const pendentes = await apiFetch("/solicitacoes/pendentes");
+    atualizarStatusConexao("conectada");
     const container = document.getElementById("lista-pendentes");
 
     const idsNovos = new Set(pendentes.map(s => s.id));
@@ -155,13 +156,25 @@ async function carregarPendentes() {
       b.addEventListener("click", () => decidir(b.dataset.recusar, false)));
     container.querySelectorAll("[data-analisar]").forEach(b =>
       b.addEventListener("click", () => analisar(b.dataset.analisar)));
-  } catch (e) { /* silencioso */ }
+  } catch (e) {
+    atualizarStatusConexao("desconectada");
+  }
 }
 
 let jaCarregouPrimeiraVez = false;
 
+function atualizarStatusConexao(status) {
+  const indicador = document.getElementById("status-conexao");
+  const rotulos = {
+    conectada: "Conectado ao painel remoto",
+    desconectada: "Sem conexão com o servidor"
+  };
+  indicador.className = `status-conexao ${status}`;
+  indicador.textContent = rotulos[status];
+}
+
 function rotuloTipo(tipo) {
-  return { CANCELAMENTO: "Cancelamento", DESCONTO: "Desconto", CUPOM: "Cupom" }[tipo] || tipo;
+  return { CANCELAMENTO: "Cancelamento" }[tipo] || "Tipo legado";
 }
 
 function escapar(texto) {
