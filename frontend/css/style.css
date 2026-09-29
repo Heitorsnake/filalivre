@@ -129,6 +129,7 @@ body {
 .acesso-remoto-item > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .acesso-remoto-item > div:first-child span { color: var(--texto-fraco); font-size: 0.78rem; overflow-wrap: anywhere; }
 .acesso-remoto-destino strong { font-size: 0.86rem; overflow-wrap: anywhere; }
+.acesso-remoto-acoes { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .acesso-remoto-indisponivel { color: var(--texto-fraco); font-size: 0.76rem; }
 .status-conexao {
   display: inline-flex;

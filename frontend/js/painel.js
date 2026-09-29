@@ -227,7 +227,10 @@ async function carregarCaixas() {
           <span class="anydesk-rotulo">ID AnyDesk</span>
           <strong>${c.anydeskId ? escapar(c.anydeskId) : "Não configurado"}</strong>
         </div>
-        ${c.anydeskId ? `<a class="btn btn-azul btn-pequeno" href="anydesk://${encodeURIComponent(c.anydeskId.replace(/\s+/g, ""))}">Conectar</a>` : `<span class="acesso-remoto-indisponivel">Sem acesso configurado</span>`}`;
+        <div class="acesso-remoto-acoes">
+          ${c.anydeskId ? `<a class="btn btn-azul btn-pequeno" href="anydesk:${encodeURIComponent(c.anydeskId.replace(/\s+/g, ""))}">Conectar</a>` : `<span class="acesso-remoto-indisponivel">Sem acesso configurado</span>`}
+          ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<button type="button" class="btn btn-cinza btn-pequeno" data-editar-anydesk="${c.id}">${c.anydeskId ? "Editar ID" : "Adicionar ID"}</button>` : ""}
+        </div>`;
       listaAcessoRemoto.appendChild(acessoRemoto);
 
       const cartao = document.createElement("div");
@@ -240,11 +243,11 @@ async function carregarCaixas() {
         <div class="caixa-detalhe"><span>Itens</span><strong>${c.qtdItens}</strong></div>
         <div class="caixa-detalhe"><span>Operador</span><strong>${c.operadorNome ? escapar(c.operadorNome) : "—"}</strong></div>
         <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>
-        ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-cinza btn-pequeno" data-editar-anydesk="${c.id}">Editar AnyDesk</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
+        ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
       grid.appendChild(cartao);
     }
     grid.querySelectorAll("[data-editar-caixa]").forEach(botao => botao.addEventListener("click", () => editarCaixa(botao.dataset.editarCaixa)));
-    grid.querySelectorAll("[data-editar-anydesk]").forEach(botao => botao.addEventListener("click", () => {
+    listaAcessoRemoto.querySelectorAll("[data-editar-anydesk]").forEach(botao => botao.addEventListener("click", () => {
       const caixa = caixas.find(item => String(item.id) === botao.dataset.editarAnydesk);
       if (caixa) editarAnydesk(caixa);
     }));

@@ -44,7 +44,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 3. O operador visualiza o identificador associado ao caixa selecionado no terminal.
 4. Na seção **Acesso remoto** do painel, o gestor aciona **Conectar** junto ao caixa desejado para solicitar ao sistema operacional a abertura do cliente AnyDesk instalado no computador do gestor com o identificador do caixa.
 
-O FilaLivre não obtém o ID automaticamente, não estabelece a sessão e não incorpora a imagem da tela remota. A conexão depende do AnyDesk instalado e configurado, da disponibilidade do computador remoto e da autorização exigida pelo AnyDesk.
+O FilaLivre não obtém o ID automaticamente nem incorpora a imagem da tela remota. O link `anydesk:<ID>` solicita a abertura do cliente padrão instalado e o início da sessão. A conexão depende da disponibilidade do computador remoto e da autorização exigida pelo AnyDesk; clientes personalizados podem usar outro prefixo de URL handler.
 
 ## Critérios de aceite
 
