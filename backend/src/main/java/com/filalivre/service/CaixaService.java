@@ -2,6 +2,7 @@ package com.filalivre.service;
 
 import com.filalivre.dto.CaixaRequest;
 import com.filalivre.dto.CaixaResponse;
+import com.filalivre.dto.AnydeskRequest;
 import com.filalivre.dto.TotaisRequest;
 import com.filalivre.model.Caixa;
 import com.filalivre.model.StatusCaixa;
@@ -64,6 +65,19 @@ public class CaixaService {
         }
         auditoriaService.registrar(usuario, caixa.getNumero(), "CAIXA_EDITADO",
                 "Localização alterada para " + caixa.getLocalizacao());
+        return toResponse(caixa);
+    }
+
+    @Transactional
+    public CaixaResponse atualizarAnydesk(Long id, Usuario operador, AnydeskRequest req) {
+        Caixa caixa = buscar(id, operador);
+        if (caixa.getOperador() != null && !caixa.getOperador().getId().equals(operador.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Não é possível alterar o AnyDesk de um caixa em atendimento por outro operador");
+        }
+        caixa.setAnydeskId(normalizarAnydeskId(req.anydeskId()));
+        auditoriaService.registrar(operador, caixa.getNumero(), "CAIXA_ANYDESK_ATUALIZADO",
+                "ID AnyDesk do caixa atualizado");
         return toResponse(caixa);
     }
 

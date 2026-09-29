@@ -360,6 +360,7 @@ body {
 
 .linha-form { display: grid; grid-template-columns: 1fr 110px 80px auto; gap: 10px; margin-bottom: 14px; }
 @media (max-width: 700px) { .linha-form { grid-template-columns: 1fr 1fr; } }
+.linha-form.linha-anydesk { grid-template-columns: 1fr auto; }
 
 .banner-decisao {
   border-radius: 12px;

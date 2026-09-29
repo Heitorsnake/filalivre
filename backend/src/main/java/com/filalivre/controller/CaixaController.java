@@ -2,6 +2,7 @@ package com.filalivre.controller;
 
 import com.filalivre.dto.CaixaRequest;
 import com.filalivre.dto.CaixaResponse;
+import com.filalivre.dto.AnydeskRequest;
 import com.filalivre.dto.TotaisRequest;
 import com.filalivre.model.Usuario;
 import com.filalivre.service.CaixaService;
@@ -50,6 +51,14 @@ public class CaixaController {
                                 @Valid @RequestBody CaixaRequest req,
                                 @AuthenticationPrincipal Usuario usuario) {
         return caixaService.editar(id, req, usuario);
+    }
+
+    @PutMapping("/{id}/anydesk")
+    @PreAuthorize("hasRole('OPERADOR')")
+    public CaixaResponse atualizarAnydesk(@PathVariable Long id,
+                                          @Valid @RequestBody AnydeskRequest req,
+                                          @AuthenticationPrincipal Usuario operador) {
+        return caixaService.atualizarAnydesk(id, operador, req);
     }
 
     @DeleteMapping("/{id}")

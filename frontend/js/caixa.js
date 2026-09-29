@@ -18,6 +18,8 @@ const btnFinalizar = document.getElementById("btn-finalizar");
 const btnSolicitar = document.getElementById("btn-solicitar");
 const aguardandoGestor = document.getElementById("aguardando-gestor");
 const bannerDecisao = document.getElementById("banner-decisao");
+const secaoCarrinho = document.getElementById("secao-carrinho");
+const anydeskIdOperador = document.getElementById("anydesk-id-operador");
 
 let caixas = [];
 let caixaAtual = null;
@@ -41,6 +43,19 @@ document.getElementById("form-mercado").addEventListener("submit", async (evento
     });
     mostrarToast("Mercado conectado", "verde");
     await carregarMercado();
+    await carregarCaixas();
+  } catch (e) { mostrarToast(e.message, "vermelho"); }
+});
+
+document.getElementById("form-anydesk-operador").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  if (!caixaSelecionada()) return;
+  try {
+    await apiFetch(`/caixas/${caixaAtual.id}/anydesk`, {
+      method: "PUT",
+      body: { anydeskId: anydeskIdOperador.value.trim() || null }
+    });
+    mostrarToast("ID AnyDesk atualizado", "verde");
     await carregarCaixas();
   } catch (e) { mostrarToast(e.message, "vermelho"); }
 });
@@ -221,6 +236,9 @@ async function carregarCaixas() {
 
   document.getElementById("anydesk-operador").textContent =
     caixaAtual?.anydeskId || "Acesso remoto não configurado";
+  if (document.activeElement !== anydeskIdOperador) {
+    anydeskIdOperador.value = caixaAtual?.anydeskId || "";
+  }
   renderizarStatus(caixaAtual);
 
   const minhasPendentes = await apiFetch("/solicitacoes/minhas");
@@ -244,7 +262,12 @@ async function carregarCaixas() {
 }
 
 function renderizarStatus(caixa) {
-  if (!caixa) return;
+  if (!caixa) {
+    secaoCarrinho.hidden = true;
+    anydeskIdOperador.disabled = true;
+    document.querySelector("#form-anydesk-operador button").disabled = true;
+    return;
+  }
 
   chipStatus.className = `status-chip status-${caixa.status}`;
   const rotulos = {
@@ -262,6 +285,9 @@ function renderizarStatus(caixa) {
   const meuAtendimento = caixa.operadorNome === usuario.nome;
   const bloqueadoPorSolicitacao = caixa.status === "SOLICITACAO" || caixa.status === "APROVACAO";
 
+  secaoCarrinho.hidden = !meuAtendimento || !caixa.inicioAtendimento;
+  anydeskIdOperador.disabled = Boolean(caixa.operadorNome && !meuAtendimento);
+  document.querySelector("#form-anydesk-operador button").disabled = anydeskIdOperador.disabled;
   btnEspera.disabled = !meuAtendimento || bloqueadoPorSolicitacao;
   btnFinalizar.disabled = !meuAtendimento || bloqueadoPorSolicitacao;
   btnSolicitar.disabled = !meuAtendimento || bloqueadoPorSolicitacao;
