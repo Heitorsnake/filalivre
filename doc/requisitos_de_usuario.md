@@ -20,7 +20,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 - **RU-03 - Solicitação:** o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.
 - **RU-04 - Acompanhamento:** o operador visualiza o retorno da decisão no terminal.
 - **RU-05 - Painel remoto do supervisor/gestor:** o supervisor/gestor acompanha remotamente caixas, status, operadores e solicitações pendentes do mercado.
-- **RU-05A - Acesso AnyDesk por caixa:** ao cadastrar ou editar um caixa, o supervisor/gestor pode informar opcionalmente o ID/endereço AnyDesk do computador do operador. O painel exibe o ID no cartão do caixa e oferece um atalho para abrir o cliente AnyDesk nesse endereço. O terminal do operador exibe o ID associado ao caixa selecionado.
+- **RU-05A - Acesso AnyDesk por caixa:** ao cadastrar ou editar um caixa, o supervisor/gestor pode informar opcionalmente o ID/endereço AnyDesk do computador do operador. A seção Acesso remoto do painel lista os caixas, exibe cada ID e oferece um atalho para abrir o cliente AnyDesk nesse endereço. O terminal do operador exibe o ID associado ao caixa selecionado.
 - **RU-06 - Decisão:** supervisor e gestor podem analisar, aprovar ou recusar uma solicitação.
 - **RU-07 - Relatórios:** gestor e administrador consultam totais e indicadores operacionais.
 - **RU-08 - Administração:** administrador cria usuários, escolhe seus perfis e ativa ou desativa contas.
@@ -42,7 +42,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 1. O operador ou responsável pelo computador do caixa informa ao gestor o ID/endereço mostrado no AnyDesk dessa máquina. O ID do próprio computador do gestor não deve ser usado nesse cadastro.
 2. O gestor informa esse identificador no campo opcional do cadastro do caixa. Também pode adicioná-lo ou alterá-lo posteriormente pelo cartão do caixa.
 3. O operador visualiza o identificador associado ao caixa selecionado no terminal.
-4. No painel, o gestor aciona **Conectar** para solicitar ao sistema operacional a abertura do cliente AnyDesk instalado no computador do gestor com o identificador do caixa.
+4. Na seção **Acesso remoto** do painel, o gestor aciona **Conectar** junto ao caixa desejado para solicitar ao sistema operacional a abertura do cliente AnyDesk instalado no computador do gestor com o identificador do caixa.
 
 O FilaLivre não obtém o ID automaticamente, não estabelece a sessão e não incorpora a imagem da tela remota. A conexão depende do AnyDesk instalado e configurado, da disponibilidade do computador remoto e da autorização exigida pelo AnyDesk.
 

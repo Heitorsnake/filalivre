@@ -212,8 +212,24 @@ async function carregarCaixas() {
   try {
     const caixas = await apiFetch("/caixas");
     const grid = document.getElementById("grid-caixas");
+    const listaAcessoRemoto = document.getElementById("lista-acesso-remoto");
     grid.innerHTML = "";
+    listaAcessoRemoto.innerHTML = "";
     for (const c of caixas) {
+      const acessoRemoto = document.createElement("div");
+      acessoRemoto.className = "acesso-remoto-item";
+      acessoRemoto.innerHTML = `
+        <div>
+          <strong>Caixa ${String(c.numero).padStart(2, "0")}</strong>
+          <span>${escapar(c.operadorNome || c.localizacao || "Operador não identificado")}</span>
+        </div>
+        <div class="acesso-remoto-destino">
+          <span class="anydesk-rotulo">ID AnyDesk</span>
+          <strong>${c.anydeskId ? escapar(c.anydeskId) : "Não configurado"}</strong>
+        </div>
+        ${c.anydeskId ? `<a class="btn btn-azul btn-pequeno" href="anydesk://${encodeURIComponent(c.anydeskId.replace(/\s+/g, ""))}">Conectar</a>` : `<span class="acesso-remoto-indisponivel">Sem acesso configurado</span>`}`;
+      listaAcessoRemoto.appendChild(acessoRemoto);
+
       const cartao = document.createElement("div");
       cartao.className = `caixa-card borda-${c.status}`;
       cartao.innerHTML = `
@@ -224,11 +240,6 @@ async function carregarCaixas() {
         <div class="caixa-detalhe"><span>Itens</span><strong>${c.qtdItens}</strong></div>
         <div class="caixa-detalhe"><span>Operador</span><strong>${c.operadorNome ? escapar(c.operadorNome) : "—"}</strong></div>
         <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>
-        <div class="anydesk-card">
-          <span class="anydesk-rotulo">AnyDesk</span>
-          <strong>${c.anydeskId ? escapar(c.anydeskId) : "Não configurado"}</strong>
-          ${c.anydeskId ? `<a class="btn btn-azul btn-pequeno" href="anydesk://${encodeURIComponent(c.anydeskId.replace(/\s+/g, ""))}">Conectar</a>` : ""}
-        </div>
         ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-cinza btn-pequeno" data-editar-anydesk="${c.id}">Editar AnyDesk</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
       grid.appendChild(cartao);
     }

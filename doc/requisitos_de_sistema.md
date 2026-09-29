@@ -53,7 +53,7 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 - `PATCH /api/caixas/{id}` aceita `anydeskId` para atualizar ou limpar o identificador. Quando omitido, o valor existente deve ser preservado para compatibilidade com atualizações que alteram somente a localização.
 - As respostas de caixas incluem `anydeskId`, nulo quando não configurado. O campo é limitado ao caixa e ao mercado correspondentes às regras existentes de autorização.
 - A entidade persiste o valor na coluna `caixas.anydesk_id`. O Hibernate aplica a alteração no banco conforme `ddl-auto: update`; os esquemas SQL de referência também declaram a coluna.
-- O painel do gestor remove espaços do ID ao montar o endereço `anydesk://` do botão **Conectar**. A abertura depende do handler do cliente AnyDesk no computador do gestor e das confirmações do navegador/sistema operacional.
+- A seção **Acesso remoto** do painel lista os caixas e seus IDs AnyDesk; os cartões operacionais permanecem separados. O painel remove espaços do ID ao montar o endereço `anydesk://` do botão **Conectar**. A abertura depende do handler do cliente AnyDesk no computador do gestor e das confirmações do navegador/sistema operacional.
 - O terminal do operador exibe o identificador do caixa selecionado. Nenhuma API do FilaLivre captura ou transmite a tela, autentica a sessão AnyDesk ou controla o dispositivo remoto.
 
 ## Segurança

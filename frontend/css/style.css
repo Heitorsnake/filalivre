@@ -112,8 +112,8 @@ body {
 
 .painel-remoto {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 16px;
   padding: 14px 18px;
   background: var(--bg-card);
@@ -122,6 +122,14 @@ body {
 }
 .painel-remoto strong { font-size: 0.92rem; }
 .painel-remoto p { color: var(--texto-fraco); font-size: 0.82rem; margin-top: 4px; }
+.painel-remoto > div:first-child { flex: 1 1 280px; }
+.painel-remoto > .status-conexao { flex: 0 0 auto; }
+.lista-acesso-remoto { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; width: 100%; }
+.acesso-remoto-item { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; min-width: 0; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+.acesso-remoto-item > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.acesso-remoto-item > div:first-child span { color: var(--texto-fraco); font-size: 0.78rem; overflow-wrap: anywhere; }
+.acesso-remoto-destino strong { font-size: 0.86rem; overflow-wrap: anywhere; }
+.acesso-remoto-indisponivel { color: var(--texto-fraco); font-size: 0.76rem; }
 .status-conexao {
   display: inline-flex;
   align-items: center;
@@ -138,6 +146,8 @@ body {
 .status-conexao.desconectada { color: var(--vermelho); background: rgba(239,68,68,.12); }
 @media (max-width: 600px) {
   .painel-remoto { align-items: flex-start; flex-direction: column; }
+  .painel-remoto > .status-conexao { white-space: normal; }
+  .lista-acesso-remoto { grid-template-columns: 1fr; }
 }
 
 /* ===== Chips de estatísticas ===== */
