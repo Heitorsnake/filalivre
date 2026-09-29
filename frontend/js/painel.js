@@ -78,8 +78,12 @@ if (!podeDecidir) {
     try {
       await apiFetch("/caixas", {
         method: "POST",
-        body: { localizacao: document.getElementById("localizacao-caixa").value.trim() }
+        body: {
+          localizacao: document.getElementById("localizacao-caixa").value.trim(),
+          anydeskId: document.getElementById("anydesk-id-caixa").value.trim() || null
+        }
       });
+      e.target.reset();
       dialogCaixa.close();
       mostrarToast("Caixa cadastrado com sucesso", "verde");
       carregarCaixas();
@@ -220,12 +224,34 @@ async function carregarCaixas() {
         <div class="caixa-detalhe"><span>Itens</span><strong>${c.qtdItens}</strong></div>
         <div class="caixa-detalhe"><span>Operador</span><strong>${c.operadorNome ? escapar(c.operadorNome) : "—"}</strong></div>
         <div class="caixa-detalhe"><span>Tempo de atendimento</span><strong>${tempoDecorrido(c.inicioAtendimento)}</strong></div>
-        ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
+        <div class="anydesk-card">
+          <span class="anydesk-rotulo">AnyDesk</span>
+          <strong>${c.anydeskId ? escapar(c.anydeskId) : "Não configurado"}</strong>
+          ${c.anydeskId ? `<a class="btn btn-azul btn-pequeno" href="anydesk://${encodeURIComponent(c.anydeskId.replace(/\s+/g, ""))}">Conectar</a>` : ""}
+        </div>
+        ${["SUPERVISOR", "GERENTE"].includes(usuario?.perfil) ? `<div class="dialog-acoes"><button class="btn btn-cinza btn-pequeno" data-editar-caixa="${c.id}">Editar local</button><button class="btn btn-cinza btn-pequeno" data-editar-anydesk="${c.id}">Editar AnyDesk</button><button class="btn btn-vermelho btn-pequeno" data-desativar-caixa="${c.id}">Desativar</button></div>` : ""}`;
       grid.appendChild(cartao);
     }
     grid.querySelectorAll("[data-editar-caixa]").forEach(botao => botao.addEventListener("click", () => editarCaixa(botao.dataset.editarCaixa)));
+    grid.querySelectorAll("[data-editar-anydesk]").forEach(botao => botao.addEventListener("click", () => {
+      const caixa = caixas.find(item => String(item.id) === botao.dataset.editarAnydesk);
+      if (caixa) editarAnydesk(caixa);
+    }));
     grid.querySelectorAll("[data-desativar-caixa]").forEach(botao => botao.addEventListener("click", () => desativarCaixa(botao.dataset.desativarCaixa)));
   } catch (e) { /* silencioso */ }
+}
+
+async function editarAnydesk(caixa) {
+  const anydeskId = prompt("ID ou endereço AnyDesk do computador do caixa (deixe vazio para remover):", caixa.anydeskId || "");
+  if (anydeskId === null) return;
+  try {
+    await apiFetch(`/caixas/${caixa.id}`, {
+      method: "PATCH",
+      body: { localizacao: caixa.localizacao || "Não informada", anydeskId: anydeskId.trim() }
+    });
+    mostrarToast(anydeskId.trim() ? "Acesso AnyDesk atualizado" : "Acesso AnyDesk removido", "verde");
+    carregarCaixas();
+  } catch (e) { mostrarToast(e.message, "vermelho"); }
 }
 
 async function editarCaixa(id) {

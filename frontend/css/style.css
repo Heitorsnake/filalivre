@@ -380,13 +380,31 @@ dialog {
   background: var(--bg-card);
   color: var(--texto);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 26px;
-  width: min(440px, 92vw);
+  border-radius: 10px;
+  padding: 30px;
+  width: min(520px, 92vw);
+  max-height: min(88vh, 720px);
+  overflow-y: auto;
+  margin: auto;
 }
 dialog::backdrop { background: rgba(5, 8, 15, 0.75); }
 dialog h3 { margin-bottom: 18px; }
+.dialog-kicker { color: var(--verde); font-size: 0.7rem; font-weight: 800; margin-bottom: 8px; }
+.dialog-descricao { color: var(--texto-fraco); font-size: 0.88rem; margin: -8px 0 20px; line-height: 1.5; }
+.campo small { color: var(--texto-fraco); font-size: 0.76rem; line-height: 1.45; }
+.campo label span { color: var(--texto-fraco); font-weight: 400; }
 .dialog-acoes { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+
+.anydesk-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border); }
+.anydesk-rotulo { color: var(--texto-fraco); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+.anydesk-card strong, .acesso-anydesk-operador strong { overflow-wrap: anywhere; }
+.acesso-anydesk-operador { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding-top: 14px; border-top: 1px solid var(--border); }
+
+@media (max-width: 600px) {
+  dialog { padding: 22px; }
+  #dialog-caixa .dialog-acoes { flex-direction: column-reverse; }
+  #dialog-caixa .dialog-acoes .btn { width: 100%; }
+}
 
 /* ===== Toast ===== */
 #toasts {

@@ -31,6 +31,7 @@ CREATE TABLE caixas (
   id INTEGER PRIMARY KEY,
   numero INTEGER NOT NULL UNIQUE,
   localizacao TEXT,
+  anydesk_id TEXT,
   ativo INTEGER NOT NULL DEFAULT 1,
   status TEXT NOT NULL,
   valor_compra NUMERIC NOT NULL DEFAULT 0,

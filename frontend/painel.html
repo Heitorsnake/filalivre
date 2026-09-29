@@ -89,13 +89,20 @@
   </main>
 
   <dialog id="dialog-caixa">
+    <div class="dialog-kicker">CONFIGURAÇÃO DE TERMINAL</div>
     <h3>Cadastrar novo caixa</h3>
+    <p class="dialog-descricao">Defina a identificação do caixa. Para configurar o acesso remoto, peça ao operador o ID mostrado no AnyDesk do computador do caixa.</p>
     <div class="mensagem-erro" id="erro-caixa"></div>
     <form method="dialog" id="form-novo-caixa">
       <div class="campo">
         <label for="localizacao-caixa">Nome/localização do caixa</label>
         <input type="text" id="localizacao-caixa" maxlength="150" required placeholder="Ex.: Perto do banheiro">
         <small>O número será gerado automaticamente pelo sistema.</small>
+      </div>
+      <div class="campo">
+        <label for="anydesk-id-caixa">ID AnyDesk do computador do operador <span>(opcional)</span></label>
+        <input type="text" id="anydesk-id-caixa" maxlength="64" autocomplete="off" placeholder="ID do computador do caixa">
+        <small>Digite o ID que aparece no AnyDesk da pessoa que será acessada. Não use o ID do computador do gestor. Pode preencher depois.</small>
       </div>
       <div class="dialog-acoes">
         <button type="button" class="btn btn-cinza" onclick="document.getElementById('dialog-caixa').close()">Cancelar</button>

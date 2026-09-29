@@ -28,6 +28,9 @@ public class Caixa {
     @Column(length = 150)
     private String localizacao = "Não informada";
 
+    @Column(name = "anydesk_id", length = 64)
+    private String anydeskId;
+
     @Column(nullable = false)
     private boolean ativo = true;
 
@@ -69,6 +72,14 @@ public class Caixa {
 
     public void setLocalizacao(String localizacao) {
         this.localizacao = localizacao;
+    }
+
+    public String getAnydeskId() {
+        return anydeskId;
+    }
+
+    public void setAnydeskId(String anydeskId) {
+        this.anydeskId = anydeskId;
     }
 
     public boolean isAtivo() {

@@ -14,5 +14,6 @@ public record CaixaResponse(
         Integer qtdItens,
         String operadorNome,
         LocalDateTime inicioAtendimento,
-        boolean solicitacaoPendente) {
+        boolean solicitacaoPendente,
+        String anydeskId) {
 }

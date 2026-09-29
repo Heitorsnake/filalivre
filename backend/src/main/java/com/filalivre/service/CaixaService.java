@@ -49,6 +49,7 @@ public class CaixaService {
             .orElse(null);
         caixa.setNumero(maiorNumero == null ? 1 : maiorNumero + 1);
         caixa.setLocalizacao(req.localizacao().trim());
+        caixa.setAnydeskId(normalizarAnydeskId(req.anydeskId()));
         caixa.setMercado(usuario.getMercado());
         caixa = caixaRepository.save(caixa);
         return toResponse(caixa);
@@ -58,6 +59,9 @@ public class CaixaService {
     public CaixaResponse editar(Long id, CaixaRequest req, Usuario usuario) {
         Caixa caixa = buscar(id, usuario);
         caixa.setLocalizacao(req.localizacao().trim());
+        if (req.anydeskId() != null) {
+            caixa.setAnydeskId(normalizarAnydeskId(req.anydeskId()));
+        }
         auditoriaService.registrar(usuario, caixa.getNumero(), "CAIXA_EDITADO",
                 "Localização alterada para " + caixa.getLocalizacao());
         return toResponse(caixa);
@@ -149,6 +153,12 @@ public class CaixaService {
                 c.getQtdItens(),
                 c.getOperador() != null ? c.getOperador().getNome() : null,
                 c.getInicioAtendimento(),
-                pendente);
+                pendente,
+                c.getAnydeskId());
+    }
+
+    private String normalizarAnydeskId(String anydeskId) {
+        if (anydeskId == null || anydeskId.isBlank()) return null;
+        return anydeskId.trim();
     }
 }

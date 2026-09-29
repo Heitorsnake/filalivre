@@ -215,8 +215,12 @@ async function carregarCaixas() {
   if (escolhido) {
     selectCaixa.value = String(escolhido.id);
     caixaAtual = escolhido;
+  } else {
+    caixaAtual = null;
   }
 
+  document.getElementById("anydesk-operador").textContent =
+    caixaAtual?.anydeskId || "Acesso remoto não configurado";
   renderizarStatus(caixaAtual);
 
   const minhasPendentes = await apiFetch("/solicitacoes/minhas");
