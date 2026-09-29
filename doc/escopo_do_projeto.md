@@ -11,6 +11,7 @@ O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, 
 - Cadastro de mercado pelo supervisor e geração de código de acesso.
 - Entrada do operador no mercado por código.
 - Operação de caixas, carrinho simulado e acompanhamento do atendimento.
+- Cadastro opcional do ID/endereço AnyDesk do computador de cada caixa, exibição no terminal do operador e atalho no painel do gestor para abrir o cliente AnyDesk.
 - Criação de solicitações de cancelamento de item pelo operador.
 - Análise, aprovação ou recusa pelo gestor/supervisor.
 - Administração de usuários, perfis e status de ativação.
@@ -22,11 +23,12 @@ O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, 
 - Integração com estoque, ERP ou fiscal.
 - Aplicativo mobile nativo.
 - Envio externo de notificações por e-mail ou SMS.
+- Exibição ou controle da sessão remota AnyDesk dentro do FilaLivre; o sistema apenas solicita ao sistema operacional a abertura do cliente AnyDesk instalado.
 
 ## Perfis
 
-- **Operador:** atua no terminal do caixa e envia solicitações.
-- **Supervisor/gestor:** cadastra o mercado, acompanha os caixas, decide solicitações, cadastra caixas e consulta relatórios.
+- **Operador:** atua no terminal do caixa, consulta o ID AnyDesk associado ao caixa e envia solicitações.
+- **Supervisor/gestor:** cadastra o mercado, acompanha os caixas, decide solicitações, cadastra caixas, configura o ID AnyDesk do computador do operador e consulta relatórios.
 - **Administrador:** gerencia usuários, perfis, ativação e auditoria.
 
 ## Arquitetura e tecnologias

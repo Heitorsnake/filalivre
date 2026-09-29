@@ -1,0 +1,11 @@
+# Contas de demonstração
+
+Estas contas são criadas automaticamente na primeira inicialização do banco:
+
+| Perfil | E-mail | Senha | Mercado | Código |
+|---|---|---|---|---|
+| Administrador | `admin@filalivre.com` | `admin123` | - | - |
+| Supervisor / gestor | `supervisor@filalivre.com` | `supervisor123` | Mercado Demonstração | `MERCADO1` |
+| Operador | `operador@filalivre.com` | `operador123` | Mercado Demonstração | `MERCADO1` |
+
+Em produção, altere as senhas e não use estas credenciais publicamente. Para autenticar o operador, associe-o ao mercado usando o código indicado.

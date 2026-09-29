@@ -20,6 +20,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 - **RU-03 - Solicitação:** o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.
 - **RU-04 - Acompanhamento:** o operador visualiza o retorno da decisão no terminal.
 - **RU-05 - Painel remoto do supervisor/gestor:** o supervisor/gestor acompanha remotamente caixas, status, operadores e solicitações pendentes do mercado.
+- **RU-05A - Acesso AnyDesk por caixa:** ao cadastrar ou editar um caixa, o supervisor/gestor pode informar opcionalmente o ID/endereço AnyDesk do computador do operador. O painel exibe o ID no cartão do caixa e oferece um atalho para abrir o cliente AnyDesk nesse endereço. O terminal do operador exibe o ID associado ao caixa selecionado.
 - **RU-06 - Decisão:** supervisor e gestor podem analisar, aprovar ou recusar uma solicitação.
 - **RU-07 - Relatórios:** gestor e administrador consultam totais e indicadores operacionais.
 - **RU-08 - Administração:** administrador cria usuários, escolhe seus perfis e ativa ou desativa contas.
@@ -36,6 +37,15 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 7. O sistema registra a decisão e atualiza o terminal do operador.
 8. O administrador acompanha a operação por relatórios e auditoria.
 
+## Configuração de acesso AnyDesk
+
+1. O operador ou responsável pelo computador do caixa informa ao gestor o ID/endereço mostrado no AnyDesk dessa máquina. O ID do próprio computador do gestor não deve ser usado nesse cadastro.
+2. O gestor informa esse identificador no campo opcional do cadastro do caixa. Também pode adicioná-lo ou alterá-lo posteriormente pelo cartão do caixa.
+3. O operador visualiza o identificador associado ao caixa selecionado no terminal.
+4. No painel, o gestor aciona **Conectar** para solicitar ao sistema operacional a abertura do cliente AnyDesk instalado no computador do gestor com o identificador do caixa.
+
+O FilaLivre não obtém o ID automaticamente, não estabelece a sessão e não incorpora a imagem da tela remota. A conexão depende do AnyDesk instalado e configurado, da disponibilidade do computador remoto e da autorização exigida pelo AnyDesk.
+
 ## Critérios de aceite
 
 - Usuários não podem acessar telas incompatíveis com seu perfil.
@@ -44,3 +54,5 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 - O cadastro e a alteração de usuários devem ficar restritos ao administrador.
 - Um operador não pode visualizar caixas, solicitações ou relatórios de outro mercado.
 - O código de mercado inválido deve ser recusado pelo backend.
+- O ID AnyDesk é opcional, pertence ao computador do caixa/operador e deve ser retornado junto aos dados do caixa sem misturar dados de mercados diferentes.
+- O atalho de conexão deve usar o ID do caixa e abrir o cliente AnyDesk; não deve apresentar a interface local do gestor como se fosse a tela remota.
