@@ -5,7 +5,6 @@ import com.filalivre.dto.UsuarioResponse;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.UsuarioRepository;
 import com.filalivre.service.AuditoriaService;
-import com.filalivre.service.EmailVerificacaoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -31,16 +30,13 @@ public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditoriaService auditoriaService;
-    private final EmailVerificacaoService emailVerificacaoService;
 
     public UsuarioController(UsuarioRepository usuarioRepository,
                              PasswordEncoder passwordEncoder,
-                             AuditoriaService auditoriaService,
-                             EmailVerificacaoService emailVerificacaoService) {
+                             AuditoriaService auditoriaService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditoriaService = auditoriaService;
-        this.emailVerificacaoService = emailVerificacaoService;
     }
 
     @GetMapping
@@ -62,12 +58,7 @@ public class UsuarioController {
         usuario.setEmail(email);
         usuario.setSenha(passwordEncoder.encode(req.senha()));
         usuario.setPerfil(req.perfil());
-        String token = emailVerificacaoService.requerVerificacao(email)
-            ? emailVerificacaoService.prepararToken(usuario) : null;
         usuario = usuarioRepository.save(usuario);
-        if (token != null) {
-            emailVerificacaoService.enviar(usuario.getNome(), usuario.getEmail(), token);
-        }
         auditoriaService.registrar(logado, null, "USUARIO_CRIADO",
                 "Usuário " + usuario.getEmail() + " criado com perfil " + usuario.getPerfil());
         return UsuarioResponse.de(usuario);

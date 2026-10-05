@@ -34,7 +34,7 @@ A aplicação fica disponível em `http://localhost:8080`. O backend serve o fro
 
 Em um banco novo, não há contas de demonstração por padrão. Para desenvolvimento, defina `FILALIVRE_DEMO_DATA=true` antes de iniciar a aplicação; em uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
 
-Contas novas com endereço `@gmail.com` (por cadastro ou criação administrativa) exigem confirmação antes do login. Após cadastrar, a tela de credenciais é substituída por um formulário para digitar o código de 6 dígitos enviado por SMTP. O código expira em 10 minutos; é permitido solicitar outro a cada 5 minutos. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` com uma conta Gmail e uma senha de app do Google.
+Somente contas novas com endereço `@gmail.com` criadas pelo formulário público de cadastro exigem confirmação. Após o cadastro, a tela de credenciais é substituída por um formulário para digitar o código de 6 dígitos enviado por SMTP. O código expira em 10 minutos; é permitido solicitar outro a cada 5 minutos. Contas criadas pelo administrador não passam por essa verificação. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` com uma conta Gmail e uma senha de app do Google; sem essas variáveis o sistema não consegue enviar códigos.
 
 ## Execução com Docker
 

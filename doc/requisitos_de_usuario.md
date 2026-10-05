@@ -21,7 +21,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 
 - **RU-01 - Login:** cada usuário acessa o sistema com e-mail e senha e recebe uma sessão conforme seu perfil.
 - **RU-01A - Cadastro de perfil:** no cadastro público, o usuário escolhe operador ou supervisor/gestor. Administrador continua sendo criado apenas pela administração.
-- **RU-01B - Confirmação de Gmail:** após cadastrar um endereço `@gmail.com`, a tela de credenciais é substituída pela tela de inserção do código de 6 dígitos enviado por e-mail. O código expira em 10 minutos, admite até cinco tentativas e pode ser reenviado respeitando o intervalo mínimo de cinco minutos.
+- **RU-01B - Confirmação de Gmail:** somente no cadastro público de um endereço `@gmail.com`, a tela de credenciais é substituída pela tela de inserção do código de 6 dígitos enviado por e-mail. A confirmação é feita uma única vez; contas criadas pelo administrador não passam por essa etapa. O código expira em 10 minutos, admite até cinco tentativas e pode ser reenviado respeitando o intervalo mínimo de cinco minutos.
 - **RU-02 - Terminal do operador:** o operador visualiza seu caixa, registra itens, inicia, pausa e finaliza o atendimento.
 - **RU-02A - Acesso ao mercado:** o operador informa o código recebido do supervisor e visualiza somente os caixas do mercado associado.
 - **RU-03 - Solicitação:** o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.

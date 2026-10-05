@@ -80,7 +80,8 @@ public class EmailVerificacaoService {
     public void enviar(String nome, String email, String token) {
         if (remetente.isBlank() || senhaSmtp.isBlank()) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "O envio de e-mail ainda não está configurado.");
+                "A confirmação de Gmail está indisponível: o administrador precisa configurar "
+                    + "FILALIVRE_SMTP_USERNAME e FILALIVRE_SMTP_PASSWORD no servidor.");
         }
 
         SimpleMailMessage mensagem = new SimpleMailMessage();
