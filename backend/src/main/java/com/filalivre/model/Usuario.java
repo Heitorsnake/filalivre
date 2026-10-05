@@ -51,6 +51,9 @@ public class Usuario implements UserDetails {
     @Column(name = "token_verificacao_email_expira_em")
     private Instant tokenVerificacaoEmailExpiraEm;
 
+    @Column(name = "tentativas_verificacao_email", nullable = false, columnDefinition = "integer default 0")
+    private int tentativasVerificacaoEmail;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mercado_id")
     private Mercado mercado;
@@ -121,6 +124,14 @@ public class Usuario implements UserDetails {
 
     public void setTokenVerificacaoEmailExpiraEm(Instant tokenVerificacaoEmailExpiraEm) {
         this.tokenVerificacaoEmailExpiraEm = tokenVerificacaoEmailExpiraEm;
+    }
+
+    public int getTentativasVerificacaoEmail() {
+        return tentativasVerificacaoEmail;
+    }
+
+    public void setTentativasVerificacaoEmail(int tentativasVerificacaoEmail) {
+        this.tentativasVerificacaoEmail = tentativasVerificacaoEmail;
     }
 
     public Mercado getMercado() { return mercado; }

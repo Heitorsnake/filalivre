@@ -22,11 +22,6 @@
     <div class="cartao form-cartao">
       <div class="mensagem-erro" id="erro"></div>
       <div class="mensagem-sucesso" id="sucesso"></div>
-      <div id="confirmacao-email" class="mensagem-sucesso" style="display:none">
-        <p>Para ativar sua conta, confirme que você tem acesso a este endereço Gmail.</p>
-        <button type="button" class="btn btn-verde" id="btn-confirmar-email">Confirmar e-mail</button>
-      </div>
-
       <form id="form-login" class="ativo">
         <div class="campo">
           <label for="login-email">E-mail</label>
@@ -37,7 +32,7 @@
           <input type="password" id="login-senha" required autocomplete="current-password" placeholder="••••••••">
         </div>
         <button type="submit" class="btn btn-verde" style="width:100%">Entrar</button>
-        <button type="button" class="btn btn-cinza" id="btn-reenviar-verificacao" style="width:100%;margin-top:.6rem">Reenviar link de confirmação Gmail</button>
+        <button type="button" class="btn btn-cinza" id="btn-reenviar-verificacao" style="width:100%;margin-top:.6rem">Reenviar código de confirmação Gmail</button>
       </form>
 
       <form id="form-cadastro">
@@ -61,6 +56,16 @@
           </select>
         </div>
         <button type="submit" class="btn btn-azul" style="width:100%">Criar conta</button>
+      </form>
+
+      <form id="form-verificacao">
+        <p id="texto-verificacao">Enviamos um código de 6 dígitos para seu Gmail. Ele expira em 10 minutos.</p>
+        <div class="campo">
+          <label for="codigo-verificacao">Código de verificação</label>
+          <input type="text" id="codigo-verificacao" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="000000">
+        </div>
+        <button type="submit" class="btn btn-verde" style="width:100%">Verificar e-mail</button>
+        <button type="button" class="btn btn-cinza" id="btn-reenviar-codigo" style="width:100%;margin-top:.6rem">Reenviar código</button>
       </form>
     </div>
 

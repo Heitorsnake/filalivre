@@ -34,7 +34,7 @@ A aplicação fica disponível em `http://localhost:8080`. O backend serve o fro
 
 Em um banco novo, não há contas de demonstração por padrão. Para desenvolvimento, defina `FILALIVRE_DEMO_DATA=true` antes de iniciar a aplicação; em uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
 
-Contas novas com endereço `@gmail.com` (por cadastro ou criação administrativa) exigem confirmação por link enviado por SMTP antes do login. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` com uma conta Gmail e uma senha de app do Google. Defina `FILALIVRE_FRONTEND_URL` como a URL pública da página `index.html` para que o link de confirmação aponte para o site correto.
+Contas novas com endereço `@gmail.com` (por cadastro ou criação administrativa) exigem confirmação antes do login. Após cadastrar, a tela de credenciais é substituída por um formulário para digitar o código de 6 dígitos enviado por SMTP. O código expira em 10 minutos; é permitido solicitar outro a cada 5 minutos. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` com uma conta Gmail e uma senha de app do Google.
 
 ## Execução com Docker
 
@@ -57,9 +57,8 @@ O serviço pode ser publicado usando o [Dockerfile](../Dockerfile):
 4. Configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro deploy para criar a conta administrativa inicial. A senha deve ter pelo menos 12 caracteres; armazene-a como segredo no provedor. O bootstrap só ocorre quando o banco ainda não tem usuários.
 5. Configure `FILALIVRE_CORS_ALLOWED_ORIGINS` com as origens exatas do frontend, separadas por vírgulas. Não use `*` com cookies de sessão.
 6. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` como segredos do serviço. Para Gmail, use uma senha de app do Google (com a verificação em duas etapas ativada), não a senha normal da conta.
-7. Configure `FILALIVRE_FRONTEND_URL` para a URL pública completa da tela de acesso, incluindo `/index.html`.
-8. Adicione um Persistent Disk montado em `/data` para preservar o SQLite.
-9. Faça o deploy e abra a URL atribuída ao serviço.
+7. Adicione um Persistent Disk montado em `/data` para preservar o SQLite.
+8. Faça o deploy e abra a URL atribuída ao serviço.
 
 O backend usa sessão com cookie HttpOnly, token CSRF em requisições de alteração, CORS restrito, expiração por inatividade de 30 minutos e renovação do ID de sessão no login. Se o frontend estiver hospedado em outro domínio (por exemplo, GitHub Pages), configure HTTPS e `FILALIVRE_COOKIE_SAME_SITE=None` no backend; mantenha a origem exata em `FILALIVRE_CORS_ALLOWED_ORIGINS`. Não habilite dados de demonstração em produção.
 

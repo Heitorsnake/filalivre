@@ -49,9 +49,12 @@ public class AuthController {
     }
 
     @PostMapping("/verificar-email")
-    public java.util.Map<String, String> verificarEmail(@Valid @RequestBody VerificarEmailRequest req) {
-        authService.verificarEmail(req.token());
-        return java.util.Map.of("mensagem", "E-mail confirmado. Agora você já pode entrar.");
+    public java.util.Map<String, Object> verificarEmail(@Valid @RequestBody VerificarEmailRequest req) {
+        boolean verificado = authService.verificarEmail(req.email(), req.codigo());
+        String mensagem = verificado
+                ? "E-mail confirmado. Agora você já pode entrar."
+                : "Código inválido, expirado ou com tentativas esgotadas. Solicite um novo código.";
+        return java.util.Map.of("verificado", verificado, "mensagem", mensagem);
     }
 
     @PostMapping("/reenviar-verificacao")

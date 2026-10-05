@@ -34,7 +34,7 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 |---|---|---|
 | `POST` | `/api/auth/login` | Público |
 | `POST` | `/api/auth/cadastro` | Público, cria operador ou supervisor |
-| `POST` | `/api/auth/verificar-email` | Público com token, confirma cadastro Gmail |
+| `POST` | `/api/auth/verificar-email` | Público com e-mail e código de 6 dígitos, confirma cadastro Gmail; até cinco tentativas |
 | `POST` | `/api/auth/reenviar-verificacao` | Público, solicita novo link de confirmação Gmail |
 | `POST` | `/api/auth/logout` | Autenticado |
 | `GET` | `/api/caixas` | Autenticado |

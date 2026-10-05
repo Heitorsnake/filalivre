@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Locale;
@@ -28,22 +27,17 @@ public class EmailVerificacaoService {
     private final JavaMailSender mailSender;
     private final String remetente;
     private final String senhaSmtp;
-    private final String urlFrontend;
 
     public EmailVerificacaoService(JavaMailSender mailSender,
                                    @Value("${spring.mail.username:}") String remetente,
-                                   @Value("${spring.mail.password:}") String senhaSmtp,
-                                   @Value("${filalivre.email.frontend-url:http://localhost:8080/index.html}") String urlFrontend) {
+                                   @Value("${spring.mail.password:}") String senhaSmtp) {
         this.mailSender = mailSender;
         this.remetente = remetente;
         this.senhaSmtp = senhaSmtp;
-        this.urlFrontend = urlFrontend;
     }
 
     public String gerarToken() {
-        byte[] bytes = new byte[32];
-        RANDOM.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+        return String.format(Locale.ROOT, "%06d", RANDOM.nextInt(1_000_000));
     }
 
     public boolean requerVerificacao(String email) {
@@ -54,7 +48,8 @@ public class EmailVerificacaoService {
         String token = gerarToken();
         usuario.setEmailVerificado(false);
         usuario.setTokenVerificacaoEmailHash(hashToken(token));
-        usuario.setTokenVerificacaoEmailExpiraEm(Instant.now().plus(Duration.ofHours(24)));
+        usuario.setTokenVerificacaoEmailExpiraEm(Instant.now().plus(Duration.ofMinutes(10)));
+        usuario.setTentativasVerificacaoEmail(0);
         return token;
     }
 
@@ -88,16 +83,14 @@ public class EmailVerificacaoService {
                     "O envio de e-mail ainda não está configurado.");
         }
 
-        String link = urlFrontend + "#verificar-email=" + token;
-
         SimpleMailMessage mensagem = new SimpleMailMessage();
         mensagem.setFrom(remetente);
         mensagem.setTo(email);
-        mensagem.setSubject("Confirme seu e-mail — FilaLivre");
+        mensagem.setSubject("Código de verificação — FilaLivre");
         mensagem.setText("Olá, " + nome + "!\n\n"
-                + "Para confirmar seu endereço de e-mail e ativar sua conta no FilaLivre, acesse o link abaixo.\n\n"
-                + link + "\n\n"
-                + "O link expira em 24 horas. Se você não criou esta conta, ignore esta mensagem.");
+            + "Digite este código na tela de criação da conta para confirmar seu Gmail:\n\n"
+            + token + "\n\n"
+            + "O código expira em 10 minutos. Se você não criou esta conta, ignore esta mensagem.");
         try {
             mailSender.send(mensagem);
             ultimosEnvios.put(email.toLowerCase(Locale.ROOT), Instant.now());

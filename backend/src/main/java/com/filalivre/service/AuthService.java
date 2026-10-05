@@ -71,7 +71,7 @@ public class AuthService {
             usuario = usuarioRepository.save(usuario);
             emailVerificacaoService.enviar(usuario.getNome(), email, token);
             return new CadastroResponse(true, null,
-                    "Enviamos um link de confirmação para seu Gmail. Confirme o endereço antes de entrar.");
+                    "Enviamos um código de 6 dígitos para seu Gmail. Digite-o para ativar sua conta.");
         }
 
         usuario = usuarioRepository.save(usuario);
@@ -81,20 +81,46 @@ public class AuthService {
     }
 
     @Transactional
-    public void verificarEmail(String token) {
-        Usuario usuario = usuarioRepository.findByTokenVerificacaoEmailHash(emailVerificacaoService.hashToken(token))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "O link de confirmação é inválido ou já foi utilizado."));
+    public boolean verificarEmail(String emailInformado, String codigo) {
+        String email = emailInformado.trim().toLowerCase(java.util.Locale.ROOT);
+        Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email).orElse(null);
+        if (usuario == null || usuario.isEmailVerificado() || !emailVerificacaoService.requerVerificacao(email)) {
+            return false;
+        }
+        if (usuario.getTentativasVerificacaoEmail() >= 5) {
+            usuario.setTokenVerificacaoEmailHash(null);
+            usuario.setTokenVerificacaoEmailExpiraEm(null);
+            usuarioRepository.save(usuario);
+            return false;
+        }
         if (usuario.getTokenVerificacaoEmailExpiraEm() == null
                 || !usuario.getTokenVerificacaoEmailExpiraEm().isAfter(Instant.now())) {
-            throw new ResponseStatusException(HttpStatus.GONE,
-                    "O link de confirmação expirou. Solicite outro link na tela de login.");
+            usuario.setTokenVerificacaoEmailHash(null);
+            usuario.setTokenVerificacaoEmailExpiraEm(null);
+            usuarioRepository.save(usuario);
+            return false;
+        }
+        byte[] codigoRecebido = emailVerificacaoService.hashToken(codigo)
+                .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        byte[] codigoEsperado = usuario.getTokenVerificacaoEmailHash()
+                .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        if (!java.security.MessageDigest.isEqual(codigoEsperado, codigoRecebido)) {
+            int tentativas = usuario.getTentativasVerificacaoEmail() + 1;
+            usuario.setTentativasVerificacaoEmail(tentativas);
+            if (tentativas >= 5) {
+                usuario.setTokenVerificacaoEmailHash(null);
+                usuario.setTokenVerificacaoEmailExpiraEm(null);
+            }
+            usuarioRepository.save(usuario);
+            return false;
         }
         usuario.setEmailVerificado(true);
         usuario.setTokenVerificacaoEmailHash(null);
         usuario.setTokenVerificacaoEmailExpiraEm(null);
+        usuario.setTentativasVerificacaoEmail(0);
         usuarioRepository.save(usuario);
         auditoriaService.registrar(usuario, null, "EMAIL_VERIFICADO", "Endereço Gmail confirmado");
+        return true;
     }
 
     @Transactional
