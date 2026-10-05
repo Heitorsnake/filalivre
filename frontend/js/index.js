@@ -38,23 +38,6 @@ function trocarAba(aba) {
 abaLogin.addEventListener("click", () => trocarAba("login"));
 abaCadastro.addEventListener("click", () => trocarAba("cadastro"));
 
-document.getElementById("btn-reenviar-verificacao").addEventListener("click", async () => {
-  const email = document.getElementById("login-email").value.trim();
-  if (!email) {
-    mostrarErro("Informe seu e-mail Gmail para solicitar um novo código.");
-    return;
-  }
-  try {
-    const resultado = await apiFetch("/auth/reenviar-verificacao", {
-      method: "POST",
-      body: { email }
-    });
-    mostrarSucesso(resultado.mensagem);
-  } catch (e) {
-    mostrarErro(e.message);
-  }
-});
-
 document.getElementById("btn-reenviar-codigo").addEventListener("click", async () => {
   try {
     const resultado = await apiFetch("/auth/reenviar-verificacao", {

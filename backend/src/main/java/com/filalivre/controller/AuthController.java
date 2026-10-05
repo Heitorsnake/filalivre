@@ -62,7 +62,7 @@ public class AuthController {
             @Valid @RequestBody ReenviarVerificacaoRequest req) {
         authService.reenviarVerificacao(req.email());
         return java.util.Map.of("mensagem",
-            "Se houver uma conta Gmail pendente, enviaremos um link. Aguarde até 5 minutos antes de pedir outro.");
+            "Se houver uma conta Gmail aguardando confirmação e já tiver passado o intervalo, enviaremos outro código. Caso contrário, aguarde até 5 minutos antes de tentar novamente.");
     }
 
     @GetMapping("/eu")
