@@ -1,5 +1,11 @@
 # Escopo do Projeto - FilaLivre
 
+**Instituição:** Instituto Federal de Mato Grosso (IFMT)  
+**Turma:** 2º ano B de Informática  
+**Integrantes:** Heitor Pernet, Maicon Goulart, Eduardo Gomes e José Leandro
+
+---
+
 ## Objetivo
 
 O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, que exerce a função de gestor, acompanha os atendimentos e analisa solicitações de cancelamento de item sem precisar se deslocar até o caixa. O sistema registra cada ação para manter rastreabilidade operacional e separa a operação por mercado.

@@ -1,11 +1,31 @@
 const API = window.FILALIVRE_API_URL || "/api";
+let csrfToken = null;
+let csrfPromise = null;
+
+async function obterTokenCsrf() {
+  if (!csrfPromise) {
+    csrfPromise = fetch(API + "/auth/csrf", { credentials: "include" })
+      .then(async resposta => {
+        if (!resposta.ok) throw new Error("Não foi possível iniciar uma sessão segura.");
+        const dados = await resposta.json();
+        csrfToken = dados.token;
+      })
+      .finally(() => { csrfPromise = null; });
+  }
+  await csrfPromise;
+}
 
 async function apiFetch(path, options = {}) {
+  const method = (options.method || "GET").toUpperCase();
   const config = {
-    method: options.method || "GET",
+    method,
     credentials: "include",
     headers: {}
   };
+  if (!["GET", "HEAD", "OPTIONS", "TRACE"].includes(method)) {
+    if (!csrfToken) await obterTokenCsrf();
+    config.headers["X-XSRF-TOKEN"] = csrfToken;
+  }
   if (options.body !== undefined) {
     config.headers["Content-Type"] = "application/json";
     config.body = JSON.stringify(options.body);
@@ -48,7 +68,8 @@ function destinoPorPerfil(perfil) {
 }
 
 function sair() {
-  fetch(API + "/auth/logout", { method: "POST", credentials: "include" }).finally(() => {
+  apiFetch("/auth/logout", { method: "POST" }).finally(() => {
+    csrfToken = null;
     localStorage.removeItem("filalivre_usuario");
     window.location.href = "index.html";
   });

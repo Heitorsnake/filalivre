@@ -1,6 +1,12 @@
 # Contas de demonstração
 
-Estas contas são criadas automaticamente na primeira inicialização do banco:
+**Instituição:** Instituto Federal de Mato Grosso (IFMT)  
+**Turma:** 2º ano B de Informática  
+**Integrantes:** Heitor Pernet, Maicon Goulart, Eduardo Gomes e José Leandro
+
+---
+
+Estas contas só são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido antes da primeira inicialização do banco. Não habilite essa opção em produção:
 
 | Perfil | E-mail | Senha | Mercado | Código |
 |---|---|---|---|---|
@@ -8,4 +14,4 @@ Estas contas são criadas automaticamente na primeira inicialização do banco:
 | Supervisor / gestor | `supervisor@filalivre.com` | `supervisor123` | Mercado Demonstração | `MERCADO1` |
 | Operador | `operador@filalivre.com` | `operador123` | Mercado Demonstração | `MERCADO1` |
 
-Em produção, altere as senhas e não use estas credenciais publicamente. Para autenticar o operador, associe-o ao mercado usando o código indicado.
+Para uma instalação de produção, crie a primeira conta administrativa pelas variáveis secretas `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro início do backend. A senha inicial deve conter pelo menos 12 caracteres. Para autenticar o operador de demonstração, associe-o ao mercado usando o código indicado.

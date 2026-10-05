@@ -1,13 +1,17 @@
 package com.filalivre.controller;
 
 import com.filalivre.dto.CadastroRequest;
+import com.filalivre.dto.CadastroResponse;
 import com.filalivre.dto.LoginRequest;
+import com.filalivre.dto.ReenviarVerificacaoRequest;
 import com.filalivre.dto.UsuarioResponse;
+import com.filalivre.dto.VerificarEmailRequest;
 import com.filalivre.model.Usuario;
 import com.filalivre.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +29,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @GetMapping("/csrf")
+    public java.util.Map<String, String> csrf(CsrfToken csrfToken) {
+        return java.util.Map.of("token", csrfToken.getToken());
+    }
+
     @PostMapping("/login")
     public UsuarioResponse login(@Valid @RequestBody LoginRequest req,
                                  HttpServletRequest request,
@@ -33,10 +42,24 @@ public class AuthController {
     }
 
     @PostMapping("/cadastro")
-    public UsuarioResponse cadastro(@Valid @RequestBody CadastroRequest req,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+    public CadastroResponse cadastro(@Valid @RequestBody CadastroRequest req,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) {
         return authService.cadastrar(req, request, response);
+    }
+
+    @PostMapping("/verificar-email")
+    public java.util.Map<String, String> verificarEmail(@Valid @RequestBody VerificarEmailRequest req) {
+        authService.verificarEmail(req.token());
+        return java.util.Map.of("mensagem", "E-mail confirmado. Agora você já pode entrar.");
+    }
+
+    @PostMapping("/reenviar-verificacao")
+    public java.util.Map<String, String> reenviarVerificacao(
+            @Valid @RequestBody ReenviarVerificacaoRequest req) {
+        authService.reenviarVerificacao(req.email());
+        return java.util.Map.of("mensagem",
+            "Se houver uma conta Gmail pendente, enviaremos um link. Aguarde até 5 minutos antes de pedir outro.");
     }
 
     @GetMapping("/eu")

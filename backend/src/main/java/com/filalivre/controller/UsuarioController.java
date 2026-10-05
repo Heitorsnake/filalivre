@@ -5,6 +5,7 @@ import com.filalivre.dto.UsuarioResponse;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.UsuarioRepository;
 import com.filalivre.service.AuditoriaService;
+import com.filalivre.service.EmailVerificacaoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -29,13 +31,16 @@ public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditoriaService auditoriaService;
+    private final EmailVerificacaoService emailVerificacaoService;
 
     public UsuarioController(UsuarioRepository usuarioRepository,
                              PasswordEncoder passwordEncoder,
-                             AuditoriaService auditoriaService) {
+                             AuditoriaService auditoriaService,
+                             EmailVerificacaoService emailVerificacaoService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditoriaService = auditoriaService;
+        this.emailVerificacaoService = emailVerificacaoService;
     }
 
     @GetMapping
@@ -45,17 +50,24 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
     public UsuarioResponse criar(@Valid @RequestBody UsuarioAdminRequest req,
                                  @AuthenticationPrincipal Usuario logado) {
-        if (usuarioRepository.existsByEmail(req.email())) {
+        String email = req.email().trim().toLowerCase(java.util.Locale.ROOT);
+        if (usuarioRepository.existsByEmailIgnoreCase(email)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
         }
         Usuario usuario = new Usuario();
         usuario.setNome(req.nome());
-        usuario.setEmail(req.email());
+        usuario.setEmail(email);
         usuario.setSenha(passwordEncoder.encode(req.senha()));
         usuario.setPerfil(req.perfil());
+        String token = emailVerificacaoService.requerVerificacao(email)
+            ? emailVerificacaoService.prepararToken(usuario) : null;
         usuario = usuarioRepository.save(usuario);
+        if (token != null) {
+            emailVerificacaoService.enviar(usuario.getNome(), usuario.getEmail(), token);
+        }
         auditoriaService.registrar(logado, null, "USUARIO_CRIADO",
                 "Usuário " + usuario.getEmail() + " criado com perfil " + usuario.getPerfil());
         return UsuarioResponse.de(usuario);

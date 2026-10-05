@@ -1,5 +1,11 @@
 # Requisitos de Sistema - FilaLivre
 
+**Instituição:** Instituto Federal de Mato Grosso (IFMT)  
+**Turma:** 2º ano B de Informática  
+**Integrantes:** Heitor Pernet, Maicon Goulart, Eduardo Gomes e José Leandro
+
+---
+
 O projeto é voltado ao acesso remoto à operação dos caixas: o supervisor acompanha o atendimento e decide solicitações pelo painel, sem precisar estar fisicamente no caixa.
 
 ## Stack obrigatória
@@ -28,6 +34,8 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 |---|---|---|
 | `POST` | `/api/auth/login` | Público |
 | `POST` | `/api/auth/cadastro` | Público, cria operador ou supervisor |
+| `POST` | `/api/auth/verificar-email` | Público com token, confirma cadastro Gmail |
+| `POST` | `/api/auth/reenviar-verificacao` | Público, solicita novo link de confirmação Gmail |
 | `POST` | `/api/auth/logout` | Autenticado |
 | `GET` | `/api/caixas` | Autenticado |
 | `POST` | `/api/caixas` | Supervisor/Gestor |

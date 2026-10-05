@@ -1,5 +1,11 @@
 # Requisitos de Usuário - FilaLivre
 
+**Instituição:** Instituto Federal de Mato Grosso (IFMT)  
+**Turma:** 2º ano B de Informática  
+**Integrantes:** Heitor Pernet, Maicon Goulart, Eduardo Gomes e José Leandro
+
+---
+
 ## Atores
 
 ### Operador de caixa
@@ -15,6 +21,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 
 - **RU-01 - Login:** cada usuário acessa o sistema com e-mail e senha e recebe uma sessão conforme seu perfil.
 - **RU-01A - Cadastro de perfil:** no cadastro público, o usuário escolhe operador ou supervisor/gestor. Administrador continua sendo criado apenas pela administração.
+- **RU-01B - Confirmação de Gmail:** contas cadastradas com endereço `@gmail.com` só podem entrar após confirmar o e-mail por um link enviado ao endereço informado.
 - **RU-02 - Terminal do operador:** o operador visualiza seu caixa, registra itens, inicia, pausa e finaliza o atendimento.
 - **RU-02A - Acesso ao mercado:** o operador informa o código recebido do supervisor e visualiza somente os caixas do mercado associado.
 - **RU-03 - Solicitação:** o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.

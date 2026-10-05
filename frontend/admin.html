@@ -33,9 +33,9 @@
       <h2>Manutenção de usuários e perfis</h2>
       <div class="cartao">
         <form class="linha-form" id="form-usuario">
-          <input type="text" id="novo-nome" required placeholder="Nome completo">
-          <input type="email" id="novo-email" required placeholder="E-mail">
-          <input type="password" id="nova-senha" required minlength="6" placeholder="Senha">
+          <input type="text" id="novo-nome" required maxlength="100" placeholder="Nome completo">
+          <input type="email" id="novo-email" required maxlength="254" placeholder="E-mail">
+          <input type="password" id="nova-senha" required minlength="12" maxlength="72" autocomplete="new-password" placeholder="Senha (mínimo 12 caracteres)">
           <select id="novo-perfil" required>
             <option value="OPERADOR">Operador</option>
             <option value="SUPERVISOR">Supervisor</option>

@@ -1,5 +1,11 @@
 # Documentação do FilaLivre
 
+**Instituição:** Instituto Federal de Mato Grosso (IFMT)  
+**Turma:** 2º ano B de Informática  
+**Integrantes:** Heitor Pernet, Maicon Goulart, Eduardo Gomes e José Leandro
+
+---
+
 Esta pasta reúne a documentação funcional, técnica e operacional do projeto.
 
 ## Índice

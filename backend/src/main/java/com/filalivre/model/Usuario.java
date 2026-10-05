@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.Instant;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -40,6 +41,15 @@ public class Usuario implements UserDetails {
 
     @Column(nullable = false)
     private boolean ativo = true;
+
+    @Column(name = "email_verificado", nullable = false, columnDefinition = "boolean default true")
+    private boolean emailVerificado = true;
+
+    @Column(name = "token_verificacao_email_hash", length = 64)
+    private String tokenVerificacaoEmailHash;
+
+    @Column(name = "token_verificacao_email_expira_em")
+    private Instant tokenVerificacaoEmailExpiraEm;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mercado_id")
@@ -89,6 +99,30 @@ public class Usuario implements UserDetails {
         this.ativo = ativo;
     }
 
+    public boolean isEmailVerificado() {
+        return emailVerificado;
+    }
+
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
+    public String getTokenVerificacaoEmailHash() {
+        return tokenVerificacaoEmailHash;
+    }
+
+    public void setTokenVerificacaoEmailHash(String tokenVerificacaoEmailHash) {
+        this.tokenVerificacaoEmailHash = tokenVerificacaoEmailHash;
+    }
+
+    public Instant getTokenVerificacaoEmailExpiraEm() {
+        return tokenVerificacaoEmailExpiraEm;
+    }
+
+    public void setTokenVerificacaoEmailExpiraEm(Instant tokenVerificacaoEmailExpiraEm) {
+        this.tokenVerificacaoEmailExpiraEm = tokenVerificacaoEmailExpiraEm;
+    }
+
     public Mercado getMercado() { return mercado; }
 
     public void setMercado(Mercado mercado) { this.mercado = mercado; }
@@ -125,6 +159,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return ativo;
+        return ativo && emailVerificado;
     }
 }

@@ -8,6 +8,7 @@ import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.MercadoRepository;
 import com.filalivre.repository.UsuarioRepository;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,49 +21,53 @@ public class DadosIniciais {
     CommandLineRunner criarDadosIniciais(UsuarioRepository usuarioRepository,
                                          CaixaRepository caixaRepository,
                                          MercadoRepository mercadoRepository,
-                                         PasswordEncoder passwordEncoder) {
+                                         PasswordEncoder passwordEncoder,
+                                         @Value("${filalivre.dados-iniciais.demo:false}") boolean dadosDemo,
+                                         @Value("${filalivre.admin.email:}") String emailAdmin,
+                                         @Value("${filalivre.admin.password:}") String senhaAdmin) {
         return args -> {
             if (usuarioRepository.count() == 0) {
-                Usuario admin = usuario("Administrador", "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR, passwordEncoder);
-                Usuario supervisor = usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123", Perfil.SUPERVISOR, passwordEncoder);
-                Usuario operador = usuario("Operador Demonstração", "operador@filalivre.com", "operador123", Perfil.OPERADOR, passwordEncoder);
-                usuarioRepository.saveAll(List.of(admin, supervisor, operador));
-
-                Mercado mercado = new Mercado();
-                mercado.setNome("Mercado Demonstração");
-                mercado.setCodigoAcesso("MERCADO1");
-                mercado.setGestor(supervisor);
-                mercado = mercadoRepository.save(mercado);
-                supervisor.setMercado(mercado);
-                operador.setMercado(mercado);
-                usuarioRepository.saveAll(List.of(supervisor, operador));
+                if (dadosDemo) {
+                    criarContasDemo(usuarioRepository, mercadoRepository, passwordEncoder);
+                } else if (!emailAdmin.isBlank() || !senhaAdmin.isBlank()) {
+                    if (emailAdmin.isBlank() || senhaAdmin.length() < 12) {
+                        throw new IllegalStateException(
+                                "Defina FILALIVRE_ADMIN_EMAIL e FILALIVRE_ADMIN_PASSWORD com no mínimo 12 caracteres.");
+                    }
+                    usuarioRepository.save(usuario("Administrador", emailAdmin.trim(), senhaAdmin,
+                            Perfil.ADMINISTRADOR, passwordEncoder));
+                }
             }
-            migrarContaGestorAntiga(usuarioRepository, passwordEncoder);
             if (caixaRepository.count() == 0) {
                 Mercado mercado = mercadoRepository.findAll().stream().findFirst().orElse(null);
-                for (int numero = 1; numero <= 6; numero++) {
-                    Caixa caixa = new Caixa();
-                    caixa.setNumero(numero);
-                    caixa.setMercado(mercado);
-                    caixaRepository.save(caixa);
+                if (mercado != null) {
+                    for (int numero = 1; numero <= 6; numero++) {
+                        Caixa caixa = new Caixa();
+                        caixa.setNumero(numero);
+                        caixa.setMercado(mercado);
+                        caixaRepository.save(caixa);
+                    }
                 }
             }
         };
     }
 
-    private void migrarContaGestorAntiga(UsuarioRepository usuarioRepository,
-                                         PasswordEncoder passwordEncoder) {
-        usuarioRepository.findByEmail("gestor@filalivre.com").ifPresent(antiga -> {
-            if (usuarioRepository.findByEmail("supervisor@filalivre.com").isEmpty()) {
-                antiga.setNome("Supervisor Demonstração");
-                antiga.setEmail("supervisor@filalivre.com");
-                antiga.setSenha(passwordEncoder.encode("supervisor123"));
-                antiga.setPerfil(Perfil.SUPERVISOR);
-                usuarioRepository.save(antiga);
-            } else {
-                usuarioRepository.delete(antiga);
-            }
-        });
+    private void criarContasDemo(UsuarioRepository usuarioRepository,
+                                 MercadoRepository mercadoRepository,
+                                 PasswordEncoder passwordEncoder) {
+        Usuario admin = usuario("Administrador", "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR, passwordEncoder);
+        Usuario supervisor = usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123", Perfil.SUPERVISOR, passwordEncoder);
+        Usuario operador = usuario("Operador Demonstração", "operador@filalivre.com", "operador123", Perfil.OPERADOR, passwordEncoder);
+        usuarioRepository.saveAll(List.of(admin, supervisor, operador));
+
+        Mercado mercado = new Mercado();
+        mercado.setNome("Mercado Demonstração");
+        mercado.setCodigoAcesso("MERCADO1");
+        mercado.setGestor(supervisor);
+        mercado = mercadoRepository.save(mercado);
+        supervisor.setMercado(mercado);
+        operador.setMercado(mercado);
+        usuarioRepository.saveAll(List.of(supervisor, operador));
     }
 
     private Usuario usuario(String nome, String email, String senha, Perfil perfil, PasswordEncoder encoder) {

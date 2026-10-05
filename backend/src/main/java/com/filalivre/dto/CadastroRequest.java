@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CadastroRequest(
-        @NotBlank String nome,
-        @NotBlank @Email String email,
-        @NotBlank @Size(min = 6) String senha,
+        @NotBlank @Size(max = 100) String nome,
+        @NotBlank @Email @Size(max = 254) String email,
+        @NotBlank @Size(min = 12, max = 72) String senha,
         @NotBlank String perfil) {
 }

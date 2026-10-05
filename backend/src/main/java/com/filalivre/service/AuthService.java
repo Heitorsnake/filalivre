@@ -1,11 +1,13 @@
 package com.filalivre.service;
 
 import com.filalivre.dto.CadastroRequest;
+import com.filalivre.dto.CadastroResponse;
 import com.filalivre.dto.LoginRequest;
 import com.filalivre.dto.UsuarioResponse;
 import com.filalivre.model.Perfil;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.UsuarioRepository;
+import java.time.Instant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -28,27 +30,31 @@ public class AuthService {
     private final SecurityContextRepository securityContextRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditoriaService auditoriaService;
+    private final EmailVerificacaoService emailVerificacaoService;
 
     public AuthService(UsuarioRepository usuarioRepository,
                        AuthenticationManager authenticationManager,
                        SecurityContextRepository securityContextRepository,
                        PasswordEncoder passwordEncoder,
-                       AuditoriaService auditoriaService) {
+                       AuditoriaService auditoriaService,
+                       EmailVerificacaoService emailVerificacaoService) {
         this.usuarioRepository = usuarioRepository;
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditoriaService = auditoriaService;
+        this.emailVerificacaoService = emailVerificacaoService;
     }
 
     @Transactional
-    public UsuarioResponse cadastrar(CadastroRequest req, HttpServletRequest request, HttpServletResponse response) {
-        if (usuarioRepository.existsByEmail(req.email())) {
+    public CadastroResponse cadastrar(CadastroRequest req, HttpServletRequest request, HttpServletResponse response) {
+        String email = req.email().trim().toLowerCase(java.util.Locale.ROOT);
+        if (usuarioRepository.existsByEmailIgnoreCase(email)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
         }
         Usuario usuario = new Usuario();
         usuario.setNome(req.nome());
-        usuario.setEmail(req.email());
+        usuario.setEmail(email);
         usuario.setSenha(passwordEncoder.encode(req.senha()));
         try {
             Perfil perfil = Perfil.valueOf(req.perfil().trim().toUpperCase());
@@ -59,14 +65,55 @@ public class AuthService {
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Escolha Operador ou Supervisor");
         }
+
+        if (emailVerificacaoService.requerVerificacao(email)) {
+            String token = emailVerificacaoService.prepararToken(usuario);
+            usuario = usuarioRepository.save(usuario);
+            emailVerificacaoService.enviar(usuario.getNome(), email, token);
+            return new CadastroResponse(true, null,
+                    "Enviamos um link de confirmação para seu Gmail. Confirme o endereço antes de entrar.");
+        }
+
         usuario = usuarioRepository.save(usuario);
 
         autenticarESalvarSessao(new LoginRequest(usuario.getEmail(), req.senha()), request, response);
-        return UsuarioResponse.de(usuario);
+        return new CadastroResponse(false, UsuarioResponse.de(usuario), "Conta criada.");
+    }
+
+    @Transactional
+    public void verificarEmail(String token) {
+        Usuario usuario = usuarioRepository.findByTokenVerificacaoEmailHash(emailVerificacaoService.hashToken(token))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "O link de confirmação é inválido ou já foi utilizado."));
+        if (usuario.getTokenVerificacaoEmailExpiraEm() == null
+                || !usuario.getTokenVerificacaoEmailExpiraEm().isAfter(Instant.now())) {
+            throw new ResponseStatusException(HttpStatus.GONE,
+                    "O link de confirmação expirou. Solicite outro link na tela de login.");
+        }
+        usuario.setEmailVerificado(true);
+        usuario.setTokenVerificacaoEmailHash(null);
+        usuario.setTokenVerificacaoEmailExpiraEm(null);
+        usuarioRepository.save(usuario);
+        auditoriaService.registrar(usuario, null, "EMAIL_VERIFICADO", "Endereço Gmail confirmado");
+    }
+
+    @Transactional
+    public void reenviarVerificacao(String emailInformado) {
+        String email = emailInformado.trim().toLowerCase(java.util.Locale.ROOT);
+        usuarioRepository.findByEmailIgnoreCase(email).ifPresent(usuario -> {
+            if (!usuario.isEmailVerificado()
+                    && emailVerificacaoService.requerVerificacao(email)
+                    && emailVerificacaoService.reservarReenvio(email)) {
+                String token = emailVerificacaoService.prepararToken(usuario);
+                usuarioRepository.save(usuario);
+                emailVerificacaoService.enviar(usuario.getNome(), email, token);
+            }
+        });
     }
 
     public UsuarioResponse login(LoginRequest req, HttpServletRequest request, HttpServletResponse response) {
-        return autenticarESalvarSessao(req, request, response);
+        return autenticarESalvarSessao(
+            new LoginRequest(req.email().trim().toLowerCase(java.util.Locale.ROOT), req.senha()), request, response);
     }
 
     private UsuarioResponse autenticarESalvarSessao(LoginRequest req, HttpServletRequest request,
@@ -74,6 +121,9 @@ public class AuthService {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken.unauthenticated(req.email(), req.senha()));
+            if (request.getSession(false) != null) {
+                request.changeSessionId();
+            }
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
