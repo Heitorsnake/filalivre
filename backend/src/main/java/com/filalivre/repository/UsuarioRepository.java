@@ -10,5 +10,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByEmailIgnoreCase(String email);
 
-    Optional<Usuario> findByTokenVerificacaoEmailHash(String tokenVerificacaoEmailHash);
 }

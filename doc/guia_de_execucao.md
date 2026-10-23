@@ -32,9 +32,9 @@ mvn spring-boot:run
 
 A aplicação fica disponível em `http://localhost:8080`. O backend serve o frontend pelo caminho `../frontend` por padrão local.
 
-Em um banco novo, não há contas de demonstração por padrão. Para desenvolvimento, defina `FILALIVRE_DEMO_DATA=true` antes de iniciar a aplicação; em uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
+No desenvolvimento local, defina `FILALIVRE_DEMO_DATA=true` para criar as contas demonstrativas. O seed é repetível: ao iniciar com essa opção, cria apenas contas que ainda não existam. Para uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
 
-Somente contas novas com endereço `@gmail.com` criadas pelo formulário público de cadastro exigem confirmação. Após o cadastro, a tela de credenciais é substituída por um formulário para digitar o código de 6 dígitos enviado por SMTP. O código expira em 10 minutos; é permitido solicitar outro a cada 5 minutos. Contas criadas pelo administrador não passam por essa verificação. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` com uma conta Gmail e uma senha de app do Google; sem essas variáveis o sistema não consegue enviar códigos.
+O cadastro público cria e autentica a conta imediatamente, sem confirmação por e-mail.
 
 ## Execução com Docker
 
@@ -45,7 +45,7 @@ docker build -t filalivre .
 docker run --rm -p 8080:8080 -v filalivre-data:/data filalivre
 ```
 
-Acesse `http://localhost:8080`. Para manter os dados entre execuções, preserve o volume `filalivre-data`.
+Acesse `http://localhost:8080`. O Dockerfile habilita as contas de demonstração para facilitar testes; para manter os dados entre execuções, preserve o volume `filalivre-data`.
 
 ## Publicação no Render
 
@@ -54,15 +54,14 @@ O serviço pode ser publicado usando o [Dockerfile](../Dockerfile):
 1. Conecte o repositório GitHub ao Web Service do Render.
 2. Escolha o ambiente Docker e use a porta HTTP fornecida pela variável `PORT`.
 3. Configure `FILALIVRE_FRONTEND_PATH=/frontend`, `FILALIVRE_DB_PATH=/data/filalivre.db` e `FILALIVRE_COOKIE_SECURE=true`.
-4. Configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro deploy para criar a conta administrativa inicial. A senha deve ter pelo menos 12 caracteres; armazene-a como segredo no provedor. O bootstrap só ocorre quando o banco ainda não tem usuários.
+4. Defina `FILALIVRE_DEMO_DATA=false` e configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro deploy para criar a conta administrativa inicial. A senha deve ter pelo menos 12 caracteres; armazene-a como segredo no provedor. O bootstrap do administrador ocorre quando o banco ainda não tem usuários.
 5. Configure `FILALIVRE_CORS_ALLOWED_ORIGINS` com as origens exatas do frontend, separadas por vírgulas. Não use `*` com cookies de sessão.
-6. Configure `FILALIVRE_SMTP_USERNAME` e `FILALIVRE_SMTP_PASSWORD` como segredos do serviço. Para Gmail, use uma senha de app do Google (com a verificação em duas etapas ativada), não a senha normal da conta.
-7. Adicione um Persistent Disk montado em `/data` para preservar o SQLite.
-8. Faça o deploy e abra a URL atribuída ao serviço.
+6. Adicione um Persistent Disk montado em `/data` para preservar o SQLite.
+7. Faça o deploy e abra a URL atribuída ao serviço.
 
 O backend usa sessão com cookie HttpOnly, token CSRF em requisições de alteração, CORS restrito, expiração por inatividade de 30 minutos e renovação do ID de sessão no login. Se o frontend estiver hospedado em outro domínio (por exemplo, GitHub Pages), configure HTTPS e `FILALIVRE_COOKIE_SAME_SITE=None` no backend; mantenha a origem exata em `FILALIVRE_CORS_ALLOWED_ORIGINS`. Não habilite dados de demonstração em produção.
 
-Para testar localmente com contas fictícias, defina `FILALIVRE_DEMO_DATA=true` antes da primeira inicialização. Essas contas usam senhas públicas e nunca devem ser expostas na internet.
+As contas demonstrativas usam senhas públicas. O Dockerfile as habilita para demonstrações; em qualquer ambiente exposto à internet, defina `FILALIVRE_DEMO_DATA=false`.
 
 O Render usa o SQLite local do serviço. O plano gratuito pode não preservar arquivos entre reinicializações; sem Persistent Disk, os dados podem ser perdidos. O deploy não se conecta automaticamente ao SQLiteCloud.
 

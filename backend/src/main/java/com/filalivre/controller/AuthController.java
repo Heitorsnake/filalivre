@@ -3,9 +3,7 @@ package com.filalivre.controller;
 import com.filalivre.dto.CadastroRequest;
 import com.filalivre.dto.CadastroResponse;
 import com.filalivre.dto.LoginRequest;
-import com.filalivre.dto.ReenviarVerificacaoRequest;
 import com.filalivre.dto.UsuarioResponse;
-import com.filalivre.dto.VerificarEmailRequest;
 import com.filalivre.model.Usuario;
 import com.filalivre.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,23 +44,6 @@ public class AuthController {
                                      HttpServletRequest request,
                                      HttpServletResponse response) {
         return authService.cadastrar(req, request, response);
-    }
-
-    @PostMapping("/verificar-email")
-    public java.util.Map<String, Object> verificarEmail(@Valid @RequestBody VerificarEmailRequest req) {
-        boolean verificado = authService.verificarEmail(req.email(), req.codigo());
-        String mensagem = verificado
-                ? "E-mail confirmado. Agora você já pode entrar."
-                : "Código inválido, expirado ou com tentativas esgotadas. Solicite um novo código.";
-        return java.util.Map.of("verificado", verificado, "mensagem", mensagem);
-    }
-
-    @PostMapping("/reenviar-verificacao")
-    public java.util.Map<String, String> reenviarVerificacao(
-            @Valid @RequestBody ReenviarVerificacaoRequest req) {
-        authService.reenviarVerificacao(req.email());
-        return java.util.Map.of("mensagem",
-            "Se houver uma conta Gmail aguardando confirmação e já tiver passado o intervalo, enviaremos outro código. Caso contrário, aguarde até 5 minutos antes de tentar novamente.");
     }
 
     @GetMapping("/eu")

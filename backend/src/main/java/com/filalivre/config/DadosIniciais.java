@@ -26,10 +26,10 @@ public class DadosIniciais {
                                          @Value("${filalivre.admin.email:}") String emailAdmin,
                                          @Value("${filalivre.admin.password:}") String senhaAdmin) {
         return args -> {
-            if (usuarioRepository.count() == 0) {
-                if (dadosDemo) {
-                    criarContasDemo(usuarioRepository, mercadoRepository, passwordEncoder);
-                } else if (!emailAdmin.isBlank() || !senhaAdmin.isBlank()) {
+            if (dadosDemo) {
+                criarContasDemo(usuarioRepository, mercadoRepository, passwordEncoder);
+            } else if (usuarioRepository.count() == 0) {
+                if (!emailAdmin.isBlank() || !senhaAdmin.isBlank()) {
                     if (emailAdmin.isBlank() || senhaAdmin.length() < 12) {
                         throw new IllegalStateException(
                                 "Defina FILALIVRE_ADMIN_EMAIL e FILALIVRE_ADMIN_PASSWORD com no mínimo 12 caracteres.");
@@ -55,18 +55,30 @@ public class DadosIniciais {
     private void criarContasDemo(UsuarioRepository usuarioRepository,
                                  MercadoRepository mercadoRepository,
                                  PasswordEncoder passwordEncoder) {
-        Usuario admin = usuario("Administrador", "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR, passwordEncoder);
-        Usuario supervisor = usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123", Perfil.SUPERVISOR, passwordEncoder);
-        Usuario operador = usuario("Operador Demonstração", "operador@filalivre.com", "operador123", Perfil.OPERADOR, passwordEncoder);
+        Usuario admin = usuarioRepository.findByEmailIgnoreCase("admin@filalivre.com")
+            .orElseGet(() -> usuario("Administrador", "admin@filalivre.com", "admin123",
+                Perfil.ADMINISTRADOR, passwordEncoder));
+        Usuario supervisor = usuarioRepository.findByEmailIgnoreCase("supervisor@filalivre.com")
+            .orElseGet(() -> usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123",
+                Perfil.SUPERVISOR, passwordEncoder));
+        Usuario operador = usuarioRepository.findByEmailIgnoreCase("operador@filalivre.com")
+            .orElseGet(() -> usuario("Operador Demonstração", "operador@filalivre.com", "operador123",
+                Perfil.OPERADOR, passwordEncoder));
         usuarioRepository.saveAll(List.of(admin, supervisor, operador));
 
-        Mercado mercado = new Mercado();
-        mercado.setNome("Mercado Demonstração");
-        mercado.setCodigoAcesso("MERCADO1");
-        mercado.setGestor(supervisor);
-        mercado = mercadoRepository.save(mercado);
-        supervisor.setMercado(mercado);
-        operador.setMercado(mercado);
+        Mercado mercado = mercadoRepository.findByCodigoAcessoIgnoreCase("MERCADO1").orElseGet(() -> {
+            Mercado novoMercado = new Mercado();
+            novoMercado.setNome("Mercado Demonstração");
+            novoMercado.setCodigoAcesso("MERCADO1");
+            novoMercado.setGestor(supervisor);
+            return mercadoRepository.save(novoMercado);
+        });
+        if (supervisor.getMercado() == null) {
+            supervisor.setMercado(mercado);
+        }
+        if (operador.getMercado() == null) {
+            operador.setMercado(mercado);
+        }
         usuarioRepository.saveAll(List.of(supervisor, operador));
     }
 

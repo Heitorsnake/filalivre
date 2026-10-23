@@ -13,6 +13,7 @@ COPY frontend /frontend
 
 ENV FILALIVRE_FRONTEND_PATH=/frontend
 ENV FILALIVRE_DB_PATH=/data/filalivre.db
+ENV FILALIVRE_DEMO_DATA=true
 
 RUN mkdir -p /data
 

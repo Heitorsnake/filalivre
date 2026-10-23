@@ -11,21 +11,6 @@ server:
 spring:
   application:
     name: filalivre
-  mail:
-    host: ${FILALIVRE_SMTP_HOST:smtp.gmail.com}
-    port: ${FILALIVRE_SMTP_PORT:587}
-    username: ${FILALIVRE_SMTP_USERNAME:}
-    password: ${FILALIVRE_SMTP_PASSWORD:}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
   datasource:
     url: jdbc:sqlite:${FILALIVRE_DB_PATH:../database/filalivre.db}
     driver-class-name: org.sqlite.JDBC
@@ -49,5 +34,3 @@ filalivre:
   admin:
     email: ${FILALIVRE_ADMIN_EMAIL:}
     password: ${FILALIVRE_ADMIN_PASSWORD:}
-  email:
-    frontend-url: ${FILALIVRE_FRONTEND_URL:http://localhost:8080/index.html}

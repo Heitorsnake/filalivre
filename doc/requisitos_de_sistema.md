@@ -34,8 +34,6 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 |---|---|---|
 | `POST` | `/api/auth/login` | Público |
 | `POST` | `/api/auth/cadastro` | Público, cria operador ou supervisor |
-| `POST` | `/api/auth/verificar-email` | Público com e-mail e código de 6 dígitos, confirma cadastro Gmail; até cinco tentativas |
-| `POST` | `/api/auth/reenviar-verificacao` | Público, solicita novo link de confirmação Gmail |
 | `POST` | `/api/auth/logout` | Autenticado |
 | `GET` | `/api/caixas` | Autenticado |
 | `POST` | `/api/caixas` | Supervisor/Gestor |
@@ -70,6 +68,7 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 - Senhas armazenadas com BCrypt.
 - Rotas protegidas por perfil usando `@PreAuthorize`.
 - Usuários inativos não podem autenticar.
+- O cadastro público autentica imediatamente, sem etapa de confirmação de e-mail.
 - Ações relevantes são registradas na auditoria.
 - O acesso a caixas, solicitações, histórico e relatórios respeita o mercado do usuário.
 - Novas solicitações de negócio são limitadas ao cancelamento de item.

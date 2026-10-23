@@ -69,14 +69,14 @@ async function desativarCaixa(id) {
 async function carregarUsuarios() {
   try {
     const usuarios = await apiFetch("/usuarios");
-    const ativos = usuarios.filter(item => item.ativo && item.emailVerificado).length;
+    const ativos = usuarios.filter(item => item.ativo).length;
     document.getElementById("res-ativos").textContent = ativos;
     document.getElementById("corpo-usuarios").innerHTML = usuarios.map(item => `
       <tr>
         <td>${escapar(item.nome)}</td>
         <td>${escapar(item.email)}</td>
         <td><span class="perfil-badge">${rotulosPerfil[item.perfil] || item.perfil}</span></td>
-        <td>${!item.ativo ? "Inativo" : item.emailVerificado ? "Ativo" : "Aguardando confirmação Gmail"}</td>
+        <td>${item.ativo ? "Ativo" : "Inativo"}</td>
         <td><button class="btn btn-cinza btn-pequeno" data-usuario="${item.id}">${item.ativo ? "Desativar" : "Ativar"}</button></td>
       </tr>`).join("");
 
@@ -139,9 +139,7 @@ document.getElementById("form-usuario").addEventListener("submit", async evento 
       }
     });
     evento.target.reset();
-    mostrarToast(novoUsuario.emailVerificado
-      ? "Usuário criado com sucesso"
-      : "Usuário criado; aguardando confirmação do Gmail", "verde");
+    mostrarToast("Usuário criado com sucesso", "verde");
     carregarUsuarios();
     carregarHistorico();
   } catch (excecao) {
