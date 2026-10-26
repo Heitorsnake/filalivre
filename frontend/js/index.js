@@ -4,6 +4,76 @@ const abaCadastro = document.getElementById("aba-cadastro");
 const formLogin = document.getElementById("form-login");
 const formCadastro = document.getElementById("form-cadastro");
 const sucesso = document.getElementById("sucesso");
+const botoesIdioma = document.querySelectorAll(".idioma-opcao");
+
+const traducoes = {
+  "pt-BR": {
+    titulo: "FilaLivre — Acesso",
+    idioma: "Idioma",
+    descricao: "Sistema de gerenciamento remoto de caixas de supermercado. Solicitações de cancelamento analisadas pelo supervisor sem deslocamento físico.",
+    abaLogin: "Entrar",
+    abaCadastro: "Criar conta",
+    email: "E-mail",
+    senha: "Senha",
+    entrar: "Entrar",
+    nomeCompleto: "Nome completo",
+    senhaCadastro: "Senha (mínimo 12 caracteres)",
+    tipoConta: "Tipo de conta",
+    operador: "Operador de caixa",
+    supervisor: "Supervisor / gestor do mercado",
+    criarConta: "Criar conta",
+    placeholderEmail: "voce@filalivre.com",
+    placeholderSenha: "••••••••",
+    placeholderNome: "Seu nome",
+    nomeIdioma: "Português"
+  },
+  es: {
+    titulo: "FilaLivre — Acceso",
+    idioma: "Idioma",
+    descricao: "Sistema de gestión remota de cajas de supermercado. Las solicitudes de cancelación son analizadas por el supervisor sin necesidad de desplazamiento.",
+    abaLogin: "Iniciar sesión",
+    abaCadastro: "Crear cuenta",
+    email: "Correo electrónico",
+    senha: "Contraseña",
+    entrar: "Iniciar sesión",
+    nomeCompleto: "Nombre completo",
+    senhaCadastro: "Contraseña (mínimo 12 caracteres)",
+    tipoConta: "Tipo de cuenta",
+    operador: "Cajero",
+    supervisor: "Supervisor / gerente del mercado",
+    criarConta: "Crear cuenta",
+    placeholderEmail: "tu@filalivre.com",
+    placeholderSenha: "••••••••",
+    placeholderNome: "Tu nombre",
+    nomeIdioma: "Español"
+  }
+};
+
+function mudarIdioma(idioma) {
+  const textos = traducoes[idioma] || traducoes["pt-BR"];
+  document.documentElement.lang = idioma;
+  document.title = textos.titulo;
+  document.querySelectorAll("[data-i18n]").forEach((elemento) => {
+    elemento.textContent = textos[elemento.dataset.i18n];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((elemento) => {
+    elemento.placeholder = textos[elemento.dataset.i18nPlaceholder];
+  });
+  document.querySelector(".idioma-controle").setAttribute("aria-label", textos.idioma);
+  botoesIdioma.forEach((botao) => {
+    const selecionado = botao.dataset.idioma === idioma;
+    botao.classList.toggle("ativa", selecionado);
+    botao.setAttribute("aria-pressed", String(selecionado));
+    botao.title = traducoes[botao.dataset.idioma].nomeIdioma;
+    botao.setAttribute("aria-label", traducoes[botao.dataset.idioma].nomeIdioma);
+  });
+  localStorage.setItem("filalivre-idioma", idioma);
+}
+
+botoesIdioma.forEach((botao) => {
+  botao.addEventListener("click", () => mudarIdioma(botao.dataset.idioma));
+});
+mudarIdioma(localStorage.getItem("filalivre-idioma") || "pt-BR");
 
 function mostrarErro(mensagem) {
   sucesso.style.display = "none";
