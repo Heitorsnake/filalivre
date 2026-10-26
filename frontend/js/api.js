@@ -76,12 +76,14 @@ function sair() {
 }
 
 function formatarMoeda(valor) {
-  return Number(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const locale = window.idiomaAtual === "es" ? "es-ES" : "pt-BR";
+  return Number(valor).toLocaleString(locale, { style: "currency", currency: "BRL" });
 }
 
 function formatarDataHora(iso) {
   if (!iso) return "-";
-  return new Date(iso).toLocaleString("pt-BR", {
+  const locale = window.idiomaAtual === "es" ? "es-ES" : "pt-BR";
+  return new Date(iso).toLocaleString(locale, {
     day: "2-digit", month: "2-digit",
     hour: "2-digit", minute: "2-digit"
   });

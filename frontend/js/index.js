@@ -51,6 +51,7 @@ const traducoes = {
 
 function mudarIdioma(idioma) {
   const textos = traducoes[idioma] || traducoes["pt-BR"];
+  window.idiomaAtual = idioma;
   document.documentElement.lang = idioma;
   document.title = textos.titulo;
   document.querySelectorAll("[data-i18n]").forEach((elemento) => {
@@ -68,6 +69,7 @@ function mudarIdioma(idioma) {
     botao.setAttribute("aria-label", traducoes[botao.dataset.idioma].nomeIdioma);
   });
   localStorage.setItem("filalivre-idioma", idioma);
+  window.aplicarIdioma?.(idioma);
 }
 
 botoesIdioma.forEach((botao) => {
