@@ -52,8 +52,6 @@ const traducoes = {
 function mudarIdioma(idioma) {
   const textos = traducoes[idioma] || traducoes["pt-BR"];
   window.idiomaAtual = idioma;
-  document.documentElement.lang = idioma;
-  document.title = textos.titulo;
   document.querySelectorAll("[data-i18n]").forEach((elemento) => {
     elemento.textContent = textos[elemento.dataset.i18n];
   });
@@ -70,6 +68,8 @@ function mudarIdioma(idioma) {
   });
   localStorage.setItem("filalivre-idioma", idioma);
   window.aplicarIdioma?.(idioma);
+  document.documentElement.lang = idioma;
+  document.title = textos.titulo;
 }
 
 botoesIdioma.forEach((botao) => {

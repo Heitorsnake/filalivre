@@ -301,6 +301,11 @@ body {
   border-radius: 8px;
   background: rgba(26, 33, 48, 0.72);
 }
+.topo .idioma-controle {
+  position: static;
+  flex: 0 0 auto;
+  background: transparent;
+}
 .idioma-opcao {
   display: grid;
   place-items: center;

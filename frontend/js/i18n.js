@@ -1,5 +1,7 @@
 (function () {
   let idioma = localStorage.getItem("filalivre-idioma") || "pt-BR";
+  const textosOriginais = new WeakMap();
+  const atributosOriginais = new WeakMap();
   const traducoes = {
     "FilaLivre — Central de Controle": "FilaLivre — Panel de control",
     "FilaLivre — Terminal do Caixa": "FilaLivre — Terminal de caja",
@@ -217,25 +219,38 @@
 
   function traduzirElemento(elemento) {
     if (elemento.nodeType === Node.TEXT_NODE) {
-      const traduzido = traduzirTexto(elemento.nodeValue);
+      if (!textosOriginais.has(elemento)) textosOriginais.set(elemento, elemento.nodeValue);
+      const original = textosOriginais.get(elemento);
+      const traduzido = idioma === "es" ? traduzirTexto(original) : original;
       if (traduzido !== elemento.nodeValue) elemento.nodeValue = traduzido;
       return;
     }
     if (elemento.nodeType !== Node.ELEMENT_NODE && elemento !== document) return;
     const raiz = elemento.nodeType === Node.ELEMENT_NODE ? elemento : document.documentElement;
+    const traduzirAtributo = (item, nome) => {
+      let originais = atributosOriginais.get(item);
+      if (!originais) {
+        originais = new Map();
+        atributosOriginais.set(item, originais);
+      }
+      if (!originais.has(nome)) originais.set(nome, item.getAttribute(nome));
+      const original = originais.get(nome);
+      const valor = idioma === "es" ? traduzirTexto(original) : original;
+      if (item.getAttribute(nome) !== valor) item.setAttribute(nome, valor);
+    };
     const arvore = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT);
     while (arvore.nextNode()) traduzirElemento(arvore.currentNode);
     if (raiz.matches?.("input[placeholder], textarea[placeholder]")) {
-      raiz.placeholder = traduzirTexto(raiz.placeholder);
+      traduzirAtributo(raiz, "placeholder");
     }
     raiz.querySelectorAll?.("input[placeholder], textarea[placeholder]").forEach(campo => {
-      campo.placeholder = traduzirTexto(campo.placeholder);
+      traduzirAtributo(campo, "placeholder");
     });
-    if (raiz.matches?.("[title]")) raiz.title = traduzirTexto(raiz.title);
-    raiz.querySelectorAll?.("[title]").forEach(item => { item.title = traduzirTexto(item.title); });
-    if (raiz.matches?.("[aria-label]")) raiz.setAttribute("aria-label", traduzirTexto(raiz.getAttribute("aria-label")));
+    if (raiz.matches?.("[title]")) traduzirAtributo(raiz, "title");
+    raiz.querySelectorAll?.("[title]").forEach(item => traduzirAtributo(item, "title"));
+    if (raiz.matches?.("[aria-label]")) traduzirAtributo(raiz, "aria-label");
     raiz.querySelectorAll?.("[aria-label]").forEach(item => {
-      item.setAttribute("aria-label", traduzirTexto(item.getAttribute("aria-label")));
+      traduzirAtributo(item, "aria-label");
     });
   }
 
@@ -243,11 +258,19 @@
   window.aplicarIdioma = function (novoIdioma) {
     idioma = novoIdioma === "es" ? "es" : "pt-BR";
     window.idiomaAtual = idioma;
+    localStorage.setItem("filalivre-idioma", idioma);
     document.documentElement.lang = idioma;
+    document.querySelectorAll(".idioma-opcao").forEach(botao => {
+      const selecionado = botao.dataset.idioma === idioma;
+      botao.classList.toggle("ativa", selecionado);
+      botao.setAttribute("aria-pressed", String(selecionado));
+    });
     traduzirElemento(document);
   };
-  document.documentElement.lang = idioma;
-  traduzirElemento(document);
+  document.querySelectorAll(".idioma-opcao").forEach(botao => {
+    botao.addEventListener("click", () => window.aplicarIdioma(botao.dataset.idioma));
+  });
+  window.aplicarIdioma(idioma);
   const observador = new MutationObserver(mudancas => {
     mudancas.forEach(mudanca => {
       if (mudanca.type === "characterData") traduzirElemento(mudanca.target);
