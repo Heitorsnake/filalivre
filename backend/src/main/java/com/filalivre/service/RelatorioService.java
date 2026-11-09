@@ -1,6 +1,7 @@
 package com.filalivre.service;
 
 import com.filalivre.dto.ResumoResponse;
+import com.filalivre.model.Caixa;
 import com.filalivre.model.StatusCaixa;
 import com.filalivre.model.StatusSolicitacao;
 import com.filalivre.model.Solicitacao;
@@ -27,9 +28,10 @@ public class RelatorioService {
     }
 
     public ResumoResponse resumo(Usuario usuario) {
-        List<Solicitacao> decididas = solicitacaoRepository
-                .findByStatusIn(List.of(StatusSolicitacao.APROVADA, StatusSolicitacao.RECUSADA))
-                .stream().filter(s -> pertenceAoMercado(s.getCaixa(), usuario)).toList();
+        Long mercadoId = usuario.getMercadoId();
+        List<Solicitacao> decididas = mercadoId == null ? List.of() : solicitacaoRepository
+            .findByCaixa_Mercado_IdAndStatusIn(mercadoId,
+                List.of(StatusSolicitacao.APROVADA, StatusSolicitacao.RECUSADA));
 
         double tempoMedioMinutos = decididas.stream()
                 .filter(s -> s.getDecididoEm() != null)
@@ -41,14 +43,13 @@ public class RelatorioService {
         for (StatusCaixa st : StatusCaixa.values()) {
             caixasPorStatus.put(st.name(), 0L);
         }
-        caixasPorStatus.putAll(caixaRepository.findAll().stream()
-            .filter(c -> pertenceAoMercado(c, usuario))
-                .collect(Collectors.groupingBy(c -> c.getStatus().name(), Collectors.counting())));
+        List<Caixa> caixas = mercadoId == null ? List.of() : caixaRepository.findAllByMercadoId(mercadoId);
+        caixasPorStatus.putAll(caixas.stream()
+            .collect(Collectors.groupingBy(c -> c.getStatus().name(), Collectors.counting())));
 
-        long totalSolicitacoes = solicitacaoRepository.findAll().stream()
-            .filter(s -> pertenceAoMercado(s.getCaixa(), usuario)).count();
-        long pendentes = solicitacaoRepository.findByStatusOrderByCriadoEmDesc(StatusSolicitacao.PENDENTE).stream()
-            .filter(s -> pertenceAoMercado(s.getCaixa(), usuario)).count();
+        long totalSolicitacoes = mercadoId == null ? 0 : solicitacaoRepository.countByCaixa_Mercado_Id(mercadoId);
+        long pendentes = mercadoId == null ? 0
+            : solicitacaoRepository.countByCaixa_Mercado_IdAndStatus(mercadoId, StatusSolicitacao.PENDENTE);
 
         return new ResumoResponse(
                 totalSolicitacoes,
@@ -60,8 +61,4 @@ public class RelatorioService {
                 caixasPorStatus);
     }
 
-    private boolean pertenceAoMercado(com.filalivre.model.Caixa caixa, Usuario usuario) {
-        return usuario.getMercado() != null && caixa.getMercado() != null
-                && caixa.getMercado().getId().equals(usuario.getMercado().getId());
-    }
 }

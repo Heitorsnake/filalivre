@@ -69,21 +69,25 @@ public class CaixaController {
     }
 
     @PostMapping("/{id}/iniciar")
+    @PreAuthorize("hasRole('OPERADOR')")
     public CaixaResponse iniciarAtendimento(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         return caixaService.iniciarAtendimento(id, usuario);
     }
 
     @PostMapping("/{id}/espera")
+    @PreAuthorize("hasRole('OPERADOR')")
     public CaixaResponse alternarEspera(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         return caixaService.alternarEspera(id, usuario);
     }
 
     @PostMapping("/{id}/finalizar")
+    @PreAuthorize("hasRole('OPERADOR')")
     public CaixaResponse finalizarAtendimento(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         return caixaService.finalizarAtendimento(id, usuario);
     }
 
     @PutMapping("/{id}/totais")
+    @PreAuthorize("hasRole('OPERADOR')")
     public CaixaResponse atualizarTotais(@PathVariable Long id,
                                          @Valid @RequestBody TotaisRequest req,
                                          @AuthenticationPrincipal Usuario usuario) {

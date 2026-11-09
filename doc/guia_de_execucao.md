@@ -45,7 +45,13 @@ docker build -t filalivre .
 docker run --rm -p 8080:8080 -v filalivre-data:/data filalivre
 ```
 
-Acesse `http://localhost:8080`. O Dockerfile habilita as contas de demonstração para facilitar testes; para manter os dados entre execuções, preserve o volume `filalivre-data`.
+Acesse `http://localhost:8080`. O Dockerfile mantém as contas de demonstração desativadas por padrão. Para habilitá-las em uma demonstração local controlada, inicie o contêiner explicitamente com:
+
+```bash
+docker run --rm -p 8080:8080 -e FILALIVRE_DEMO_DATA=true -v filalivre-data:/data filalivre
+```
+
+Para manter os dados entre execuções, preserve o volume `filalivre-data`. Não habilite contas demonstrativas em ambientes expostos à internet.
 
 ## Publicação no Render
 
@@ -61,7 +67,7 @@ O serviço pode ser publicado usando o [Dockerfile](../Dockerfile):
 
 O backend usa sessão com cookie HttpOnly, token CSRF em requisições de alteração, CORS restrito, expiração por inatividade de 30 minutos e renovação do ID de sessão no login. Se o frontend estiver hospedado em outro domínio (por exemplo, GitHub Pages), configure HTTPS e `FILALIVRE_COOKIE_SAME_SITE=None` no backend; mantenha a origem exata em `FILALIVRE_CORS_ALLOWED_ORIGINS`. Não habilite dados de demonstração em produção.
 
-As contas demonstrativas usam senhas públicas. O Dockerfile as habilita para demonstrações; em qualquer ambiente exposto à internet, defina `FILALIVRE_DEMO_DATA=false`.
+As contas demonstrativas usam senhas públicas. O Dockerfile as mantém desativadas por padrão; habilite `FILALIVRE_DEMO_DATA=true` somente para demonstrações locais controladas. Em qualquer ambiente exposto à internet, mantenha `FILALIVRE_DEMO_DATA=false`.
 
 O Render usa o SQLite local do serviço. O plano gratuito pode não preservar arquivos entre reinicializações; sem Persistent Disk, os dados podem ser perdidos. O deploy não se conecta automaticamente ao SQLiteCloud.
 

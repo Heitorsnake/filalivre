@@ -126,6 +126,11 @@ public class Caixa {
         this.operador = operador;
     }
 
+    public boolean estaEmAtendimentoPor(Usuario usuario) {
+        return usuario != null && operador != null && operador.getId() != null
+                && operador.getId().equals(usuario.getId());
+    }
+
     public LocalDateTime getInicioAtendimento() {
         return inicioAtendimento;
     }

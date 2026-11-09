@@ -6,7 +6,7 @@
 
 ---
 
-Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O Dockerfile habilita essa opção para demonstrações. O seed pode completar um banco existente e não duplica as contas já criadas. Desabilite a opção em ambientes expostos à internet:
+Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O Dockerfile mantém essa opção desativada por padrão; habilite-a explicitamente apenas para demonstrações locais controladas. O seed pode completar um banco existente e não duplica as contas já criadas. Não habilite a opção em ambientes expostos à internet:
 
 | Perfil | E-mail | Senha | Mercado | Código |
 |---|---|---|---|---|

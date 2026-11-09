@@ -93,6 +93,15 @@ public class Usuario implements UserDetails {
 
     public void setMercado(Mercado mercado) { this.mercado = mercado; }
 
+    public Long getMercadoId() {
+        return mercado == null ? null : mercado.getId();
+    }
+
+    public boolean pertenceAoMercado(Mercado mercado) {
+        return this.mercado != null && mercado != null && this.mercado.getId() != null
+                && this.mercado.getId().equals(mercado.getId());
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + perfil.name()));

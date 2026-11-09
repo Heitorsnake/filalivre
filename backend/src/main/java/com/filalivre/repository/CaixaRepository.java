@@ -9,6 +9,8 @@ public interface CaixaRepository extends JpaRepository<Caixa, Long> {
 
     List<Caixa> findAllByAtivoTrueOrderByNumeroAsc();
 
+    List<Caixa> findAllByMercadoId(Long mercadoId);
+
     List<Caixa> findAllByMercadoIdAndAtivoTrueOrderByNumeroAsc(Long mercadoId);
 
     Optional<Caixa> findByNumero(Integer numero);

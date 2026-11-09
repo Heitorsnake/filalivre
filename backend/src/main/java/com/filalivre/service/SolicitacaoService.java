@@ -78,15 +78,18 @@ public class SolicitacaoService {
     }
 
     public List<SolicitacaoResponse> pendentes(Usuario gestor) {
-        return solicitacaoRepository.findByStatusOrderByCriadoEmDesc(StatusSolicitacao.PENDENTE)
-                .stream().filter(s -> mesmoMercado(s.getCaixa(), gestor))
-                .map(this::toResponse).toList();
+        Long mercadoId = gestor.getMercadoId();
+        if (mercadoId == null) return List.of();
+        return solicitacaoRepository.findByCaixa_Mercado_IdAndStatusOrderByCriadoEmDesc(
+                mercadoId, StatusSolicitacao.PENDENTE)
+            .stream().map(this::toResponse).toList();
     }
 
     public List<SolicitacaoResponse> historico(Usuario gestor) {
-        return solicitacaoRepository.findTop100ByOrderByCriadoEmDesc()
-                .stream().filter(s -> mesmoMercado(s.getCaixa(), gestor))
-                .map(this::toResponse).toList();
+        Long mercadoId = gestor.getMercadoId();
+        if (mercadoId == null) return List.of();
+        return solicitacaoRepository.findTop100ByCaixa_Mercado_IdOrderByCriadoEmDesc(mercadoId)
+            .stream().map(this::toResponse).toList();
     }
 
     @Transactional
@@ -136,8 +139,7 @@ public class SolicitacaoService {
     }
 
     private boolean mesmoMercado(Caixa caixa, Usuario usuario) {
-        return usuario.getMercado() != null && caixa.getMercado() != null
-                && caixa.getMercado().getId().equals(usuario.getMercado().getId());
+        return usuario.pertenceAoMercado(caixa.getMercado());
     }
 
     private SolicitacaoResponse toResponse(Solicitacao s) {

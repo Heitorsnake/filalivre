@@ -71,7 +71,7 @@ public class CaixaService {
     @Transactional
     public CaixaResponse atualizarAnydesk(Long id, Usuario operador, AnydeskRequest req) {
         Caixa caixa = buscar(id, operador);
-        if (caixa.getOperador() != null && !caixa.getOperador().getId().equals(operador.getId())) {
+        if (caixa.getOperador() != null && !caixa.estaEmAtendimentoPor(operador)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Não é possível alterar o AnyDesk de um caixa em atendimento por outro operador");
         }
@@ -96,6 +96,9 @@ public class CaixaService {
     @Transactional
     public CaixaResponse iniciarAtendimento(Long id, Usuario operador) {
         Caixa caixa = buscar(id, operador);
+        if (caixa.getOperador() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Este caixa já está em atendimento");
+        }
         caixa.setOperador(operador);
         caixa.setStatus(StatusCaixa.NORMAL);
         caixa.setValorCompra(BigDecimal.ZERO);
@@ -109,6 +112,7 @@ public class CaixaService {
     @Transactional
     public CaixaResponse alternarEspera(Long id, Usuario usuario) {
         Caixa caixa = buscar(id, usuario);
+        exigirOperadorResponsavel(caixa, usuario);
         if (caixa.getStatus() == StatusCaixa.SOLICITACAO || caixa.getStatus() == StatusCaixa.APROVACAO) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Não é possível alterar o status: existe uma solicitação em andamento neste caixa");
@@ -126,6 +130,7 @@ public class CaixaService {
     @Transactional
     public CaixaResponse finalizarAtendimento(Long id, Usuario usuario) {
         Caixa caixa = buscar(id, usuario);
+        exigirOperadorResponsavel(caixa, usuario);
         String detalhes = String.format("Compra finalizada: %d itens, R$ %.2f",
                 caixa.getQtdItens(), caixa.getValorCompra());
         caixa.setOperador(null);
@@ -140,6 +145,7 @@ public class CaixaService {
     @Transactional
     public CaixaResponse atualizarTotais(Long id, Usuario operador, TotaisRequest req) {
         Caixa caixa = buscar(id, operador);
+        exigirOperadorResponsavel(caixa, operador);
         caixa.setValorCompra(req.valorCompra());
         caixa.setQtdItens(req.qtdItens());
         return toResponse(caixa);
@@ -148,11 +154,17 @@ public class CaixaService {
     private Caixa buscar(Long id, Usuario usuario) {
         Caixa caixa = caixaRepository.findByIdAndAtivoTrue(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado"));
-        if (usuario.getMercado() == null || caixa.getMercado() == null
-                || !caixa.getMercado().getId().equals(usuario.getMercado().getId())) {
+        if (!usuario.pertenceAoMercado(caixa.getMercado())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Caixa não encontrado");
         }
         return caixa;
+    }
+
+    private void exigirOperadorResponsavel(Caixa caixa, Usuario usuario) {
+        if (!caixa.estaEmAtendimentoPor(usuario)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Somente o operador responsável pode alterar este atendimento");
+        }
     }
 
     private CaixaResponse toResponse(Caixa c) {

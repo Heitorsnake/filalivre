@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Documento do projeto FilaLivre: escopo, requisitos, arquitetura e execução.">
+  <title>meuprojetojipex</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f1420;
+      --surface: #1a2130;
+      --border: #2c3648;
+      --text: #e8ecf4;
+      --muted: #93a0b8;
+      --green: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 "Segoe UI", system-ui, -apple-system, sans-serif; }
+    a { color: #7ddf9d; }
+    .page { width: min(100% - 32px, 1040px); margin: 0 auto; }
+    .hero { padding: 64px 0 28px; text-align: center; }
+    .hero h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; font-weight: 800; overflow-wrap: anywhere; }
+    .hero h1 span { color: var(--green); }
+    .hero p { max-width: 680px; margin: 14px auto 0; color: var(--muted); }
+    .identity { margin-top: 20px; color: var(--muted); font-size: .92rem; }
+    .identity strong { color: var(--text); }
+    nav { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px 0; background: var(--bg); border-bottom: 1px solid var(--border); }
+    nav a { padding: 6px 11px; color: var(--muted); text-decoration: none; border: 1px solid var(--border); border-radius: 7px; font-size: .84rem; }
+    nav a:hover, nav a:focus-visible { color: var(--text); border-color: var(--green); }
+    main { display: grid; gap: 16px; padding: 24px 0 48px; }
+    section { min-width: 0; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; scroll-margin-top: 76px; }
+    h2 { margin: 0 0 14px; font-size: 1.2rem; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 1rem; }
+    h3:first-child { margin-top: 0; }
+    p { margin: 8px 0; }
+    ul, ol { margin: 8px 0; padding-left: 22px; }
+    li + li { margin-top: 5px; }
+    .table-wrap { overflow-x: auto; margin: 12px 0; }
+    table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    th, td { padding: 9px 11px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: .82rem; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { overflow-wrap: anywhere; color: #b7f2c8; }
+    pre { overflow-x: auto; margin: 10px 0; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; }
+    .callout { margin-top: 14px; padding: 12px 15px; border-left: 3px solid var(--green); background: var(--bg); color: var(--muted); }
+    footer { padding: 0 0 30px; color: var(--muted); text-align: center; font-size: .84rem; }
+    @media (max-width: 600px) { .hero { padding-top: 40px; } section { padding: 18px; } nav { justify-content: flex-start; } }
+    @media print {
+      :root { color-scheme: light; --bg: #fff; --surface: #fff; --border: #cbd2dc; --text: #17202d; --muted: #4c596b; --green: #16803a; }
+      body { background: #fff; color: var(--text); }
+      nav { display: none; }
+      .hero { padding-top: 16px; }
+      section { break-inside: avoid; }
+      a { color: inherit; }
+      pre, .callout { background: #f5f7f9; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1><span>meu</span>projetojipex</h1>
+      <p>Sistema de gerenciamento remoto de caixas de supermercado. Solicitações de cancelamento analisadas pelo supervisor sem deslocamento físico.</p>
+      <div class="identity"><strong>FilaLivre</strong> · Instituto Federal de Mato Grosso (IFMT) · 2º ano B de Informática</div>
+      <div class="identity">Heitor Pernet · Maicon Goulart · Eduardo Gomes · José Leandro</div>
+    </header>
+    <nav aria-label="Seções do documento">
+      <a href="#apresentacao">Apresentação</a><a href="#objetivos">Objetivos</a><a href="#escopo">Escopo</a><a href="#perfis">Perfis</a><a href="#requisitos">Requisitos</a><a href="#fluxos">Fluxos</a><a href="#arquitetura">Arquitetura</a><a href="#seguranca">Segurança</a><a href="#execucao">Execução</a><a href="#demonstracao">Demonstração</a>
+    </nav>
+    <main>
+      <section id="apresentacao">
+        <h2>1. Apresentação</h2>
+        <p>O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, que exerce a função de gestor, acompanha os atendimentos e analisa solicitações de cancelamento de item sem precisar se deslocar até o caixa.</p>
+        <p>O sistema registra cada ação para manter a rastreabilidade operacional e separa a operação por mercado.</p>
+      </section>
+      <section id="objetivos">
+        <h2>2. Objetivos</h2>
+        <h3>Objetivo do projeto</h3>
+        <p>Permitir que o supervisor acompanhe remotamente os atendimentos e analise solicitações de cancelamento de item, mantendo o registro das ações e a separação por mercado.</p>
+        <h3>Objetivos de engenharia</h3>
+        <ol><li>Reduzir o tempo de decisão das solicitações.</li><li>Centralizar a visualização dos caixas e das ocorrências.</li><li>Registrar decisões, acessos e alterações para auditoria.</li><li>Manter separação real entre as permissões de operador, gestor e administrador.</li><li>Isolar caixas, solicitações e relatórios pelo mercado associado ao usuário.</li></ol>
+      </section>
+      <section id="escopo">
+        <h2>3. Escopo</h2>
+        <h3>Funcionalidades contempladas</h3>
+        <ul><li>Autenticação com sessão e controle de acesso por perfil.</li><li>Cadastro público com escolha entre operador e supervisor/gestor.</li><li>Cadastro de mercado pelo supervisor e geração de código de acesso.</li><li>Entrada do operador no mercado por código.</li><li>Operação de caixas, carrinho simulado e acompanhamento do atendimento.</li><li>Cadastro opcional do ID/endereço AnyDesk do computador de cada caixa, exibição no terminal do operador e atalho no painel do gestor para abrir o cliente AnyDesk.</li><li>Criação de solicitações de cancelamento de item pelo operador.</li><li>Análise, aprovação ou recusa pelo gestor/supervisor.</li><li>Administração de usuários, perfis e status de ativação.</li><li>Relatórios resumidos e histórico de auditoria.</li></ul>
+        <h3>Fora do escopo</h3>
+        <ul><li>Processamento real de pagamentos.</li><li>Integração com estoque, ERP ou fiscal.</li><li>Aplicativo mobile nativo.</li><li>Envio externo de notificações por e-mail ou SMS.</li><li>Exibição ou controle da sessão remota AnyDesk dentro do FilaLivre; o sistema apenas solicita ao sistema operacional a abertura do cliente AnyDesk instalado.</li></ul>
+      </section>
+      <section id="perfis">
+        <h2>4. Perfis e atores</h2>
+        <h3>Operador de caixa</h3><p>Atende o cliente, registra itens, controla o atendimento, inicia, pausa e finaliza a operação e solicita autorização quando uma operação exige decisão superior. Consulta o resultado da própria solicitação e o ID AnyDesk associado ao caixa.</p>
+        <h3>Supervisor/gestor de operação</h3><p>Supervisor e gestor representam a mesma conta operacional. Acompanha caixas em situação normal ou de atenção, cadastra o mercado, compartilha o código de acesso, analisa solicitações, registra aprovação ou recusa, cadastra caixas e consulta relatórios. Também pode configurar o ID AnyDesk do computador do operador.</p>
+        <h3>Administrador do sistema</h3><p>Mantém usuários, perfis e status de ativação. Consulta relatórios e auditoria, mas não executa decisões operacionais de solicitações. A conta administrativa é criada apenas pela administração.</p>
+      </section>
+      <section id="requisitos">
+        <h2>5. Requisitos de usuário</h2>
+        <div class="table-wrap"><table><thead><tr><th>Identificador</th><th>Requisito</th></tr></thead><tbody>
+          <tr><td>RU-01</td><td>Login: cada usuário acessa o sistema com e-mail e senha e recebe uma sessão conforme seu perfil.</td></tr>
+          <tr><td>RU-01A</td><td>Cadastro de perfil: no cadastro público, o usuário escolhe operador ou supervisor/gestor. Administrador continua sendo criado apenas pela administração.</td></tr>
+          <tr><td>RU-02</td><td>Terminal do operador: o operador visualiza seu caixa, registra itens, inicia, pausa e finaliza o atendimento.</td></tr>
+          <tr><td>RU-02A</td><td>Acesso ao mercado: o operador informa o código recebido do supervisor e visualiza somente os caixas do mercado associado.</td></tr>
+          <tr><td>RU-03</td><td>Solicitação: o operador informa produto, quantidade, valor e motivo para solicitar remotamente o cancelamento de um item.</td></tr>
+          <tr><td>RU-04</td><td>Acompanhamento: o operador visualiza o retorno da decisão no terminal.</td></tr>
+          <tr><td>RU-05</td><td>Painel remoto do supervisor/gestor: acompanha remotamente caixas, status, operadores e solicitações pendentes do mercado.</td></tr>
+          <tr><td>RU-05A</td><td>Acesso AnyDesk por caixa: ao cadastrar ou editar um caixa, o supervisor/gestor pode informar opcionalmente o ID/endereço AnyDesk do computador do operador. A seção Acesso remoto lista os caixas, exibe cada ID e oferece atalho para abrir o cliente AnyDesk. O terminal do operador exibe o ID associado ao caixa selecionado.</td></tr>
+          <tr><td>RU-06</td><td>Decisão: supervisor e gestor podem analisar, aprovar ou recusar uma solicitação.</td></tr>
+          <tr><td>RU-07</td><td>Relatórios: gestor e administrador consultam totais e indicadores operacionais.</td></tr>
+          <tr><td>RU-08</td><td>Administração: administrador cria usuários, escolhe seus perfis e ativa ou desativa contas.</td></tr>
+          <tr><td>RU-09</td><td>Auditoria: o sistema registra login, solicitações, decisões e alterações administrativas.</td></tr>
+        </tbody></table></div>
+        <h3>Critérios de aceite</h3>
+        <ul><li>Usuários não podem acessar telas incompatíveis com seu perfil.</li><li>O backend deve rejeitar chamadas sem a permissão correta, mesmo que a tela seja acessada diretamente.</li><li>Toda decisão deve registrar responsável e horário.</li><li>O cadastro e a alteração de usuários devem ficar restritos ao administrador.</li><li>Um operador não pode visualizar caixas, solicitações ou relatórios de outro mercado.</li><li>O código de mercado inválido deve ser recusado pelo backend.</li><li>O ID AnyDesk é opcional, pertence ao computador do caixa/operador e deve ser retornado junto aos dados do caixa sem misturar dados de mercados diferentes.</li><li>O atalho de conexão deve usar o ID do caixa e abrir o cliente AnyDesk; não deve apresentar a interface local do gestor como se fosse a tela remota.</li></ul>
+      </section>
+      <section id="fluxos">
+        <h2>6. Fluxos operacionais</h2>
+        <h3>Fluxo principal</h3>
+        <ol><li>O supervisor/gestor cria o mercado e recebe um código de acesso.</li><li>O operador informa o código e entra no mercado correto.</li><li>O operador escolhe um caixa livre, inicia o atendimento e registra os produtos.</li><li>Quando necessário, envia uma solicitação de cancelamento de item ao supervisor/gestor.</li><li>O painel remoto do supervisor/gestor apresenta a solicitação pendente.</li><li>O supervisor/gestor analisa e decide sem se deslocar até o caixa.</li><li>O sistema registra a decisão e atualiza o terminal do operador.</li><li>O administrador acompanha a operação por relatórios e auditoria.</li></ol>
+        <h3>Configuração de acesso AnyDesk</h3>
+        <ol><li>O operador ou responsável pelo computador do caixa informa ao gestor o ID/endereço mostrado no AnyDesk dessa máquina. O ID do próprio computador do gestor não deve ser usado nesse cadastro.</li><li>O gestor informa esse identificador no campo opcional do cadastro do caixa. Também pode adicioná-lo ou alterá-lo posteriormente pelo cartão do caixa.</li><li>O operador visualiza o identificador associado ao caixa selecionado no terminal.</li><li>Na seção <strong>Acesso remoto</strong> do painel, o gestor aciona <strong>Conectar</strong> junto ao caixa desejado para solicitar ao sistema operacional a abertura do cliente AnyDesk instalado no computador do gestor com o identificador do caixa.</li></ol>
+        <div class="callout">O FilaLivre não obtém o ID automaticamente nem incorpora a imagem da tela remota. O link <code>anydesk:&lt;ID&gt;</code> solicita a abertura do cliente padrão instalado e o início da sessão. A conexão depende da disponibilidade do computador remoto e da autorização exigida pelo AnyDesk; clientes personalizados podem usar outro prefixo de URL handler.</div>
+      </section>
+      <section id="arquitetura">
+        <h2>7. Arquitetura e requisitos de sistema</h2>
+        <h3>Stack</h3>
+        <ul><li><strong>Backend:</strong> Java 21, Spring Boot, Spring Security, Spring Data JPA e Hibernate.</li><li><strong>Persistência:</strong> SQLite; caminho padrão <code>database/filalivre.db</code>, configurável por <code>FILALIVRE_DB_PATH</code>.</li><li><strong>Frontend:</strong> HTML5, CSS3 e JavaScript Vanilla para interação com a API REST.</li><li><strong>Execução:</strong> Maven localmente ou Docker com Java 21.</li><li><strong>Modelo SQL de referência:</strong> <code>database/schema.sql</code>.</li></ul>
+        <h3>Persistência</h3><p>O Hibernate cria e atualiza as tabelas com <code>ddl-auto: update</code>. A aplicação usa o driver SQLite Xerial e o dialeto SQLite do Hibernate. O arquivo <code>database/filalivre-cloud.sql</code> é um dump independente para visualização no SQLiteCloud; não é a conexão usada pelo Render. O arquivo <code>filalivre.mv.db</code> é H2 e não deve ser enviado ao SQLiteCloud como se fosse SQLite.</p>
+        <h3>API principal</h3>
+        <div class="table-wrap"><table><thead><tr><th>Método</th><th>Rota</th><th>Perfil</th></tr></thead><tbody>
+          <tr><td>POST</td><td><code>/api/auth/login</code></td><td>Público</td></tr><tr><td>POST</td><td><code>/api/auth/cadastro</code></td><td>Público; cria operador ou supervisor</td></tr><tr><td>POST</td><td><code>/api/auth/logout</code></td><td>Autenticado</td></tr>
+          <tr><td>GET</td><td><code>/api/caixas</code></td><td>Autenticado</td></tr><tr><td>POST</td><td><code>/api/caixas</code></td><td>Supervisor/gestor</td></tr><tr><td>PATCH</td><td><code>/api/caixas/{id}</code></td><td>Supervisor/gestor/administrador</td></tr><tr><td>DELETE</td><td><code>/api/caixas/{id}</code></td><td>Supervisor/gestor/administrador</td></tr>
+          <tr><td>POST</td><td><code>/api/caixas/{id}/iniciar</code></td><td>Operador</td></tr><tr><td>POST</td><td><code>/api/caixas/{id}/espera</code></td><td>Operador</td></tr><tr><td>POST</td><td><code>/api/caixas/{id}/finalizar</code></td><td>Operador</td></tr>
+          <tr><td>POST</td><td><code>/api/solicitacoes</code></td><td>Operador</td></tr><tr><td>GET</td><td><code>/api/solicitacoes/pendentes</code></td><td>Supervisor/gestor</td></tr><tr><td>POST</td><td><code>/api/solicitacoes/{id}/analisar</code></td><td>Supervisor/gestor</td></tr><tr><td>POST</td><td><code>/api/solicitacoes/{id}/decidir</code></td><td>Supervisor/gestor</td></tr>
+          <tr><td>GET</td><td><code>/api/relatorios/resumo</code></td><td>Gestor/administrador</td></tr><tr><td>GET</td><td><code>/api/mercados/meu</code></td><td>Autenticado</td></tr><tr><td>POST</td><td><code>/api/mercados</code></td><td>Supervisor/gestor</td></tr><tr><td>POST</td><td><code>/api/mercados/entrar</code></td><td>Operador</td></tr><tr><td>GET</td><td><code>/api/historico</code></td><td>Gestor/administrador</td></tr><tr><td>GET/POST/PATCH</td><td><code>/api/usuarios</code></td><td>Administrador</td></tr>
+        </tbody></table></div>
+        <h3>Dados AnyDesk do caixa</h3>
+        <ul><li><code>POST /api/caixas</code> aceita <code>anydeskId</code> opcional, texto com até 64 caracteres, além de <code>localizacao</code>.</li><li><code>PATCH /api/caixas/{id}</code> aceita <code>anydeskId</code> para atualizar ou limpar o identificador. Quando omitido, o valor existente deve ser preservado em atualizações que alteram somente a localização.</li><li>As respostas de caixas incluem <code>anydeskId</code>, nulo quando não configurado. O campo respeita as regras existentes de autorização e associação ao mercado.</li><li>A entidade persiste o valor na coluna <code>caixas.anydesk_id</code>. O Hibernate aplica a alteração conforme <code>ddl-auto: update</code>; os esquemas SQL de referência também declaram a coluna.</li><li>A seção Acesso remoto lista os caixas e seus IDs AnyDesk, com ações de conexão e edição; os cartões operacionais permanecem separados. O painel remove espaços do ID e monta o URL handler oficial <code>anydesk:&lt;ID&gt;</code> para clientes padrão. O AnyDesk deve estar instalado no computador do gestor, e o navegador ou sistema operacional pode solicitar confirmação. O formato segue a <a href="https://support.anydesk.com/docs/url-handler">documentação oficial do AnyDesk</a>.</li><li>O terminal do operador exibe o identificador do caixa selecionado. Nenhuma API do FilaLivre captura ou transmite a tela, autentica a sessão AnyDesk ou controla o dispositivo remoto.</li></ul>
+      </section>
+      <section id="seguranca">
+        <h2>8. Segurança e requisitos não funcionais</h2>
+        <h3>Segurança</h3>
+        <ul><li>Sessão autenticada com Spring Security.</li><li>Senhas armazenadas com BCrypt.</li><li>Rotas protegidas por perfil usando <code>@PreAuthorize</code>.</li><li>Usuários inativos não podem autenticar.</li><li>O cadastro público autentica imediatamente, sem etapa de confirmação de e-mail.</li><li>Ações relevantes são registradas na auditoria.</li><li>O acesso a caixas, solicitações, histórico e relatórios respeita o mercado do usuário.</li><li>Novas solicitações de negócio são limitadas ao cancelamento de item.</li></ul>
+        <h3>Requisitos não funcionais</h3>
+        <ul><li>A interface deve funcionar em desktop e telas menores.</li><li>O backend deve responder em HTTP na porta <code>8080</code> por padrão.</li><li>O banco deve permanecer em arquivo local ou volume persistente no Docker.</li><li>A aplicação deve iniciar sem depender de banco externo.</li><li>O SQLiteCloud pode ser usado para consultar o dump de demonstração, mas não é usado automaticamente pela aplicação.</li></ul>
+      </section>
+      <section id="execucao">
+        <h2>9. Execução e publicação</h2>
+        <h3>Pré-requisitos</h3><ul><li>Java 21 e Maven para execução local.</li><li>Docker para build e execução em contêiner.</li></ul>
+        <h3>Execução local</h3><p>Na raiz do repositório, execute:</p><pre><code>cd backend
+      mvn spring-boot:run</code></pre>
+        <p>A aplicação fica disponível em <code>http://localhost:8080</code>. O backend serve o frontend pelo caminho <code>../frontend</code> por padrão local.</p>
+        <p>No desenvolvimento local, defina <code>FILALIVRE_DEMO_DATA=true</code> para criar as contas demonstrativas. O seed é repetível e cria apenas contas que ainda não existam. Para instalação sem dados de demonstração, configure <code>FILALIVRE_ADMIN_EMAIL</code> e <code>FILALIVRE_ADMIN_PASSWORD</code> para inicializar o primeiro administrador. O cadastro público cria e autentica a conta imediatamente, sem confirmação por e-mail.</p>
+        <h3>Execução com Docker</h3><pre><code>docker build -t filalivre .
+docker run --rm -p 8080:8080 -v filalivre-data:/data filalivre</code></pre>
+        <p>Acesse <code>http://localhost:8080</code>. O Dockerfile mantém as contas de demonstração desativadas por padrão; para habilitá-las em uma demonstração local controlada, defina <code>FILALIVRE_DEMO_DATA=true</code>. Preserve o volume <code>filalivre-data</code> para manter os dados entre execuções. Configure <code>FILALIVRE_DB_PATH=/data/filalivre.db</code> e monte volume persistente em <code>/data</code>.</p>
+        <h3>Publicação no Render</h3>
+        <ol><li>Conecte o repositório GitHub ao Web Service do Render.</li><li>Escolha o ambiente Docker e use a porta HTTP fornecida pela variável <code>PORT</code>.</li><li>Configure <code>FILALIVRE_FRONTEND_PATH=/frontend</code>, <code>FILALIVRE_DB_PATH=/data/filalivre.db</code> e <code>FILALIVRE_COOKIE_SECURE=true</code>.</li><li>Defina <code>FILALIVRE_DEMO_DATA=false</code> e configure <code>FILALIVRE_ADMIN_EMAIL</code> e <code>FILALIVRE_ADMIN_PASSWORD</code> antes do primeiro deploy. A senha deve ter pelo menos 12 caracteres e ser armazenada como segredo no provedor. O bootstrap do administrador ocorre quando o banco ainda não tem usuários.</li><li>Configure <code>FILALIVRE_CORS_ALLOWED_ORIGINS</code> com as origens exatas do frontend, separadas por vírgulas. Não use <code>*</code> com cookies de sessão.</li><li>Adicione um Persistent Disk montado em <code>/data</code> para preservar o SQLite.</li><li>Faça o deploy e abra a URL atribuída ao serviço.</li></ol>
+        <p>O backend usa sessão com cookie HttpOnly, token CSRF em requisições de alteração, CORS restrito, expiração por inatividade de 30 minutos e renovação do ID de sessão no login. Se o frontend estiver hospedado em outro domínio, por exemplo GitHub Pages, configure HTTPS e <code>FILALIVRE_COOKIE_SAME_SITE=None</code> no backend, mantendo a origem exata em <code>FILALIVRE_CORS_ALLOWED_ORIGINS</code>. Não habilite dados de demonstração em produção.</p>
+        <p>O Render usa o SQLite local do serviço. O plano gratuito pode não preservar arquivos entre reinicializações; sem Persistent Disk, os dados podem ser perdidos. O deploy não se conecta automaticamente ao SQLiteCloud.</p>
+        <h3>Publicação do frontend no GitHub Pages</h3><p>O GitHub Pages publica somente o frontend. Para usá-lo, hospede o backend Java em um serviço acessível pela internet e configure <code>frontend/js/config.js</code>:</p><pre><code>window.FILALIVRE_API_URL = "https://seu-backend.exemplo.com/api";</code></pre><p>O backend deve permitir CORS para o domínio do frontend. Use HTTPS no backend quando a sessão for compartilhada entre domínios.</p>
+        <h3>Consulta do dump SQLiteCloud</h3><p>Execute <code>database/filalivre-cloud.sql</code> no SQL Editor de um banco de demonstração, não em <strong>Upload Database</strong>. As senhas do dump são dados de visualização; use as contas do backend descritas na seção seguinte para entrar na aplicação. O arquivo <code>filalivre.mv.db</code> é H2 antigo e não deve ser enviado ao SQLiteCloud como se fosse SQLite.</p>
+      </section>
+      <section id="demonstracao">
+        <h2>10. Contas de demonstração</h2>
+        <p>Estas contas são criadas quando <code>FILALIVRE_DEMO_DATA=true</code> estiver definido. O Dockerfile mantém essa opção desativada por padrão; habilite-a explicitamente apenas para demonstrações locais controladas. O seed pode completar um banco existente e não duplica contas já criadas.</p>
+        <div class="table-wrap"><table><thead><tr><th>Perfil</th><th>E-mail</th><th>Senha</th><th>Mercado</th><th>Código</th></tr></thead><tbody>
+          <tr><td>Operador</td><td><code>operador@filalivre.com</code></td><td><code>operador123</code></td><td>Mercado Demonstração</td><td><code>MERCADO1</code></td></tr>
+          <tr><td>Supervisor/gestor</td><td><code>supervisor@filalivre.com</code></td><td><code>supervisor123</code></td><td>Mercado Demonstração</td><td><code>MERCADO1</code></td></tr>
+          <tr><td>Administrador</td><td><code>admin@filalivre.com</code></td><td><code>admin123</code></td><td>—</td><td>—</td></tr>
+        </tbody></table></div>
+        <div class="callout">As senhas demonstrativas são públicas. Desabilite <code>FILALIVRE_DEMO_DATA</code> em ambientes expostos à internet. Para produção, crie a primeira conta administrativa pelas variáveis secretas <code>FILALIVRE_ADMIN_EMAIL</code> e <code>FILALIVRE_ADMIN_PASSWORD</code> antes do primeiro início do backend; a senha inicial deve conter pelo menos 12 caracteres. Para autenticar o operador de demonstração, associe-o ao mercado usando o código indicado.</div>
+      </section>
+    </main>
+    <footer>Documento do projeto FilaLivre · Instituto Federal de Mato Grosso (IFMT)</footer>
+  </div>
+</body>
+</html>
