@@ -3,14 +3,12 @@ package com.filalivre.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.filalivre.dto.TotaisRequest;
 import com.filalivre.model.Caixa;
 import com.filalivre.model.Mercado;
+import com.filalivre.model.StatusCaixa;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.SolicitacaoRepository;
@@ -49,21 +47,20 @@ class CaixaServiceTest {
     @BeforeEach
     void configurarCaixaNoMercadoDoOperador() {
         Mercado mercado = org.mockito.Mockito.mock(Mercado.class);
-        caixa = org.mockito.Mockito.mock(Caixa.class);
+        caixa = new Caixa();
         operador = org.mockito.Mockito.mock(Usuario.class);
         responsavel = org.mockito.Mockito.mock(Usuario.class);
 
-        when(mercado.getId()).thenReturn(8L);
-        when(operador.getId()).thenReturn(2L);
-        when(operador.getMercado()).thenReturn(mercado);
-        when(caixa.getMercado()).thenReturn(mercado);
+        when(operador.pertenceAoMercado(mercado)).thenReturn(true);
+        caixa.setMercado(mercado);
         when(caixaRepository.findByIdAndAtivoTrue(CAIXA_ID)).thenReturn(Optional.of(caixa));
     }
 
     @Test
     void operadorNaoPodeAlterarAtendimentoDeOutroOperador() {
+        when(operador.getId()).thenReturn(2L);
         when(responsavel.getId()).thenReturn(1L);
-        when(caixa.getOperador()).thenReturn(responsavel);
+        caixa.setOperador(responsavel);
 
         assertAll(
                 () -> assertForbidden(() -> caixaService.alternarEspera(CAIXA_ID, operador)),
@@ -71,20 +68,20 @@ class CaixaServiceTest {
                 () -> assertForbidden(() -> caixaService.atualizarTotais(
                         CAIXA_ID, operador, new TotaisRequest(BigDecimal.ONE, 1))));
 
-        verify(caixa, never()).setStatus(any());
-        verify(caixa, never()).setOperador(any());
-        verify(caixa, never()).setValorCompra(any());
+        assertEquals(StatusCaixa.NORMAL, caixa.getStatus());
+        assertEquals(responsavel, caixa.getOperador());
+        assertEquals(BigDecimal.ZERO, caixa.getValorCompra());
     }
 
     @Test
     void caixaOcupadoNaoPodeReceberNovoAtendimento() {
-        when(caixa.getOperador()).thenReturn(responsavel);
+        caixa.setOperador(responsavel);
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> caixaService.iniciarAtendimento(CAIXA_ID, operador));
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
-        verify(caixa, never()).setOperador(any());
+        assertEquals(responsavel, caixa.getOperador());
     }
 
     private void assertForbidden(org.junit.jupiter.api.function.Executable operacao) {
