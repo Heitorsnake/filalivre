@@ -55,15 +55,12 @@ public class DadosIniciais {
     private void criarContasDemo(UsuarioRepository usuarioRepository,
                                  MercadoRepository mercadoRepository,
                                  PasswordEncoder passwordEncoder) {
-        Usuario admin = usuarioRepository.findByEmailIgnoreCase("admin@filalivre.com")
-            .orElseGet(() -> usuario("Administrador", "admin@filalivre.com", "admin123",
-                Perfil.ADMINISTRADOR, passwordEncoder));
-        Usuario supervisor = usuarioRepository.findByEmailIgnoreCase("supervisor@filalivre.com")
-            .orElseGet(() -> usuario("Supervisor Demonstração", "supervisor@filalivre.com", "supervisor123",
-                Perfil.SUPERVISOR, passwordEncoder));
-        Usuario operador = usuarioRepository.findByEmailIgnoreCase("operador@filalivre.com")
-            .orElseGet(() -> usuario("Operador Demonstração", "operador@filalivre.com", "operador123",
-                Perfil.OPERADOR, passwordEncoder));
+        Usuario admin = usuarioDemo(usuarioRepository, passwordEncoder, "Administrador",
+                "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR);
+        Usuario supervisor = usuarioDemo(usuarioRepository, passwordEncoder, "Supervisor Demonstração",
+                "supervisor@filalivre.com", "supervisor123", Perfil.SUPERVISOR);
+        Usuario operador = usuarioDemo(usuarioRepository, passwordEncoder, "Operador Demonstração",
+                "operador@filalivre.com", "operador123", Perfil.OPERADOR);
         usuarioRepository.saveAll(List.of(admin, supervisor, operador));
 
         Mercado mercado = mercadoRepository.findByCodigoAcessoIgnoreCase("MERCADO1").orElseGet(() -> {
@@ -80,6 +77,19 @@ public class DadosIniciais {
             operador.setMercado(mercado);
         }
         usuarioRepository.saveAll(List.of(supervisor, operador));
+    }
+
+    private Usuario usuarioDemo(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
+                                String nome, String email, String senha, Perfil perfil) {
+        Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email)
+                .orElseGet(() -> usuario(nome, email, senha, perfil, passwordEncoder));
+        usuario.setNome(nome);
+        usuario.setPerfil(perfil);
+        usuario.setAtivo(true);
+        if (usuario.getSenha() == null || !passwordEncoder.matches(senha, usuario.getSenha())) {
+            usuario.setSenha(passwordEncoder.encode(senha));
+        }
+        return usuario;
     }
 
     private Usuario usuario(String nome, String email, String senha, Perfil perfil, PasswordEncoder encoder) {

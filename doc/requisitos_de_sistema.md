@@ -10,7 +10,7 @@ O projeto é voltado ao acesso remoto à operação dos caixas: o supervisor aco
 
 ## Stack obrigatória
 
-- Java 21 e Spring Boot no backend.
+- Java 25 (LTS) e Spring Boot no backend.
 - SQLite como banco padrão da aplicação.
 - HTML5 e CSS3 na apresentação.
 - JavaScript Vanilla apenas para a interação das páginas e consumo da API.
@@ -47,6 +47,7 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 | `POST` | `/api/solicitacoes/{id}/analisar` | Supervisor/Gestor |
 | `POST` | `/api/solicitacoes/{id}/decidir` | Supervisor/Gestor |
 | `GET` | `/api/relatorios/resumo` | Gestor/Administrador |
+| `GET` | `/api/relatorios/solicitacoes?inicio=AAAA-MM-DD&fim=AAAA-MM-DD&status=...` | Supervisor/Gestor/Administrador |
 | `GET` | `/api/mercados/meu` | Autenticado |
 | `POST` | `/api/mercados` | Supervisor/Gestor |
 | `POST` | `/api/mercados/entrar` | Operador |
@@ -71,6 +72,9 @@ O arquivo `database/filalivre-cloud.sql` é um dump independente para visualiza�
 - O cadastro público autentica imediatamente, sem etapa de confirmação de e-mail.
 - Ações relevantes são registradas na auditoria.
 - O acesso a caixas, solicitações, histórico e relatórios respeita o mercado do usuário.
+- O relatório de solicitações aceita período inclusivo e filtro opcional por estado; o intervalo máximo é de 366 dias. Supervisores consultam apenas o próprio mercado e administradores podem consultar o conjunto do sistema.
+- O relatório apresenta somente solicitações persistidas, com totais, percentagem de aprovação, tempo médio de decisão, série diária e registos detalhados. O CSV exportado usa UTF-8 e separador compatível com Excel; a opção de impressão permite guardar em PDF pelo navegador.
+- O carrinho e os totais de venda são simulações temporárias do navegador, não constituem histórico persistido e não devem ser usados como dados de relatórios de vendas ou faturamento.
 - Novas solicitações de negócio são limitadas ao cancelamento de item.
 
 ## Requisitos não funcionais

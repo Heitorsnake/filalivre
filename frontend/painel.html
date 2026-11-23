@@ -63,6 +63,81 @@
       </div>
     </section>
 
+    <section class="secao" id="secao-relatorios">
+      <div class="secao-cabecalho">
+        <div>
+          <h2>Relatório de solicitações</h2>
+          <p>Consulte decisões e pedidos registados no período selecionado.</p>
+        </div>
+      </div>
+      <div class="cartao relatorio-cartao">
+        <form id="form-relatorio" class="filtros-relatorio">
+          <div class="campo">
+            <label for="relatorio-inicio">Data inicial</label>
+            <input id="relatorio-inicio" type="date" required>
+          </div>
+          <div class="campo">
+            <label for="relatorio-fim">Data final</label>
+            <input id="relatorio-fim" type="date" required>
+          </div>
+          <div class="campo">
+            <label for="relatorio-status">Estado</label>
+            <select id="relatorio-status">
+              <option value="">Todos os estados</option>
+              <option value="PENDENTE">Pendente</option>
+              <option value="APROVADA">Aprovada</option>
+              <option value="RECUSADA">Recusada</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-azul">Gerar relatório</button>
+        </form>
+        <div class="acoes-relatorio">
+          <button type="button" class="btn btn-cinza" id="btn-relatorio-excel" disabled>Exportar CSV (compatível com Excel)</button>
+          <button type="button" class="btn btn-cinza" id="btn-relatorio-pdf" disabled>Imprimir / guardar PDF</button>
+        </div>
+        <p id="estado-relatorio" class="estado-relatorio" role="status" aria-live="polite"></p>
+        <div class="mensagem-erro" id="erro-relatorio" role="alert"></div>
+        <div id="conteudo-relatorio" hidden>
+          <p id="metadados-relatorio" class="metadados-relatorio"></p>
+          <section class="resumo-executivo-relatorio" aria-labelledby="titulo-resumo-executivo">
+            <h3 id="titulo-resumo-executivo">Resumo executivo</h3>
+            <p><span>Solicitações no período:</span> <strong id="resumo-total">0</strong></p>
+            <p><span>Estado atual — pendentes:</span> <strong id="resumo-pendentes">0</strong>;
+              <span>aprovadas:</span> <strong id="resumo-aprovadas">0</strong>;
+              <span>recusadas:</span> <strong id="resumo-recusadas">0</strong>.</p>
+            <p><span>Taxa de aprovação entre decisões concluídas:</span>
+              <strong id="resumo-percentual">0%</strong>.</p>
+            <p class="nota-relatorio">O período usa a data de criação. O estado apresentado é o atual; a taxa considera apenas solicitações decididas e todos os indicadores respeitam o filtro de estado.</p>
+          </section>
+          <div class="chips indicadores-relatorio">
+            <div class="chip"><div class="rotulo">Solicitações</div><div class="valor" id="relatorio-total">0</div></div>
+            <div class="chip"><div class="rotulo">Pendentes</div><div class="valor" id="relatorio-pendentes">0</div></div>
+            <div class="chip"><div class="rotulo">Aprovadas</div><div class="valor" id="relatorio-aprovadas">0</div></div>
+            <div class="chip"><div class="rotulo">Recusadas</div><div class="valor" id="relatorio-recusadas">0</div></div>
+            <div class="chip"><div class="rotulo">Aprovação</div><div class="valor" id="relatorio-percentual">0%</div></div>
+            <div class="chip"><div class="rotulo">Tempo médio</div><div class="valor" id="relatorio-tempo">—</div></div>
+          </div>
+          <div class="cartao grafico-cartao">
+            <h3>Solicitações por dia</h3>
+            <div id="relatorio-grafico" class="relatorio-grafico"></div>
+            <div class="legenda-grafico">
+              <span><i class="legenda-pendente"></i>Pendentes</span>
+              <span><i class="legenda-aprovada"></i>Aprovadas</span>
+              <span><i class="legenda-recusada"></i>Recusadas</span>
+            </div>
+          </div>
+          <div class="cartao tabela-responsiva tabela-relatorio">
+            <table class="tabela">
+              <thead>
+                <tr><th>Data</th><th>Caixa</th><th>Operador</th><th>Solicitação</th><th>Valor</th><th>Estado</th><th>Decisão</th></tr>
+              </thead>
+              <tbody id="corpo-relatorio"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="secao">
       <h2>Solicitações pendentes de decisão</h2>
       <div class="lista-solicitacoes" id="lista-pendentes"></div>
@@ -75,7 +150,7 @@
 
     <section class="secao">
       <h2>Histórico de ações (auditoria)</h2>
-      <div class="cartao" style="padding:0; overflow-x:auto;">
+      <div class="cartao tabela-responsiva" style="padding:0;">
         <table class="tabela">
           <thead>
             <tr>
@@ -119,6 +194,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/relatorios.js"></script>
   <script src="js/painel.js"></script>
 </body>
 </html>

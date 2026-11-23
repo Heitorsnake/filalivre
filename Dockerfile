@@ -1,11 +1,11 @@
-FROM maven:3.9.9-eclipse-temurin-21 AS build
+FROM maven:3.9.11-eclipse-temurin-25 AS build
 
 WORKDIR /build
 COPY backend/pom.xml backend/pom.xml
 COPY backend/src backend/src
 RUN mvn -f backend/pom.xml clean package -DskipTests
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 COPY --from=build /build/backend/target/filalivre-backend-1.0.0.jar app.jar

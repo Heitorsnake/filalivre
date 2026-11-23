@@ -125,7 +125,7 @@
       <section id="arquitetura">
         <h2>7. Arquitetura e requisitos de sistema</h2>
         <h3>Stack</h3>
-        <ul><li><strong>Backend:</strong> Java 21, Spring Boot, Spring Security, Spring Data JPA e Hibernate.</li><li><strong>Persistência:</strong> SQLite; caminho padrão <code>database/filalivre.db</code>, configurável por <code>FILALIVRE_DB_PATH</code>.</li><li><strong>Frontend:</strong> HTML5, CSS3 e JavaScript Vanilla para interação com a API REST.</li><li><strong>Execução:</strong> Maven localmente ou Docker com Java 21.</li><li><strong>Modelo SQL de referência:</strong> <code>database/schema.sql</code>.</li></ul>
+        <ul><li><strong>Backend:</strong> Java 25 (LTS), Spring Boot, Spring Security, Spring Data JPA e Hibernate.</li><li><strong>Persistência:</strong> SQLite; caminho padrão <code>database/filalivre.db</code>, configurável por <code>FILALIVRE_DB_PATH</code>.</li><li><strong>Frontend:</strong> HTML5, CSS3 e JavaScript Vanilla para interação com a API REST.</li><li><strong>Execução:</strong> Maven localmente ou Docker com Java 25.</li><li><strong>Modelo SQL de referência:</strong> <code>database/schema.sql</code>.</li></ul>
         <h3>Persistência</h3><p>O Hibernate cria e atualiza as tabelas com <code>ddl-auto: update</code>. A aplicação usa o driver SQLite Xerial e o dialeto SQLite do Hibernate. O arquivo <code>database/filalivre-cloud.sql</code> é um dump independente para visualização no SQLiteCloud; não é a conexão usada pelo Render. O arquivo <code>filalivre.mv.db</code> é H2 e não deve ser enviado ao SQLiteCloud como se fosse SQLite.</p>
         <h3>API principal</h3>
         <div class="table-wrap"><table><thead><tr><th>Método</th><th>Rota</th><th>Perfil</th></tr></thead><tbody>
@@ -147,7 +147,7 @@
       </section>
       <section id="execucao">
         <h2>9. Execução e publicação</h2>
-        <h3>Pré-requisitos</h3><ul><li>Java 21 e Maven para execução local.</li><li>Docker para build e execução em contêiner.</li></ul>
+        <h3>Pré-requisitos</h3><ul><li>Java 25 (LTS) e Maven para execução local.</li><li>Docker para build e execução em contêiner.</li></ul>
         <h3>Execução local</h3><p>Na raiz do repositório, execute:</p><pre><code>cd backend
       mvn spring-boot:run</code></pre>
         <p>A aplicação fica disponível em <code>http://localhost:8080</code>. O backend serve o frontend pelo caminho <code>../frontend</code> por padrão local.</p>

@@ -21,7 +21,7 @@ O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, 
 - Criação de solicitações de cancelamento de item pelo operador.
 - Análise, aprovação ou recusa pelo gestor/supervisor.
 - Administração de usuários, perfis e status de ativação.
-- Relatórios resumidos e histórico de auditoria.
+- Relatórios de solicitações filtrados por período e estado, com indicadores, série temporal, detalhe histórico e exportação/impressão, além do histórico de auditoria.
 
 ## Fora do escopo
 
@@ -39,10 +39,10 @@ O FilaLivre é voltado ao acesso remoto à operação dos caixas. O supervisor, 
 
 ## Arquitetura e tecnologias
 
-- **Backend:** Java 21, Spring Boot, Spring Security, Spring Data JPA e Hibernate.
+- **Backend:** Java 25 (LTS), Spring Boot, Spring Security, Spring Data JPA e Hibernate.
 - **Persistência:** SQLite em `database/filalivre.db`, com SQL de referência em `database/schema.sql` e dump de demonstração em `database/filalivre-cloud.sql`.
 - **Frontend:** HTML5, CSS3 e JavaScript Vanilla para interação com a API REST.
-- **Execução:** Maven localmente ou Docker com Java 21.
+- **Execução:** Maven localmente ou Docker com Java 25.
 
 ## Objetivos de engenharia
 

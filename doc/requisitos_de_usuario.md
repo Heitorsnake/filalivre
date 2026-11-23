@@ -28,7 +28,7 @@ Mantém usuários, perfis e status de ativação. Consulta relatórios e auditor
 - **RU-05 - Painel remoto do supervisor/gestor:** o supervisor/gestor acompanha remotamente caixas, status, operadores e solicitações pendentes do mercado.
 - **RU-05A - Acesso AnyDesk por caixa:** ao cadastrar ou editar um caixa, o supervisor/gestor pode informar opcionalmente o ID/endereço AnyDesk do computador do operador. A seção Acesso remoto do painel lista os caixas, exibe cada ID e oferece um atalho para abrir o cliente AnyDesk nesse endereço. O terminal do operador exibe o ID associado ao caixa selecionado.
 - **RU-06 - Decisão:** supervisor e gestor podem analisar, aprovar ou recusar uma solicitação.
-- **RU-07 - Relatórios:** gestor e administrador consultam totais e indicadores operacionais.
+- **RU-07 - Relatórios:** supervisor/gestor e administrador consultam solicitações por período e estado, totais, percentagem de aprovação, tempo médio de decisão, evolução diária e detalhe histórico. Podem exportar os dados em CSV compatível com Excel ou imprimir/guardar o relatório em PDF. Os indicadores utilizam apenas registos persistidos.
 - **RU-08 - Administração:** administrador cria usuários, escolhe seus perfis e ativa ou desativa contas.
 - **RU-09 - Auditoria:** o sistema registra login, solicitações, decisões e alterações administrativas.
 

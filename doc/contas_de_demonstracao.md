@@ -6,7 +6,7 @@
 
 ---
 
-Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O Dockerfile mantém essa opção desativada por padrão; habilite-a explicitamente apenas para demonstrações locais controladas. O seed pode completar um banco existente e não duplica as contas já criadas. Não habilite a opção em ambientes expostos à internet:
+Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O Dockerfile mantém essa opção desativada por padrão; habilite-a explicitamente apenas em ambientes de demonstração isolados. Enquanto a opção estiver ativa, o seed restaura as senhas, perfis e o estado ativo destas contas a cada inicialização, inclusive se elas já existirem no banco. Não habilite a opção em serviços expostos à internet:
 
 | Perfil | E-mail | Senha | Mercado | Código |
 |---|---|---|---|---|
@@ -14,4 +14,4 @@ Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O 
 | Supervisor / gestor | `supervisor@filalivre.com` | `supervisor123` | Mercado Demonstração | `MERCADO1` |
 | Operador | `operador@filalivre.com` | `operador123` | Mercado Demonstração | `MERCADO1` |
 
-Para uma instalação de produção, crie a primeira conta administrativa pelas variáveis secretas `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro início do backend. A senha inicial deve conter pelo menos 12 caracteres. Para autenticar o operador de demonstração, associe-o ao mercado usando o código indicado.
+Para uma instalação de produção, mantenha `FILALIVRE_DEMO_DATA=false` e crie a primeira conta administrativa pelas variáveis secretas `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` antes do primeiro início do backend. A senha inicial deve conter pelo menos 12 caracteres. Para autenticar o operador de demonstração, associe-o ao mercado usando o código indicado.

@@ -18,7 +18,8 @@
     <description>Sistema de Gerenciamento Remoto de Caixas de Supermercado</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
+        <byte-buddy.version>1.18.17</byte-buddy.version>
     </properties>
 
     <dependencies>

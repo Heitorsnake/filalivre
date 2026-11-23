@@ -12,7 +12,7 @@ Sistema para acompanhamento remoto de caixas de supermercado. Operadores registr
 
 ## Tecnologias
 
-- Backend: Java 21, Spring Boot, Spring Security, Spring Data JPA e Hibernate.
+- Backend: Java 25 (LTS), Spring Boot, Spring Security, Spring Data JPA e Hibernate.
 - Banco padrão: SQLite em arquivo.
 - Frontend: HTML5, CSS3 e JavaScript Vanilla.
 - Execução: Maven ou Docker.

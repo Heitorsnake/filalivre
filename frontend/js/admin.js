@@ -10,7 +10,6 @@ document.getElementById("nome-usuario").textContent = usuario?.nome || "";
 
 const rotulosPerfil = {
   OPERADOR: "Operador",
-  SUPERVISOR: "Supervisor",
   SUPERVISOR: "Supervisor / gestor",
   ADMINISTRADOR: "Administrador"
 };
@@ -73,11 +72,11 @@ async function carregarUsuarios() {
     document.getElementById("res-ativos").textContent = ativos;
     document.getElementById("corpo-usuarios").innerHTML = usuarios.map(item => `
       <tr>
-        <td>${escapar(item.nome)}</td>
-        <td>${escapar(item.email)}</td>
-        <td><span class="perfil-badge">${rotulosPerfil[item.perfil] || item.perfil}</span></td>
-        <td>${item.ativo ? "Ativo" : "Inativo"}</td>
-        <td><button class="btn btn-cinza btn-pequeno" data-usuario="${item.id}">${item.ativo ? "Desativar" : "Ativar"}</button></td>
+        <td data-label="Nome">${escapar(item.nome)}</td>
+        <td data-label="E-mail">${escapar(item.email)}</td>
+        <td data-label="Perfil"><span class="perfil-badge">${rotulosPerfil[item.perfil] || item.perfil}</span></td>
+        <td data-label="Status">${item.ativo ? "Ativo" : "Inativo"}</td>
+        <td data-label="Ação"><button class="btn btn-cinza btn-pequeno" data-usuario="${item.id}">${item.ativo ? "Desativar" : "Ativar"}</button></td>
       </tr>`).join("");
 
     document.querySelectorAll("[data-usuario]").forEach(botao => {
@@ -113,11 +112,11 @@ async function carregarHistorico() {
     const registros = await apiFetch("/historico");
     document.getElementById("corpo-historico").innerHTML = registros.map(registro => `
       <tr>
-        <td>${formatarDataHora(registro.momento)}</td>
-        <td>${escapar(registro.usuarioNome)}</td>
-        <td>${registro.caixaNumero ? `Caixa ${String(registro.caixaNumero).padStart(2, "0")}` : "-"}</td>
-        <td>${rotulosAcao[registro.acao] || registro.acao}</td>
-        <td>${escapar(registro.detalhes)}</td>
+        <td data-label="Momento">${formatarDataHora(registro.momento)}</td>
+        <td data-label="Usuário">${escapar(registro.usuarioNome)}</td>
+        <td data-label="Caixa">${registro.caixaNumero ? `Caixa ${String(registro.caixaNumero).padStart(2, "0")}` : "-"}</td>
+        <td data-label="Ação">${rotulosAcao[registro.acao] || registro.acao}</td>
+        <td data-label="Detalhes">${escapar(registro.detalhes)}</td>
       </tr>`).join("");
   } catch (erro) {
     mostrarToast(erro.message, "vermelho");

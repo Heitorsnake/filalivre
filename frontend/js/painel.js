@@ -106,7 +106,9 @@ async function carregarResumo() {
     const atencao = (resumo.caixasPorStatus.SOLICITACAO || 0) + (resumo.caixasPorStatus.APROVACAO || 0)
       + (resumo.caixasPorStatus.AGUARDANDO || 0);
     document.getElementById("res-atencao").textContent = atencao;
-  } catch (e) { /* silencioso */ }
+  } catch (e) {
+    mostrarToast(e.message || "Não foi possível carregar o resumo.", "vermelho");
+  }
 }
 
 async function carregarPendentes() {
@@ -252,7 +254,9 @@ async function carregarCaixas() {
       if (caixa) editarAnydesk(caixa);
     }));
     grid.querySelectorAll("[data-desativar-caixa]").forEach(botao => botao.addEventListener("click", () => desativarCaixa(botao.dataset.desativarCaixa)));
-  } catch (e) { /* silencioso */ }
+  } catch (e) {
+    mostrarToast(e.message || "Não foi possível carregar as caixas.", "vermelho");
+  }
 }
 
 async function editarAnydesk(caixa) {
@@ -293,13 +297,15 @@ async function carregarHistorico() {
     const corpo = document.getElementById("corpo-historico");
     corpo.innerHTML = registros.slice(0, 30).map(r => `
       <tr>
-        <td>${formatarDataHora(r.momento)}</td>
-        <td>${escapar(r.usuarioNome)}</td>
-        <td>${r.caixaNumero ? "Caixa " + String(r.caixaNumero).padStart(2, "0") : "—"}</td>
-        <td>${rotulosAcao[r.acao] || r.acao}</td>
-        <td>${escapar(r.detalhes)}</td>
+        <td data-label="Momento">${formatarDataHora(r.momento)}</td>
+        <td data-label="Usuário">${escapar(r.usuarioNome)}</td>
+        <td data-label="Caixa">${r.caixaNumero ? "Caixa " + String(r.caixaNumero).padStart(2, "0") : "—"}</td>
+        <td data-label="Ação">${rotulosAcao[r.acao] || r.acao}</td>
+        <td data-label="Detalhes">${escapar(r.detalhes)}</td>
       </tr>`).join("");
-  } catch (e) { /* silencioso */ }
+  } catch (e) {
+    mostrarToast(e.message || "Não foi possível carregar o histórico.", "vermelho");
+  }
 }
 
 let tituloOriginal = document.title;

@@ -8,7 +8,7 @@
 
 ## Pré-requisitos
 
-- Java 21 e Maven para execução local.
+- Java 25 (LTS) e Maven para execução local.
 - Docker para build e execução em contêiner.
 
 ## Banco SQLite
@@ -32,7 +32,7 @@ mvn spring-boot:run
 
 A aplicação fica disponível em `http://localhost:8080`. O backend serve o frontend pelo caminho `../frontend` por padrão local.
 
-No desenvolvimento local, defina `FILALIVRE_DEMO_DATA=true` para criar as contas demonstrativas. O seed é repetível: ao iniciar com essa opção, cria apenas contas que ainda não existam. Para uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
+No desenvolvimento local, defina `FILALIVRE_DEMO_DATA=true` para criar as contas demonstrativas. O seed é repetível: cria as contas ausentes e restaura as senhas, perfis e o estado ativo das contas demo existentes. Para uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
 
 O cadastro público cria e autentica a conta imediatamente, sem confirmação por e-mail.
 
@@ -67,7 +67,7 @@ O serviço pode ser publicado usando o [Dockerfile](../Dockerfile):
 
 O backend usa sessão com cookie HttpOnly, token CSRF em requisições de alteração, CORS restrito, expiração por inatividade de 30 minutos e renovação do ID de sessão no login. Se o frontend estiver hospedado em outro domínio (por exemplo, GitHub Pages), configure HTTPS e `FILALIVRE_COOKIE_SAME_SITE=None` no backend; mantenha a origem exata em `FILALIVRE_CORS_ALLOWED_ORIGINS`. Não habilite dados de demonstração em produção.
 
-As contas demonstrativas usam senhas públicas. O Dockerfile as mantém desativadas por padrão; habilite `FILALIVRE_DEMO_DATA=true` somente para demonstrações locais controladas. Em qualquer ambiente exposto à internet, mantenha `FILALIVRE_DEMO_DATA=false`.
+As contas demonstrativas usam senhas públicas, e o seed restaura essas credenciais em cada inicialização enquanto `FILALIVRE_DEMO_DATA=true`. O Dockerfile as mantém desativadas por padrão; habilite essa opção somente em ambiente de demonstração isolado, com banco separado. Em qualquer ambiente exposto à internet, mantenha `FILALIVRE_DEMO_DATA=false`.
 
 O Render usa o SQLite local do serviço. O plano gratuito pode não preservar arquivos entre reinicializações; sem Persistent Disk, os dados podem ser perdidos. O deploy não se conecta automaticamente ao SQLiteCloud.
 
