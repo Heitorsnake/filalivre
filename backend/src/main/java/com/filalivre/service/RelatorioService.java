@@ -38,6 +38,7 @@ public class RelatorioService {
         this.caixaRepository = caixaRepository;
     }
 
+    @Transactional(readOnly = true)
     public ResumoResponse resumo(Usuario usuario) {
         Long mercadoId = usuario.getMercadoId();
         boolean administrador = usuario.getPerfil() == Perfil.ADMINISTRADOR;

@@ -24,6 +24,8 @@ const anydeskIdOperador = document.getElementById("anydesk-id-operador");
 let caixas = [];
 let caixaAtual = null;
 let carrinho = [];
+let valorBaseCarrinho = 0;
+let qtdBaseCarrinho = 0;
 let solicitacaoPendenteId = null;
 let ultimaSolicitacaoDecidida = null;
 
@@ -65,6 +67,8 @@ btnIniciar.addEventListener("click", async () => {
   try {
     await apiFetch(`/caixas/${caixaAtual.id}/iniciar`, { method: "POST" });
     carrinho = [];
+    valorBaseCarrinho = 0;
+    qtdBaseCarrinho = 0;
     renderizarCarrinho();
     mostrarToast(`Você assumiu o Caixa ${String(caixaAtual.numero).padStart(2, "0")}`, "verde");
     await atualizarTudo();
@@ -89,6 +93,8 @@ btnFinalizar.addEventListener("click", async () => {
   try {
     await apiFetch(`/caixas/${caixaAtual.id}/finalizar`, { method: "POST" });
     carrinho = [];
+    valorBaseCarrinho = 0;
+    qtdBaseCarrinho = 0;
     renderizarCarrinho();
     mostrarToast("Venda finalizada com sucesso", "verde");
     await atualizarTudo();
@@ -155,11 +161,12 @@ async function sincronizarTotais() {
 }
 
 function totalCarrinho() {
-  return Math.round(carrinho.reduce((soma, item) => soma + item.preco * item.qtd, 0) * 100) / 100;
+  const novoValor = carrinho.reduce((soma, item) => soma + item.preco * item.qtd, 0);
+  return Math.round((valorBaseCarrinho + novoValor) * 100) / 100;
 }
 
 function itensCarrinho() {
-  return carrinho.reduce((soma, item) => soma + item.qtd, 0);
+  return qtdBaseCarrinho + carrinho.reduce((soma, item) => soma + item.qtd, 0);
 }
 
 function renderizarCarrinho() {
@@ -193,6 +200,9 @@ function renderizarCarrinho() {
 selectCaixa.addEventListener("change", async () => {
   localStorage.setItem("filalivre_caixa_id", selectCaixa.value);
   carrinho = [];
+  const escolhido = caixas.find(c => String(c.id) === selectCaixa.value);
+  valorBaseCarrinho = Number(escolhido?.valorCompra) || 0;
+  qtdBaseCarrinho = Number(escolhido?.qtdItens) || 0;
   renderizarCarrinho();
   await atualizarTudo();
 });
@@ -229,6 +239,11 @@ async function carregarCaixas() {
   }
   if (escolhido) {
     selectCaixa.value = String(escolhido.id);
+    if (!caixaAtual || caixaAtual.id !== escolhido.id) {
+      carrinho = [];
+      valorBaseCarrinho = Number(escolhido.valorCompra) || 0;
+      qtdBaseCarrinho = Number(escolhido.qtdItens) || 0;
+    }
     caixaAtual = escolhido;
   } else {
     caixaAtual = null;

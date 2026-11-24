@@ -11,7 +11,6 @@ import com.filalivre.model.TipoSolicitacao;
 import com.filalivre.model.Usuario;
 import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.SolicitacaoRepository;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -72,11 +71,13 @@ public class SolicitacaoService {
         return toResponse(solicitacao);
     }
 
+    @Transactional(readOnly = true)
     public List<SolicitacaoResponse> minhas(Usuario operador) {
         return solicitacaoRepository.findByOperadorIdOrderByCriadoEmDesc(operador.getId())
                 .stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<SolicitacaoResponse> pendentes(Usuario gestor) {
         Long mercadoId = gestor.getMercadoId();
         if (mercadoId == null) return List.of();
@@ -85,6 +86,7 @@ public class SolicitacaoService {
             .stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<SolicitacaoResponse> historico(Usuario gestor) {
         Long mercadoId = gestor.getMercadoId();
         if (mercadoId == null) return List.of();

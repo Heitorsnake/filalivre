@@ -1,7 +1,6 @@
 package com.filalivre.controller;
 
 import com.filalivre.dto.RegistroAcaoResponse;
-import com.filalivre.model.Caixa;
 import com.filalivre.model.Perfil;
 import com.filalivre.model.RegistroAcao;
 import com.filalivre.model.Usuario;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/api/historico")
@@ -29,6 +29,7 @@ public class HistoricoController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     public List<RegistroAcaoResponse> listar(@AuthenticationPrincipal Usuario usuario) {
         List<RegistroAcao> registros;
@@ -38,7 +39,7 @@ public class HistoricoController {
                 return List.of();
             }
             List<Integer> numerosCaixas = caixaRepository.findAllByMercadoId(mercadoId).stream()
-                    .map(Caixa::getNumero)
+                    .map(caixa -> caixa.getNumero())
                     .toList();
             if (numerosCaixas.isEmpty()) {
                 return List.of();

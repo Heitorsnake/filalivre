@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.filalivre.dto.EntrarMercadoRequest;
 import com.filalivre.model.Perfil;
 import com.filalivre.model.Usuario;
+import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.MercadoRepository;
 import com.filalivre.repository.UsuarioRepository;
 import java.util.Optional;
@@ -29,6 +30,9 @@ class MercadoServiceInputTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private CaixaRepository caixaRepository;
 
     @InjectMocks
     private MercadoService mercadoService;

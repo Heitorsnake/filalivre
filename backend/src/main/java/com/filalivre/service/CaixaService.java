@@ -33,6 +33,7 @@ public class CaixaService {
         this.auditoriaService = auditoriaService;
     }
 
+    @Transactional(readOnly = true)
     public List<CaixaResponse> listar(Usuario usuario) {
         if (usuario.getMercado() == null) return List.of();
         return caixaRepository.findAllByMercadoIdAndAtivoTrueOrderByNumeroAsc(usuario.getMercado().getId())

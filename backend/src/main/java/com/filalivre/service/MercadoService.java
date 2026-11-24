@@ -6,6 +6,7 @@ import com.filalivre.dto.MercadoResponse;
 import com.filalivre.model.Mercado;
 import com.filalivre.model.Perfil;
 import com.filalivre.model.Usuario;
+import com.filalivre.repository.CaixaRepository;
 import com.filalivre.repository.MercadoRepository;
 import com.filalivre.repository.UsuarioRepository;
 import java.util.Locale;
@@ -20,10 +21,13 @@ public class MercadoService {
 
     private final MercadoRepository mercadoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final CaixaRepository caixaRepository;
 
-    public MercadoService(MercadoRepository mercadoRepository, UsuarioRepository usuarioRepository) {
+    public MercadoService(MercadoRepository mercadoRepository, UsuarioRepository usuarioRepository,
+                          CaixaRepository caixaRepository) {
         this.mercadoRepository = mercadoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.caixaRepository = caixaRepository;
     }
 
     @Transactional
@@ -50,6 +54,10 @@ public class MercadoService {
     public MercadoResponse entrar(EntrarMercadoRequest req, Usuario operador) {
         if (operador.getPerfil() != Perfil.OPERADOR) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Somente operadores entram por código");
+        }
+        if (caixaRepository != null && caixaRepository.existsByOperadorId(operador.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Finalize o atendimento antes de entrar em outro mercado");
         }
         Mercado mercado = mercadoRepository.findByCodigoAcessoIgnoreCase(req.codigo().trim())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Código do mercado inválido"));

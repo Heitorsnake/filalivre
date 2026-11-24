@@ -75,9 +75,9 @@ INSERT INTO mercados (id, nome, codigo_acesso, gestor_id)
 VALUES (1, 'Mercado Demonstracao', 'MERCADO1', 2);
 
 INSERT INTO usuarios (id, nome, email, senha, perfil, ativo, mercado_id) VALUES
-  (1, 'Administrador', 'admin@filalivre.com', 'admin123', 'ADMINISTRADOR', 1, NULL),
-  (2, 'Supervisor Demonstracao', 'supervisor@filalivre.com', 'supervisor123', 'SUPERVISOR', 1, 1),
-  (3, 'Operador Demonstracao', 'operador@filalivre.com', 'operador123', 'OPERADOR', 1, 1);
+  (1, 'Administrador', 'admin@filalivre.com', '$2a$10$pKnaIm5mTeBIyR2C/rmp7umnHKlUgoWd6n026voXa8mYLfjW5XMwy', 'ADMINISTRADOR', 1, NULL),
+  (2, 'Supervisor Demonstracao', 'supervisor@filalivre.com', '$2a$10$7yJTY9F48r/y5dqIH/vvB.csTHHt4Sk1z13gvF8ATaH4dedDdgSWm', 'SUPERVISOR', 1, 1),
+  (3, 'Operador Demonstracao', 'operador@filalivre.com', '$2a$10$ybyZB5KGJzlHrqDYxBScuu8UZRPYxponHQOysWhAjLf7PiqRwPo8e', 'OPERADOR', 1, 1);
 
 INSERT INTO caixas (id, numero, localizacao, ativo, status, valor_compra, qtd_itens, mercado_id)
 VALUES

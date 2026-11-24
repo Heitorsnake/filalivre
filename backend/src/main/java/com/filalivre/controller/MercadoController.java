@@ -7,6 +7,7 @@ import com.filalivre.model.Usuario;
 import com.filalivre.service.MercadoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class MercadoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'GERENTE', 'ADMINISTRADOR')")
     @ResponseStatus(HttpStatus.CREATED)
     public MercadoResponse criar(@Valid @RequestBody MercadoRequest req,
                                  @AuthenticationPrincipal Usuario usuario) {
@@ -36,6 +38,7 @@ public class MercadoController {
     }
 
     @PostMapping("/entrar")
+    @PreAuthorize("hasRole('OPERADOR')")
     public MercadoResponse entrar(@Valid @RequestBody EntrarMercadoRequest req,
                                   @AuthenticationPrincipal Usuario usuario) {
         return mercadoService.entrar(req, usuario);

@@ -54,6 +54,9 @@ class DadosIniciaisTest {
         assertContaDemo(operador, "operador123", Perfil.OPERADOR, passwordEncoder);
         assertEquals(mercado, supervisor.getMercado());
         assertEquals(mercado, operador.getMercado());
+        assertEquals("Mercado Demonstração", mercado.getNome());
+        assertEquals("MERCADO1", mercado.getCodigoAcesso());
+        assertEquals(supervisor, mercado.getGestor());
     }
 
     private Usuario usuarioExistente(String email, Perfil perfil, BCryptPasswordEncoder passwordEncoder) {

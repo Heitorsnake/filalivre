@@ -25,4 +25,6 @@ public interface CaixaRepository extends JpaRepository<Caixa, Long> {
     Optional<Caixa> findTopByMercadoIdOrderByNumeroDesc(Long mercadoId);
 
     Optional<Caixa> findByIdAndAtivoTrue(Long id);
+
+    boolean existsByOperadorId(Long operadorId);
 }

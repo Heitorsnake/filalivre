@@ -26,8 +26,9 @@ public class DadosIniciais {
                                          @Value("${filalivre.admin.email:}") String emailAdmin,
                                          @Value("${filalivre.admin.password:}") String senhaAdmin) {
         return args -> {
+            Mercado mercadoInicializacao = null;
             if (dadosDemo) {
-                criarContasDemo(usuarioRepository, mercadoRepository, passwordEncoder);
+                mercadoInicializacao = criarContasDemo(usuarioRepository, mercadoRepository, passwordEncoder);
             } else if (usuarioRepository.count() == 0) {
                 if (!emailAdmin.isBlank() || !senhaAdmin.isBlank()) {
                     if (emailAdmin.isBlank() || senhaAdmin.length() < 12) {
@@ -39,7 +40,9 @@ public class DadosIniciais {
                 }
             }
             if (caixaRepository.count() == 0) {
-                Mercado mercado = mercadoRepository.findAll().stream().findFirst().orElse(null);
+                Mercado mercado = mercadoInicializacao != null
+                        ? mercadoInicializacao
+                        : mercadoRepository.findAll().stream().findFirst().orElse(null);
                 if (mercado != null) {
                     for (int numero = 1; numero <= 6; numero++) {
                         Caixa caixa = new Caixa();
@@ -52,9 +55,9 @@ public class DadosIniciais {
         };
     }
 
-    private void criarContasDemo(UsuarioRepository usuarioRepository,
-                                 MercadoRepository mercadoRepository,
-                                 PasswordEncoder passwordEncoder) {
+    private Mercado criarContasDemo(UsuarioRepository usuarioRepository,
+                                    MercadoRepository mercadoRepository,
+                                    PasswordEncoder passwordEncoder) {
         Usuario admin = usuarioDemo(usuarioRepository, passwordEncoder, "Administrador",
                 "admin@filalivre.com", "admin123", Perfil.ADMINISTRADOR);
         Usuario supervisor = usuarioDemo(usuarioRepository, passwordEncoder, "Supervisor Demonstração",
@@ -63,20 +66,17 @@ public class DadosIniciais {
                 "operador@filalivre.com", "operador123", Perfil.OPERADOR);
         usuarioRepository.saveAll(List.of(admin, supervisor, operador));
 
-        Mercado mercado = mercadoRepository.findByCodigoAcessoIgnoreCase("MERCADO1").orElseGet(() -> {
-            Mercado novoMercado = new Mercado();
-            novoMercado.setNome("Mercado Demonstração");
-            novoMercado.setCodigoAcesso("MERCADO1");
-            novoMercado.setGestor(supervisor);
-            return mercadoRepository.save(novoMercado);
-        });
-        if (supervisor.getMercado() == null) {
-            supervisor.setMercado(mercado);
-        }
-        if (operador.getMercado() == null) {
-            operador.setMercado(mercado);
-        }
+        Mercado mercado = mercadoRepository.findByCodigoAcessoIgnoreCase("MERCADO1")
+                .orElseGet(Mercado::new);
+        mercado.setNome("Mercado Demonstração");
+        mercado.setCodigoAcesso("MERCADO1");
+        mercado.setGestor(supervisor);
+        mercadoRepository.save(mercado);
+
+        supervisor.setMercado(mercado);
+        operador.setMercado(mercado);
         usuarioRepository.saveAll(List.of(supervisor, operador));
+        return mercado;
     }
 
     private Usuario usuarioDemo(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
@@ -84,6 +84,7 @@ public class DadosIniciais {
         Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email)
                 .orElseGet(() -> usuario(nome, email, senha, perfil, passwordEncoder));
         usuario.setNome(nome);
+        usuario.setEmail(email);
         usuario.setPerfil(perfil);
         usuario.setAtivo(true);
         if (usuario.getSenha() == null || !passwordEncoder.matches(senha, usuario.getSenha())) {

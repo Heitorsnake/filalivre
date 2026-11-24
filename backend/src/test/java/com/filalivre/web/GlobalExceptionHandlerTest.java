@@ -21,8 +21,9 @@ class GlobalExceptionHandlerTest {
                 new IllegalStateException(detalheInterno));
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resposta.getStatusCode());
-        assertNotNull(resposta.getBody());
-        assertEquals("Erro interno do servidor", resposta.getBody().get("erro"));
-        assertFalse(resposta.getBody().toString().contains(detalheInterno));
+        var body = resposta.getBody();
+        assertNotNull(body);
+        assertEquals("Erro interno do servidor", body.get("erro"));
+        assertFalse(body.toString().contains(detalheInterno));
     }
 }
