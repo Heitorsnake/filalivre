@@ -6,7 +6,7 @@
 
 ---
 
-Estas contas são criadas quando `FILALIVRE_DEMO_DATA=true` estiver definido. O Dockerfile mantém essa opção desativada por padrão; habilite-a explicitamente apenas em ambientes de demonstração isolados. Enquanto a opção estiver ativa, o seed restaura as senhas, perfis e o estado ativo destas contas a cada inicialização, inclusive se elas já existirem no banco. Não habilite a opção em serviços expostos à internet:
+Estas contas são criadas automaticamente ao iniciar com `mvn spring-boot:run` (perfil local `demo`). No Docker, `FILALIVRE_DEMO_DATA` permanece desativado por padrão e deve ser habilitado explicitamente apenas em ambientes de demonstração isolados. Enquanto a opção estiver ativa, o seed restaura as senhas, perfis e o estado ativo destas contas a cada inicialização, inclusive se elas já existirem no banco. Não habilite a opção em serviços expostos à internet:
 
 | Perfil | E-mail | Senha | Mercado | Código |
 |---|---|---|---|---|

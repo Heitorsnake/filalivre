@@ -32,7 +32,7 @@ mvn spring-boot:run
 
 A aplicação fica disponível em `http://localhost:8080`. O backend serve o frontend pelo caminho `../frontend` por padrão local.
 
-No desenvolvimento local, defina `FILALIVRE_DEMO_DATA=true` para criar as contas demonstrativas. O seed é repetível: cria as contas ausentes e restaura as senhas, perfis e o estado ativo das contas demo existentes. Para uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
+Ao iniciar localmente com `mvn spring-boot:run`, o perfil `demo` é ativado automaticamente e cria as contas demonstrativas. O seed é repetível: cria as contas ausentes e restaura as senhas, perfis e o estado ativo das contas demo existentes. Defina `FILALIVRE_DEMO_DATA=false` para desativá-lo. O perfil é específico da execução Maven; para uma instalação sem dados de demonstração, configure `FILALIVRE_ADMIN_EMAIL` e `FILALIVRE_ADMIN_PASSWORD` para inicializar o primeiro administrador.
 
 O cadastro público cria e autentica a conta imediatamente, sem confirmação por e-mail.
 

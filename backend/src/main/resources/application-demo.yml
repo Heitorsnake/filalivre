@@ -1,0 +1,3 @@
+filalivre:
+  dados-iniciais:
+    demo: ${FILALIVRE_DEMO_DATA:true}
