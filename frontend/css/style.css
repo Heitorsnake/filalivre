@@ -13,6 +13,15 @@
   --roxo: #8b5cf6;
 }
 
+:root[data-tema="claro"] {
+  --bg: #f3f6fb;
+  --bg-card: #ffffff;
+  --bg-hover: #e8edf5;
+  --border: #d3dbe8;
+  --texto: #172033;
+  --texto-fraco: #5b667a;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -322,6 +331,28 @@ body {
 }
 .idioma-opcao:hover, .idioma-opcao.ativa { background: var(--bg-hover); opacity: 1; }
 .idioma-opcao:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+.tema-opcao {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--texto-fraco);
+  cursor: pointer;
+}
+.tema-opcao:hover, .tema-opcao[aria-pressed="true"] { background: var(--bg-hover); color: var(--texto); }
+.tema-opcao svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+.tema-opcao:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+
+:root[data-tema="claro"] .idioma-controle { background: rgba(255, 255, 255, 0.92); }
+:root[data-tema="claro"] .mensagem-erro,
+:root[data-tema="claro"] .banner-recusada { color: #b91c1c; }
+:root[data-tema="claro"] .mensagem-sucesso,
+:root[data-tema="claro"] .banner-aprovada { color: #166534; }
+:root[data-tema="claro"] .aguardando-gestor { color: #1d4ed8; }
 
 .login-marca { text-align: center; }
 .login-marca .logo { font-size: 2.6rem; }
@@ -556,7 +587,7 @@ dialog h3 { margin-bottom: 18px; }
 button, input, select, textarea { font: inherit; }
 button, .btn { touch-action: manipulation; }
 .btn { min-height: 42px; }
-.idioma-opcao { min-width: 44px; min-height: 44px; }
+.idioma-opcao, .tema-opcao { min-width: 44px; min-height: 44px; }
 .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--azul);
   outline-offset: 2px;

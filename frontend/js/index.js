@@ -46,6 +46,26 @@ const traducoes = {
     placeholderSenha: "••••••••",
     placeholderNome: "Tu nombre",
     nomeIdioma: "Español"
+  },
+  "en-US": {
+    titulo: "FilaLivre — Sign in",
+    idioma: "Language",
+    descricao: "Remote supermarket checkout management system. Cancellation requests are reviewed by a supervisor without needing to be on site.",
+    abaLogin: "Sign in",
+    abaCadastro: "Create account",
+    email: "Email",
+    senha: "Password",
+    entrar: "Sign in",
+    nomeCompleto: "Full name",
+    senhaCadastro: "Password (at least 12 characters)",
+    tipoConta: "Account type",
+    operador: "Checkout operator",
+    supervisor: "Supervisor / store manager",
+    criarConta: "Create account",
+    placeholderEmail: "you@filalivre.com",
+    placeholderSenha: "••••••••",
+    placeholderNome: "Your name",
+    nomeIdioma: "English"
   }
 };
 

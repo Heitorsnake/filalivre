@@ -229,14 +229,227 @@
     "Não foi possível iniciar uma sessão segura.": "No se pudo iniciar una sesión segura."
   };
 
+  const traducoesIngles = {
+    "FilaLivre — Acesso": "FilaLivre — Sign in",
+    "FilaLivre — Central de Controle": "FilaLivre — Control Panel",
+    "FilaLivre — Terminal do Caixa": "FilaLivre — Checkout Terminal",
+    "FilaLivre — Administração": "FilaLivre — Administration",
+    "Central de Controle": "Control Panel",
+    "Terminal de Caixa": "Checkout Terminal",
+    "Administração do sistema": "System Administration",
+    "Sistema de gerenciamento remoto de caixas de supermercado. Solicitações de cancelamento analisadas pelo supervisor sem deslocamento físico.": "Remote supermarket checkout management system. Cancellation requests are reviewed by a supervisor without needing to be on site.",
+    "Entrar": "Sign in",
+    "Criar conta": "Create account",
+    "E-mail": "Email",
+    "Senha": "Password",
+    "Nome completo": "Full name",
+    "Senha (mínimo 12 caracteres)": "Password (at least 12 characters)",
+    "Tipo de conta": "Account type",
+    "Operador de caixa": "Checkout operator",
+    "Supervisor / gestor do mercado": "Supervisor / store manager",
+    "Supervisor / gestor": "Supervisor / manager",
+    "Administrador": "Administrator",
+    "Acesso remoto": "Remote access",
+    "Conecte-se aos computadores dos caixas usando o AnyDesk instalado neste computador.": "Connect to checkout computers using AnyDesk installed on this computer.",
+    "Verificando conexão": "Checking connection",
+    "Mercado": "Store",
+    "Cadastre o mercado para liberar seus caixas.": "Register your store to enable its checkouts.",
+    "Nome do mercado": "Store name",
+    "Cadastrar mercado": "Register store",
+    "Visão geral": "Overview",
+    "Senha inicial": "Initial password",
+    "Preço (R$)": "Price (R$)",
+    "Relatório de solicitações": "Request report",
+    "Consulte decisões e pedidos registados no período selecionado.": "Review decisions and requests recorded during the selected period.",
+    "Data inicial": "Start date",
+    "Data final": "End date",
+    "Estado": "Status",
+    "Todos os estados": "All statuses",
+    "Pendente": "Pending",
+    "Aprovada": "Approved",
+    "Recusada": "Rejected",
+    "Gerar relatório": "Generate report",
+    "Exportar CSV (compatível com Excel)": "Export CSV (Excel compatible)",
+    "Imprimir / guardar PDF": "Print / save PDF",
+    "Solicitações": "Requests",
+    "Resumo executivo": "Executive summary",
+    "Solicitações no período:": "Requests in period:",
+    "Estado atual — pendentes:": "Current status — pending:",
+    "aprovadas:": "approved:",
+    "recusadas:": "rejected:",
+    "Taxa de aprovação entre decisões concluídas:": "Approval rate among completed decisions:",
+    "Aprovação": "Approval",
+    "Tempo médio": "Average time",
+    "Solicitações por dia": "Requests per day",
+    "Nenhuma solicitação encontrada neste período.": "No requests found for this period.",
+    "Decisão": "Decision",
+    "Gerado em": "Generated on",
+    "Período:": "Period:",
+    "Pendentes": "Pending",
+    "Aprovadas": "Approved",
+    "Recusadas": "Rejected",
+    "Tempo médio decisão": "Average decision time",
+    "Caixas em atenção": "Checkouts needing attention",
+    "Solicitações pendentes de decisão": "Requests awaiting a decision",
+    "Painel de caixas": "Checkout dashboard",
+    "Histórico de ações (auditoria)": "Activity log (audit)",
+    "Momento": "Time",
+    "Usuário": "User",
+    "Caixa": "Checkout",
+    "Ação": "Action",
+    "Detalhes": "Details",
+    "CONFIGURAÇÃO DE TERMINAL": "TERMINAL SETUP",
+    "Cadastrar novo caixa": "Register new checkout",
+    "Nome/localização do caixa": "Checkout name/location",
+    "O número será gerado automaticamente pelo sistema.": "The number will be generated automatically.",
+    "ID AnyDesk do computador do operador": "Operator computer AnyDesk ID",
+    "opcional": "optional",
+    "ID do computador do caixa": "Checkout computer ID",
+    "Cancelar": "Cancel",
+    "Cadastrar": "Register",
+    "Novo caixa": "New checkout",
+    "Sair": "Sign out",
+    "Seu mercado": "Your store",
+    "Nenhum mercado selecionado.": "No store selected.",
+    "Código do mercado": "Store code",
+    "Entrar no mercado": "Join store",
+    "Salvar ID AnyDesk": "Save AnyDesk ID",
+    "Computador do caixa selecionado": "Selected checkout computer",
+    "Selecione um caixa": "Select a checkout",
+    "Seu caixa": "Your checkout",
+    "Carregando…": "Loading…",
+    "Total da compra": "Purchase total",
+    "Itens registrados": "Items scanned",
+    "Tempo de atendimento": "Service time",
+    "Iniciar atendimento": "Start service",
+    "Colocar em espera / Retomar": "Put on hold / Resume",
+    "Finalizar venda": "Complete sale",
+    "Solicitar autorização": "Request approval",
+    "Carrinho da compra (simulação)": "Shopping cart (simulation)",
+    "Produto (ex.: Arroz 5kg)": "Product (e.g., rice 5 kg)",
+    "Preço R$": "Price (R$)",
+    "Qtd": "Qty",
+    "Registrar": "Add",
+    "Nenhum produto registrado ainda.": "No products added yet.",
+    "Solicitar autorização ao gestor": "Request manager approval",
+    "Tipo de solicitação": "Request type",
+    "Cancelamento de item": "Item cancellation",
+    "Produto": "Product",
+    "Quantidade": "Quantity",
+    "Valor (R$)": "Amount (R$)",
+    "Motivo da solicitação": "Reason for request",
+    "Enviar solicitação": "Send request",
+    "Visão administrativa": "Admin overview",
+    "Usuários ativos": "Active users",
+    "Manutenção de usuários e perfis": "User and role management",
+    "Perfil": "Role",
+    "Status": "Status",
+    "Caixas cadastrados": "Registered checkouts",
+    "Auditoria do sistema": "System audit log",
+    "Criar caixa": "Create checkout",
+    "Ativo": "Active",
+    "Inativo": "Inactive",
+    "Editar local": "Edit location",
+    "Desativar": "Deactivate",
+    "Ativar": "Activate",
+    "Localização": "Location",
+    "Não informada": "Not provided",
+    "Não identificado": "Not identified",
+    "Valor da compra": "Purchase amount",
+    "Itens": "Items",
+    "Caixa em espera": "Checkout on hold",
+    "Espera removida": "Checkout resumed",
+    "Início de atendimento": "Service started",
+    "Fim de atendimento": "Service ended",
+    "Solicitação enviada": "Request sent",
+    "Análise iniciada": "Review started",
+    "Solicitação APROVADA": "Request APPROVED",
+    "Solicitação RECUSADA": "Request REJECTED",
+    "Usuário criado": "User created",
+    "Usuário ativado": "User activated",
+    "Usuário desativado": "User deactivated",
+    "Login": "Sign in",
+    "Solicitação criada": "Request created",
+    "Solicitação aprovada": "Request approved",
+    "Solicitação recusada": "Request rejected",
+    "Nenhuma solicitação pendente. Tudo sob controle.": "No pending requests. Everything is under control.",
+    "Analisar": "Review",
+    "Aprovar": "Approve",
+    "Recusar": "Reject",
+    "Operador:": "Operator:",
+    "Solicitado às": "Requested at",
+    "Motivo:": "Reason:",
+    "Conectado ao painel remoto": "Connected to remote panel",
+    "Sem conexão com o servidor": "No connection to server",
+    "Cancelamento": "Cancellation",
+    "Fechar": "Close",
+    "APROVADA": "APPROVED",
+    "RECUSADA": "REJECTED",
+    "pelo gestor": "by the manager",
+    "Você já pode concluir a operação.": "You can now complete the transaction.",
+    "A operação não será autorizada.": "The transaction will not be approved.",
+    "Digite o ID fornecido pelo gestor para acessar um mercado.": "Enter the ID provided by the manager to access a store.",
+    "Erro": "Error",
+    "Sessão expirada. Faça login novamente.": "Your session has expired. Please sign in again.",
+    "Não foi possível iniciar uma sessão segura.": "Could not start a secure session.",
+    "A data inicial não pode ser posterior à data final": "The start date cannot be after the end date",
+    "O período máximo do relatório é de 366 dias": "The maximum report period is 366 days",
+    "Selecione um caixa primeiro": "Select a checkout first",
+    "Acesso remoto não configurado": "Remote access is not configured",
+    "+ Novo caixa": "+ New checkout",
+    "SOLICITACAO": "REQUEST",
+    "APROVACAO": "APPROVAL",
+    "OPERADOR": "OPERATOR",
+    "ADMINISTRADOR": "ADMINISTRATOR",
+    "(1) Solicitação! — FILALIVRE": "(1) Request! — FILALIVRE",
+    "EM ATENDIMENTO": "IN SERVICE",
+    "LIVRE": "AVAILABLE",
+    "AGUARDANDO": "WAITING",
+    "SOLICITAÇÃO EM ANÁLISE": "REQUEST UNDER REVIEW",
+    "APROVAÇÃO PENDENTE": "APPROVAL PENDING",
+    "A consultar os registos...": "Loading records...",
+    "O período usa a data de criação. O estado apresentado é o atual; a taxa considera apenas solicitações decididas e todos os indicadores respeitam o filtro de estado.": "The period uses the creation date. The displayed status is current; the rate includes only decided requests, and all metrics follow the selected status filter.",
+    "Valor": "Amount",
+    "solicitação(ões) encontradas.": "request(s) found.",
+    "Não foi possível carregar o histórico.": "Could not load the activity log.",
+    "Não foi possível carregar o resumo.": "Could not load the summary.",
+    "Não foi possível carregar as caixas.": "Could not load the checkouts.",
+    "Defina a identificação do caixa. Para configurar o acesso remoto, peça ao operador o ID mostrado no AnyDesk do computador do caixa.": "Set a checkout identifier. To configure remote access, ask the operator for the AnyDesk ID shown on the checkout computer.",
+    "Ex.: Perto do banheiro": "e.g., Near the restroom",
+    "Digite o ID que aparece no AnyDesk da pessoa que será acessada. Não use o ID do computador do gestor. Pode preencher depois.": "Enter the AnyDesk ID shown on the computer to be accessed. Do not use the manager's computer ID. You can fill this in later.",
+    "ID AnyDesk deste computador": "This computer's AnyDesk ID",
+    "Não foi possível carregar": "Could not load",
+    "Análise registrada. O caixa está em aprovação.": "Review recorded. The checkout is awaiting approval.",
+    "Solicitação aprovada e comunicada ao caixa.": "Request approved and the checkout has been notified.",
+    "Solicitação recusada.": "Request rejected.",
+    "Mercado cadastrado. Compartilhe o código com os operadores.": "Store registered. Share the code with the operators.",
+    "Caixa cadastrado com sucesso": "Checkout registered successfully",
+    "Caixa criado com numeração automática": "Checkout created with an automatic number",
+    "Usuário criado com sucesso": "User created successfully",
+    "Status do usuário atualizado": "User status updated",
+    "Digite o código fornecido pelo gestor para acessar um mercado.": "Enter the code provided by the manager to access a store.",
+    "Mercado conectado": "Connected to store",
+    "ID AnyDesk atualizado": "AnyDesk ID updated",
+    "Venda finalizada com sucesso": "Sale completed successfully",
+    "Solicitação enviada ao gestor": "Request sent to the manager",
+    "Inicie o atendimento antes de registrar produtos": "Start service before adding products",
+    "Solicitação de": "Request from",
+    "· Solicitado às": "· Requested at",
+    "SUPERVISOR": "SUPERVISOR",
+    "NORMAL": "NORMAL",
+    "GERENTE": "MANAGER"
+  };
+
   function traduzirTexto(texto) {
-    if (idioma !== "es") return texto;
+    const mapa = idioma === "es" ? traducoes : idioma === "en-US" ? traducoesIngles : null;
+    if (!mapa) return texto;
     const inicio = texto.match(/^\s*/)[0];
     const fim = texto.match(/\s*$/)[0];
     const conteudo = texto.trim();
-    if (traducoes[conteudo]) return `${inicio}${traducoes[conteudo]}${fim}`;
+    if (mapa[conteudo]) return `${inicio}${mapa[conteudo]}${fim}`;
     const caixa = conteudo.match(/^Caixa (\d+)(.*)$/);
     if (caixa) {
+      if (idioma === "en-US") return `${inicio}Checkout ${caixa[1]}${caixa[2]}${fim}`;
       const complemento = caixa[2]
         .replace(" — você", " — usted")
         .replace(" — livre", " — libre")
@@ -244,11 +457,16 @@
       return `${inicio}Caja ${caixa[1]}${complemento}${fim}`;
     }
     const novoPedido = conteudo.match(/^Nova solicitação no Caixa (\d+): (.*)$/);
+    if (idioma === "en-US" && novoPedido) {
+      return `${inicio}New request at checkout ${novoPedido[1]}: ${novoPedido[2]}${fim}`;
+    }
     if (novoPedido) return `${inicio}Nueva solicitud en la caja ${novoPedido[1]}: ${novoPedido[2]}${fim}`;
     if (conteudo.includes(" · código de acesso: ")) {
+      if (idioma === "en-US") return `${inicio}${conteudo.replace(" · código de acesso: ", " · access code: ")}${fim}`;
       return `${inicio}${conteudo.replace(" · código de acesso: ", " · código de acceso: ")}${fim}`;
     }
     if (/^Você assumiu o Caixa \d+$/.test(conteudo)) {
+      if (idioma === "en-US") return `${inicio}${conteudo.replace("Você assumiu o Caixa", "You are now assigned to checkout")}${fim}`;
       return `${inicio}${conteudo.replace("Você assumiu o Caixa", "Ahora está a cargo de la caja")}${fim}`;
     }
     return texto;
@@ -258,7 +476,7 @@
     if (elemento.nodeType === Node.TEXT_NODE) {
       if (!textosOriginais.has(elemento)) textosOriginais.set(elemento, elemento.nodeValue);
       const original = textosOriginais.get(elemento);
-      const traduzido = idioma === "es" ? traduzirTexto(original) : original;
+      const traduzido = traduzirTexto(original);
       if (traduzido !== elemento.nodeValue) elemento.nodeValue = traduzido;
       return;
     }
@@ -293,7 +511,7 @@
 
   window.idiomaAtual = idioma;
   window.aplicarIdioma = function (novoIdioma) {
-    idioma = novoIdioma === "es" ? "es" : "pt-BR";
+    idioma = ["es", "en-US"].includes(novoIdioma) ? novoIdioma : "pt-BR";
     window.idiomaAtual = idioma;
     localStorage.setItem("filalivre-idioma", idioma);
     document.documentElement.lang = idioma;
@@ -302,12 +520,43 @@
       botao.classList.toggle("ativa", selecionado);
       botao.setAttribute("aria-pressed", String(selecionado));
     });
+    document.querySelectorAll(".idioma-controle").forEach(controle => {
+      controle.setAttribute("aria-label", idioma === "en-US" ? "Language" : idioma === "es" ? "Idioma" : "Idioma");
+    });
     traduzirElemento(document);
+    atualizarRotulosTema();
   };
   document.querySelectorAll(".idioma-opcao").forEach(botao => {
     botao.addEventListener("click", () => window.aplicarIdioma(botao.dataset.idioma));
   });
   window.aplicarIdioma(idioma);
+
+  function atualizarRotulosTema() {
+    const claro = document.documentElement.dataset.tema === "claro";
+    document.querySelectorAll("[data-theme-toggle]").forEach(botao => {
+      const rotulo = claro ? "Ativar modo escuro" : "Ativar modo claro";
+      const rotuloIngles = claro ? "Switch to dark mode" : "Switch to light mode";
+      const rotuloEspanhol = claro ? "Activar modo oscuro" : "Activar modo claro";
+      const acessivel = idioma === "en-US" ? rotuloIngles : idioma === "es" ? rotuloEspanhol : rotulo;
+      botao.setAttribute("aria-label", acessivel);
+      botao.setAttribute("title", acessivel);
+      botao.setAttribute("aria-pressed", String(claro));
+    });
+  }
+  function aplicarTema(tema) {
+    const claro = tema === "claro";
+    document.documentElement.dataset.tema = claro ? "claro" : "escuro";
+    localStorage.setItem("filalivre-tema", claro ? "claro" : "escuro");
+    atualizarRotulosTema();
+  }
+  window.aplicarTema = aplicarTema;
+  aplicarTema(localStorage.getItem("filalivre-tema") || "escuro");
+  document.querySelectorAll("[data-theme-toggle]").forEach(botao => {
+    botao.addEventListener("click", () => {
+      aplicarTema(document.documentElement.dataset.tema === "claro" ? "escuro" : "claro");
+    });
+  });
+
   const observador = new MutationObserver(mudancas => {
     mudancas.forEach(mudanca => {
       if (mudanca.type === "characterData") traduzirElemento(mudanca.target);
